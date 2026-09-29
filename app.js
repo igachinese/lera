@@ -11,8 +11,8 @@ function tabs(active){
 }
 
 function cards(ws,id){
-  return `<div class="cardbar"><p class="sub">Карточки · нажми, чтобы открыть</p><button class="minibtn" data-hide="${id}">Скрыть пиньинь и перевод</button></div>
-  <div class="cards" id="${id}">${ws.map(w=>`<button class="wc"><span class="h">${w[0]}</span><span class="p">${w[1]}</span><span class="r">${w[2]}</span></button>`).join('')}</div>`;
+  return `<div class="cardbar"><p class="sub">Карточки · нажми — откроется и прозвучит</p><button class="minibtn" data-hide="${id}">Скрыть пиньинь и перевод</button></div>
+  <div class="cards" id="${id}">${ws.map(w=>`<button class="wc" data-say="${w[0]}"><span class="h">${w[0]}</span><span class="p">${w[1]}</span><span class="r">${w[2]}</span></button>`).join('')}</div>`;
 }
 function steps(a){return `<ul class="steps">${a.map(x=>`<li>${x}</li>`).join('')}</ul>`}
 function formula(f){return f.map(p=>`<span class="${p[1]||''}">${p[0]}</span>`).join('')}
@@ -21,6 +21,10 @@ function blockHead(key,l){
   return `<div class="bhead"><span class="bz">${z}</span><span class="bt">${t}</span><span class="bmin">${l.min[key]} мин</span><button class="go t-only" data-timer="${key}">▶ Таймер</button></div>`;
 }
 
+function exList(l,place){
+  let num=0;
+  return (EX[l.n]||[]).map((x,i)=>(x.place||'drill')===place?`<div class="exer" data-l="${l.n}" data-i="${i}" data-num="${++num}">${exercise(x,l,i,num)}</div>`:'').join('');
+}
 function lesson(l){
   const g=l.gram;
   const segs=Object.keys(BLOCKS).map(k=>`<button class="seg" style="flex:${l.min[k]}" data-jump="b-${k}"><span class="z">${BLOCKS[k][0]}</span><span class="m">${BLOCKS[k][1]} · ${l.min[k]}′</span></button>`).join('');
@@ -29,6 +33,7 @@ function lesson(l){
     <h2>${l.title}</h2><span class="bigzh">${l.zh}</span>
     <p class="goal">${l.goal}</p>
     <span class="cando"><b>Итог урока</b>${l.cando}</span>
+    <div class="stars" id="stars" aria-live="polite"></div>
   </section>
   <div class="strip">${segs}</div>
 
@@ -44,6 +49,7 @@ function lesson(l){
   <section class="block" id="b-review">${blockHead('review',l)}<div class="bbody">
     <div class="t-only">${steps(l.review)}</div>
     ${cards(l.rwords,'rw'+l.n)}
+    ${exList(l,'review')}
   </div></section>
 
   <section class="block" id="b-neu">${blockHead('neu',l)}<div class="bbody">
@@ -52,21 +58,23 @@ function lesson(l){
       <div class="formula"><span class="lab">Формула</span>${formula(g.formula)}</div>
       ${g.neg?`<div class="formula"><span class="lab">Отрицание</span>${formula(g.neg)}</div>`:''}
       <p class="explain">${g.explain}</p>
-      <div class="ex">${g.ex.map(e=>`<div class="exrow"><div><div class="z">${e[0]}</div><div class="py">${e[1]}</div></div><div class="ru">${e[2]}</div></div>`).join('')}</div>
+      <div class="ex">${g.ex.map(e=>`<div class="exrow"><div><div class="z">${spk(e[0])}${e[0]}</div><div class="py">${e[1]}</div></div><div class="ru">${e[2]}</div></div>`).join('')}</div>
       ${g.trap?`<div class="trap">${g.trap}</div>`:''}
     </div>
     ${cards(l.words,'nw'+l.n)}
+    ${exList(l,'neu')}
   </div></section>
 
   <section class="block" id="b-drill">${blockHead('drill',l)}<div class="bbody">
     <div class="t-only"><p class="sub">Как провести</p>${steps(l.drill)}</div>
-    ${(EX[l.n]||[]).map((x,i)=>`<div class="exer" data-l="${l.n}" data-i="${i}">${exercise(x,l,i)}</div>`).join('')}
+    ${exList(l,'drill')}
   </div></section>
 
   <section class="block" id="b-talk">${blockHead('talk',l)}<div class="bbody">
     <p style="margin:0;max-width:75ch">${l.talk.task}</p>
-    <div><p class="sub">Каркас ответа</p><div class="frame">${l.talk.frame.map(f=>`<div>${f[0]}<small>${f[1]}</small></div>`).join('')}</div></div>
-    <div><p class="sub">Вопросы</p><div class="qs">${l.talk.qs.map(q=>`<span>${q}</span>`).join('')}</div></div>
+    <div><p class="sub">Каркас ответа</p><div class="frame">${l.talk.frame.map(f=>`<div class="sayable" data-say="${f[0]}" tabindex="0">${f[0]}<small>${f[1]}</small></div>`).join('')}</div></div>
+    <div><p class="sub">Вопросы · нажми, чтобы услышать</p><div class="qs">${l.talk.qs.map(q=>`<span class="sayable" data-say="${q}" tabindex="0">${q}</span>`).join('')}</div></div>
+    ${recorder()}
   </div></section>
 
   <section class="block" id="b-hw">${blockHead('hw',l)}<div class="bbody">${steps(l.hw)}</div></section>`;
@@ -98,11 +106,12 @@ function go(id,noScroll){
   try{history.replaceState(null,'','#'+id)}catch(e){}
   if(!noScroll) window.scrollTo(0,0);
   bind(id);
+  if(id!=='plan'){updateStars(+id.slice(1));initExercises(main)}
 }
 
 function bind(id){
   main.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
-  main.querySelectorAll('.wc').forEach(c=>c.onclick=()=>c.classList.toggle('open'));
+  main.querySelectorAll('.wc').forEach(c=>c.onclick=()=>{c.classList.toggle('open');speak(c.dataset.say)});
   main.querySelectorAll('[data-hide]').forEach(b=>b.onclick=()=>{const g=document.getElementById(b.dataset.hide);const on=g.classList.toggle('hidden-meta');g.querySelectorAll('.wc').forEach(c=>c.classList.remove('open'));b.textContent=on?'Показать всё':'Скрыть пиньинь и перевод'});
   main.querySelectorAll('[data-jump]').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.jump).scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'}));
   main.querySelectorAll('.prep input').forEach(i=>i.onchange=()=>store.set(i.id,i.checked?'1':'0'));
@@ -123,6 +132,12 @@ function startTimer(key,m){clearInterval(T.h);T={left:m*60,total:m*60,run:true,h
 $('#tpause').onclick=()=>{if(T.run){clearInterval(T.h);T.run=false;$('#tpause').textContent='Дальше'}else{T.h=setInterval(tick,1000);T.run=true;$('#tpause').textContent='Пауза'}};
 $('#tplus').onclick=()=>{T.left+=60;T.total+=60;draw()};
 $('#tstop').onclick=()=>{clearInterval(T.h);$('#timer').hidden=true};
+
+/* sound */
+function setSnd(on){SND.on=on;$('#snd').setAttribute('aria-pressed',on);$('#snd').textContent=on?'🔊 Звук':'🔇 Без звука';store.set('snd',on?'1':'0')}
+$('#snd').onclick=()=>setSnd(!SND.on);
+setSnd(store.get('snd')!=='0');
+if(!canSpeak)$('#snd').hidden=true;
 
 /* mode */
 function setMode(m){document.body.classList.toggle('student',m==='student');$('#m-teacher').setAttribute('aria-pressed',m!=='student');$('#m-student').setAttribute('aria-pressed',m==='student');store.set('mode',m)}
