@@ -59,8 +59,8 @@ function lesson(l){
   </div></section>
 
   <section class="block" id="b-drill">${blockHead('drill',l)}<div class="bbody">
-    ${steps(l.drill)}
-    ${l.test?`<div class="test">${l.test.map((q,i)=>`<div class="tq"><span class="z">${q[0]}</span><span class="opt">${q[1]}</span><button data-ans="a${i}">Ответ</button><span class="ans" id="a${i}" hidden>${q[2]}</span></div>`).join('')}</div>`:''}
+    <div class="t-only"><p class="sub">Как провести</p>${steps(l.drill)}</div>
+    ${(EX[l.n]||[]).map((x,i)=>`<div class="exer" data-l="${l.n}" data-i="${i}">${exercise(x,l,i)}</div>`).join('')}
   </div></section>
 
   <section class="block" id="b-talk">${blockHead('talk',l)}<div class="bbody">
@@ -106,7 +106,6 @@ function bind(id){
   main.querySelectorAll('[data-hide]').forEach(b=>b.onclick=()=>{const g=document.getElementById(b.dataset.hide);const on=g.classList.toggle('hidden-meta');g.querySelectorAll('.wc').forEach(c=>c.classList.remove('open'));b.textContent=on?'Показать всё':'Скрыть пиньинь и перевод'});
   main.querySelectorAll('[data-jump]').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.jump).scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'}));
   main.querySelectorAll('.prep input').forEach(i=>i.onchange=()=>store.set(i.id,i.checked?'1':'0'));
-  main.querySelectorAll('[data-ans]').forEach(b=>b.onclick=()=>{const a=document.getElementById(b.dataset.ans);a.hidden=!a.hidden;b.textContent=a.hidden?'Ответ':'Скрыть'});
   main.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>{const t=document.getElementById(b.dataset.copy).textContent;
     const ok=()=>{b.textContent='Скопировано';setTimeout(()=>b.textContent='Копировать',1500)};
     try{navigator.clipboard.writeText(t).then(ok,()=>sel(b.dataset.copy))}catch(e){sel(b.dataset.copy)}});
