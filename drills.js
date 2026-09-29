@@ -3,6 +3,64 @@
 const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const shufNot=a=>{if(a.length<2)return a.slice();let b;do b=shuf(a);while(b.join('|')===a.join('|'));return b};
 const norm=s=>s.replace(/[\s，。？！、,.?!—\-\/]/g,'');
+/* --- озвучка (голос браузера, китайский) --- */
+const canSpeak='speechSynthesis' in window;
+const SND={on:true};
+function zhVoice(){const vs=speechSynthesis.getVoices();return vs.find(v=>/zh[-_]CN/i.test(v.lang))||vs.find(v=>/^(zh|cmn)/i.test(v.lang))||null}
+function speak(t,auto){
+  if(!canSpeak||!t||(auto&&!SND.on))return;
+  t=t.replace(/＿+/g,'，').replace(/[A-Z]：/g,'').replace(/—/g,'');
+  if(!/[\u4e00-\u9fff]/.test(t))return;
+  try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=.8;const v=zhVoice();if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}
+}
+if(canSpeak)try{speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices()}catch(e){}
+const spk=t=>canSpeak?`<button type="button" class="spk" data-say="${t}" aria-label="Послушать">🔊</button>`:'';
+
+/* --- звёзды и конфетти --- */
+function starKey(ex){return `star-${ex.dataset.l}-${ex.dataset.i}`}
+function award(ex){
+  if(ex.dataset.awarded)return;ex.dataset.awarded=1;
+  store.set(starKey(ex),'1');ex.classList.add('won');
+  confetti(ex);updateStars(+ex.dataset.l,true);
+}
+function updateStars(n,pop){
+  const el=document.getElementById('stars');if(!el)return;
+  const list=EX[n]||[],got=list.filter((x,i)=>store.get(`star-${n}-${i}`)==='1').length;
+  el.innerHTML=`<span class="sl">Звёзды урока</span><span class="stl">${list.map((x,i)=>`<i class="${store.get(`star-${n}-${i}`)==='1'?'on':''}">★</i>`).join('')}</span><b>${got} / ${list.length}</b>${got&&got===list.length?'<span class="sall">Все звёзды! 🎉</span>':''}`;
+  if(pop){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop')}
+}
+function confetti(from){
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  const r=from.getBoundingClientRect(),cx=r.left+r.width/2,cy=Math.max(40,r.top+30);
+  const cols=['#ff8fb1','#ffd166','#7bdcb5','#8ecbff','#b69cff','#ff9f6e'];
+  for(let k=0;k<36;k++){const d=document.createElement('i');d.className='cf';d.style.background=cols[k%cols.length];d.style.left=cx+'px';d.style.top=cy+'px';
+    if(k%3==0)d.style.borderRadius='50%';document.body.appendChild(d);
+    const a=Math.random()*Math.PI*2,v=120+Math.random()*220;
+    d.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:`translate(${Math.cos(a)*v}px,${Math.sin(a)*v-60+Math.random()*260}px) rotate(${Math.random()*720}deg)`,opacity:0}],{duration:1100+Math.random()*500,easing:'cubic-bezier(.2,.6,.4,1)'}).onfinish=()=>d.remove()}
+}
+
+/* --- диктофон для блока 会话 --- */
+function recorder(){
+  if(!(navigator.mediaDevices&&window.MediaRecorder))return '';
+  return `<div class="rec"><p class="sub">Запиши себя и послушай</p><div class="recbar"><button type="button" class="recb">🎙 Записать</button><span class="rect" aria-live="polite"></span></div><div class="recs"></div></div>`;
+}
+const REC={};
+async function toggleRec(box){
+  const b=box.querySelector('.recb'),t=box.querySelector('.rect');
+  if(REC.mr&&REC.mr.state==='recording'){REC.mr.stop();return}
+  try{
+    const st=await navigator.mediaDevices.getUserMedia({audio:true});
+    const mr=new MediaRecorder(st),chunks=[];REC.mr=mr;
+    mr.ondataavailable=e=>chunks.push(e.data);
+    mr.onstop=()=>{st.getTracks().forEach(x=>x.stop());clearInterval(REC.h);b.textContent='🎙 Записать ещё';b.classList.remove('on');t.textContent='';
+      const n=box.querySelectorAll('.recs figure').length+1;const f=document.createElement('figure');
+      f.innerHTML=`<figcaption>Попытка ${n}</figcaption><audio controls src="${URL.createObjectURL(new Blob(chunks,{type:mr.mimeType}))}"></audio>`;
+      box.querySelector('.recs').prepend(f)};
+    mr.start();const t0=Date.now();b.textContent='⏹ Стоп';b.classList.add('on');
+    REC.h=setInterval(()=>{const s=Math.round((Date.now()-t0)/1000);t.textContent=`● запись ${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`},250);
+  }catch(e){t.textContent='Микрофон недоступен — разреши доступ в браузере.'}
+}
+
 const chip=(v,extra='')=>`<button type="button" class="chip zh" data-v="${v}" ${extra}>${v}</button>`;
 
 const EXR={
@@ -42,20 +100,27 @@ const EXR={
   check(x){
     return `<div class="clist">${x.items.map(([v,o,e])=>`<div class="crow" data-v="${v}" data-o="${o}"><span class="ce">${e}</span><span class="cp zh">${v}${o}</span><span class="popts"><button type="button" class="opt ckb" data-y="1" aria-label="Да">✓</button><button type="button" class="opt ckb" data-y="0" aria-label="Нет">✗</button></span><span class="cout zh"></span></div>`).join('')}</div>`;
   },
+  flash(x,l){
+    const w=l[x.from];const q=shuf(w.map((_,i)=>i));
+    return `<div class="flash" data-q="${q.join(',')}" data-known="0" data-total="${w.length}">
+      <button type="button" class="fcard"><span class="fh zh"></span><span class="fb"><span class="fp"></span><span class="fr"></span></span><span class="ftap">нажми, чтобы перевернуть</span></button>
+      <div class="fbtns"><button type="button" class="opt fno">↻ Ещё раз</button><button type="button" class="opt fyes">✓ Знаю</button></div>
+      <div class="fprog"><i></i></div><p class="fcount"></p></div>`;
+  },
   bingo(x){
     return `<div class="bingo">${x.cells.map(([e,w])=>`<button type="button" class="bgc" aria-pressed="false"><span class="be">${e}</span><span class="bw zh">${w}</span><span class="bq zh">${x.q.replace('{}',w)}</span></button>`).join('')}</div>`;
   }
 };
 function checkBar(){return `<div class="exbar"><button type="button" class="go exchk">Проверить</button><button type="button" class="minibtn exans">Показать ответ</button></div>`}
 
-function exercise(x,l,i){
-  return `<div class="exh"><span class="exn">${i+1}</span><div class="ext"><h4>${x.title}</h4>${x.hint?`<p class="exhint">${x.hint}</p>`:''}</div><button type="button" class="minibtn" data-reset>Заново</button></div>
+function exercise(x,l,i,num){
+  return `<div class="exh"><span class="exn">${x.icon||num}</span><div class="ext"><h4>${x.title}</h4>${x.hint?`<p class="exhint">${x.hint}</p>`:''}</div><span class="exstar" aria-label="Звезда получена">★</span><button type="button" class="minibtn" data-reset>Заново</button></div>
   <div class="exb ex-${x.t}">${EXR[x.t](x,l)}</div><p class="res" aria-live="polite"></p>`;
 }
 
 /* --- helpers --- */
 function res(ex,text,good){const r=ex.querySelector(':scope > .res');r.textContent=text;r.classList.toggle('good',!!good)}
-function allDone(ex,sel,doneSel){const rows=ex.querySelectorAll(sel);if([...rows].every(r=>r.matches(doneSel))){const first=[...rows].filter(r=>!r.dataset.miss).length;res(ex,`Готово! С первой попытки: ${first} из ${rows.length}`,first===rows.length)}}
+function allDone(ex,sel,doneSel){const rows=ex.querySelectorAll(sel);if([...rows].every(r=>r.matches(doneSel))){const first=[...rows].filter(r=>!r.dataset.miss).length;res(ex,`Готово! С первой попытки: ${first} из ${rows.length}`,first===rows.length);award(ex)}}
 function clearMarks(unit){unit.querySelectorAll('.ok,.bad').forEach(e=>e.classList.remove('ok','bad'));const ex=unit.closest('.exer');if(ex&&!ex.querySelector('.ex-build'))res(ex,'')}
 
 function place(c,zone,before){
@@ -71,7 +136,7 @@ function checkBuild(u){
   const v=norm([...line.children].map(c=>c.dataset.v).join(''));
   const ok=u.dataset.ans.split(';').some(a=>norm(a)===v);
   line.classList.add(ok?'ok':'bad');
-  if(ok)u.classList.add('done');else u.dataset.miss=1;
+  if(ok){u.classList.add('done');speak(v,1)}else u.dataset.miss=1;
   const ex=u.closest('.exer');allDone(ex,'.brow','.done');
 }
 function tapChip(c){
@@ -113,21 +178,28 @@ document.addEventListener('pointercancel',e=>endDrag(e,true));
 /* --- нажатия --- */
 document.addEventListener('click',e=>{
   const t=e.target;let b;
+  if((b=t.closest('.spk,.sayable'))){speak(b.dataset.say);return}
+  if((b=t.closest('.recb'))){toggleRec(b.closest('.rec'));return}
   if((b=t.closest('.chip'))){ if(e.detail===0)tapChip(b); return }  // клавиатура; мышь и палец — через pointerup
   const ex=t.closest('.exer');if(!ex)return;
   const x=EX[ex.dataset.l][ex.dataset.i];
 
-  if(t.closest('[data-reset]')){ex.innerHTML=exercise(x,L[ex.dataset.l-1],+ex.dataset.i);return}
+  if(t.closest('[data-reset]')){ex.innerHTML=exercise(x,L[ex.dataset.l-1],+ex.dataset.i,+ex.dataset.num);delete ex.dataset.awarded;if(x.t==='flash')flashShow(ex);return}
 
   if((b=t.closest('.zone'))){const sel=b.closest('.unit').querySelector('.chip.sel');if(sel)place(sel,b);return}
 
+  if((b=t.closest('.fcard'))){b.classList.toggle('flip');if(b.classList.contains('flip'))speak(b.querySelector('.fh').textContent);return}
+  if((b=t.closest('.fyes,.fno'))){const f=ex.querySelector('.flash');const q=f.dataset.q.split(',');const cur=q.shift();
+    if(b.classList.contains('fyes'))f.dataset.known=+f.dataset.known+1;else q.splice(Math.min(2,q.length),0,cur);
+    f.dataset.q=q.filter(Boolean).join(',');flashShow(ex);return}
+
   if((b=t.closest('.opt:not(.tfb):not(.ckb)'))){const row=b.closest('.prow');if(row.classList.contains('ok'))return;
-    if(b.dataset.o===row.dataset.a){row.classList.add('ok');b.classList.add('ok');row.querySelector('.gap').textContent=row.dataset.a==='—'?'∅':row.dataset.a;allDone(ex,'.prow','.ok')}
+    if(b.dataset.o===row.dataset.a){row.classList.add('ok');b.classList.add('ok');row.querySelector('.gap').textContent=row.dataset.a==='—'?'∅':row.dataset.a;speak(row.querySelector('.ps').textContent.replace('∅',''),1);allDone(ex,'.prow','.ok')}
     else{b.classList.add('bad');row.dataset.miss=1}
     return}
 
   if((b=t.closest('.tfb'))){const row=b.closest('.prow');if(row.classList.contains('ok'))return;
-    if(b.dataset.v===row.dataset.ok){row.classList.add('ok');b.classList.add('ok');const f=row.querySelector('.fix');if(f)f.hidden=false;allDone(ex,'.prow','.ok')}
+    if(b.dataset.v===row.dataset.ok){row.classList.add('ok');b.classList.add('ok');const f=row.querySelector('.fix');if(f)f.hidden=false;speak((f||row.querySelector('.ps')).textContent,1);allDone(ex,'.prow','.ok')}
     else{b.classList.add('bad');row.dataset.miss=1}
     return}
 
@@ -136,30 +208,33 @@ document.addEventListener('click',e=>{
     ex.querySelectorAll(`.mc.sel[data-side="${b.dataset.side}"]`).forEach(m=>m!==b&&m.classList.remove('sel'));
     if(!other){b.classList.toggle('sel');return}
     other.classList.remove('sel');
-    if(other.dataset.k===b.dataset.k){[b,other].forEach(m=>{m.classList.add('ok');m.disabled=true});
-      if(!ex.querySelector('.mc:not(.ok)'))res(ex,'Все пары найдены!',true)}
+    if(other.dataset.k===b.dataset.k){[b,other].forEach(m=>{m.classList.add('ok');m.disabled=true});speak((b.dataset.side==='a'?b:other).textContent,1);
+      if(!ex.querySelector('.mc:not(.ok)')){res(ex,'Все пары найдены!',true);award(ex)}}
     else{[b,other].forEach(m=>{m.classList.add('bad');setTimeout(()=>m.classList.remove('bad'),600)})}
     return}
 
-  if((b=t.closest('.sayb'))){const a=b.nextElementSibling;a.hidden=!a.hidden;b.textContent=a.hidden?'Ответ':'Скрыть';return}
+  if((b=t.closest('.sayb'))){const a=b.nextElementSibling;a.hidden=!a.hidden;b.textContent=a.hidden?'Ответ':'Скрыть';if(!a.hidden){speak(a.textContent,1);b.closest('.srow').classList.add('seen')}
+    if(![...ex.querySelectorAll('.srow')].some(r=>!r.classList.contains('seen'))){res(ex,'Все карточки пройдены!',true);award(ex)}return}
 
   if((b=t.closest('.ckb'))){const row=b.closest('.crow'),y=b.dataset.y==='1';
     row.querySelectorAll('.ckb').forEach(k=>k.classList.toggle('on',k===b));
     row.querySelector('.cout').textContent=y?`我昨天${row.dataset.v}了${row.dataset.o}。`:`我昨天没${row.dataset.v}${row.dataset.o}。`;
-    row.classList.toggle('yes',y);row.classList.toggle('no',!y);return}
+    row.classList.toggle('yes',y);row.classList.toggle('no',!y);speak(row.querySelector('.cout').textContent,1);
+    if(!ex.querySelector('.crow:not(.yes):not(.no)')){res(ex,'Все дела отмечены — расскажи про свой день!',true);award(ex)}return}
 
   if((b=t.closest('.bgc'))){const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',on);
     const cells=[...ex.querySelectorAll('.bgc')],p=cells.map(c=>c.getAttribute('aria-pressed')==='true');
     const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]].filter(l=>l.every(i=>p[i]));
     cells.forEach(c=>c.classList.remove('win'));lines.flat().forEach(i=>cells[i].classList.add('win'));
-    res(ex,lines.length?'宾果！ Бинго!':'',lines.length>0);return}
+    if(on)speak(b.querySelector('.bq').textContent,1);
+    res(ex,lines.length?'宾果！ Бинго!':'',lines.length>0);if(lines.length)award(ex);return}
 
   if((b=t.closest('.hintbtn'))){const a=b.nextElementSibling;a.hidden=!a.hidden;b.closest('.brow').dataset.miss=1;return}
 
   if(t.closest('.exchk')){const u=ex.querySelector('.unit');let ok=0,n=0;
     if(x.t==='fill'){u.querySelectorAll('.gap1').forEach(g=>{n++;const c=g.querySelector('.chip');g.classList.remove('ok','bad');if(c&&c.dataset.v===g.dataset.a){g.classList.add('ok');ok++}else g.classList.add('bad')})}
     else{n=x.items.length;u.querySelectorAll('.bzone .chip').forEach(c=>{const good=c.dataset.b===c.parentElement.dataset.i;c.classList.remove('ok','bad');c.classList.add(good?'ok':'bad');if(good)ok++})}
-    res(ex,ok===n?`Всё верно! ${ok} из ${n}`:`Верно ${ok} из ${n}. Исправь красное и проверь ещё раз.`,ok===n);return}
+    res(ex,ok===n?`Всё верно! ${ok} из ${n}`:`Верно ${ok} из ${n}. Исправь красное и проверь ещё раз.`,ok===n);if(ok===n)award(ex);return}
 
   if(t.closest('.exans')){const u=ex.querySelector('.unit'),bank=u.querySelector('.bank');
     if(x.t==='fill'){u.querySelectorAll('.gap1').forEach(g=>{const c=g.querySelector('.chip');if(c&&c.dataset.v!==g.dataset.a)bank.appendChild(c)});
@@ -167,3 +242,21 @@ document.addEventListener('click',e=>{
     else u.querySelectorAll('.chip').forEach(c=>u.querySelector(`.bzone[data-i="${c.dataset.b}"]`).appendChild(c));
     clearMarks(u);u.querySelectorAll('.chip.sel').forEach(c=>c.classList.remove('sel'));res(ex,'Ответ показан. Нажми «Заново», чтобы попробовать самой.');return}
 });
+
+/* --- тренажёр карточек --- */
+function flashShow(ex){
+  const f=ex.querySelector('.flash');if(!f)return;const x=EX[ex.dataset.l][ex.dataset.i],w=L[ex.dataset.l-1][x.from];
+  const q=f.dataset.q?f.dataset.q.split(','):[],total=+f.dataset.total,known=+f.dataset.known;
+  f.querySelector('.fprog i').style.width=(known/total*100)+'%';
+  const card=f.querySelector('.fcard');card.classList.remove('flip');
+  if(!q.length){card.hidden=true;f.querySelector('.fbtns').hidden=true;f.querySelector('.fcount').textContent='';res(ex,`Все ${total} слов — знаю! 🎉`,true);award(ex);return}
+  const [h,p,r]=w[q[0]];card.querySelector('.fh').textContent=h;card.querySelector('.fp').textContent=p;card.querySelector('.fr').textContent=r;
+  f.querySelector('.fcount').textContent=`Знаю ${known} из ${total} · в колоде ещё ${q.length}`;
+}
+function initExercises(root){
+  root.querySelectorAll('.exer').forEach(ex=>{
+    if(store.get(starKey(ex))==='1')ex.classList.add('won');
+    if(EX[ex.dataset.l][ex.dataset.i].t==='flash')flashShow(ex);
+  });
+}
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('sayable')){e.preventDefault();speak(e.target.dataset.say)}});
