@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>HSK1 · Бланк Леры</title>
+<meta name="description" content="Тренажёр Леры по формату HSK1: ключи к вопросам, аудирование, чтение и мини-пробник на 200 баллов.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Nunito:wght@500;600;700;800&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+/* Layout: тетрадь с мягкими карточками — шапка с отсчётом до вс 10:00, вкладки разделов, лист с заданием, итоговая «печать» с баллами.
+   Палитра — светлый бежевый, белые карточки, приглушённый красный акцент, почти чёрный текст; тёмная тема — чёрное с белым */
+:root{
+  --paper:#F5EFE6; --paper2:#EEE4D6; --sheet:#FFFFFF; --sheet2:#FAF6F0; --ink:#1F1B18; --muted:#76695D; --rule:#E7DDD0;
+  --accent:#B5413A; --on-accent:#FFFFFF; --accent-soft:#F7E3DF; --py:#A0483E; --sky-soft:#F4EDE4;
+  --red:#B5413A; --red-soft:#F7E3DF; --green:#4E7A5D; --green-soft:#E6F0E8; --gold:#B88A3E; --gold-soft:#F7EEDC;
+  --shadow:0 2px 12px rgba(60,40,25,.06);
+  --f-display:'Comfortaa','Trebuchet MS',system-ui,sans-serif;
+  --f-body:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-zh:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#161413; --paper2:#1B1816; --sheet:#211E1C; --sheet2:#2A2624; --ink:#F6F1EB; --muted:#B4A89C; --rule:#3A3431;
+  --accent:#E3847A; --on-accent:#161413; --accent-soft:#3E2623; --py:#EBA79D; --sky-soft:#2C2724;
+  --red:#E3847A; --red-soft:#3E2623; --green:#93C3A3; --green-soft:#22332A; --gold:#E2BE7E; --gold-soft:#3A3123;
+  --shadow:0 2px 12px rgba(0,0,0,.35); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#161413; --paper2:#1B1816; --sheet:#211E1C; --sheet2:#2A2624; --ink:#F6F1EB; --muted:#B4A89C; --rule:#3A3431;
+  --accent:#E3847A; --on-accent:#161413; --accent-soft:#3E2623; --py:#EBA79D; --sky-soft:#2C2724;
+  --red:#E3847A; --red-soft:#3E2623; --green:#93C3A3; --green-soft:#22332A; --gold:#E2BE7E; --gold-soft:#3A3123;
+  --shadow:0 2px 12px rgba(0,0,0,.35); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);background-image:linear-gradient(180deg,var(--paper) 0%,var(--paper2) 100%);background-attachment:fixed;color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:18px 60px}
+.wrap{max-width:740px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.zh{font-family:var(--f-zh)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.eyebrow{font-weight:800;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(1.6rem,6vw,2.3rem);line-height:1.05;margin:4px 0 0;text-wrap:balance}
+h1 .zh{color:var(--accent);font-weight:700}
+.count{display:flex;align-items:center;gap:10px;background:var(--sheet);border:1.5px solid var(--rule);border-radius:18px;box-shadow:var(--shadow);padding:8px 14px}
+.count b{font-family:var(--f-display);font-size:1.5rem;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
+.count span{font-size:.8rem;color:var(--muted);line-height:1.25}
+
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.tab{border:1.5px solid var(--rule);background:var(--sheet);border-radius:16px;box-shadow:var(--shadow);transition:background .2s,border-color .2s;padding:9px 4px;display:flex;flex-direction:column;align-items:center;gap:1px;font-weight:700;font-size:.82rem;color:var(--muted)}
+.tab .zh{font-size:1.2rem;font-weight:700}
+.tab[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+@media(max-width:440px){.tab{font-size:.7rem}}
+
+.parts{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1.5px solid var(--rule);background:var(--sheet);border-radius:30px;padding:6px 12px;font-weight:600;font-size:.84rem;color:var(--muted)}
+.chip[aria-pressed="true"]{border-color:var(--green);color:var(--green);background:var(--green-soft)}
+
+.sheet{background:var(--sheet);border:1.5px solid var(--rule);border-radius:26px;box-shadow:var(--shadow);padding:20px 18px;min-height:360px;display:flex;flex-direction:column;gap:14px;position:relative}
+.bar{display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--muted);font-weight:600}
+.prog{flex:1;height:8px;background:var(--sheet2);border-radius:9px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .25s}
+.instr{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;border-bottom:1.5px dashed var(--rule);padding-bottom:10px}
+.instr .zh{font-weight:700;color:var(--accent)}
+.instr span{color:var(--muted);font-size:.9rem}
+
+.py{display:block;font-size:.82rem;color:var(--py);font-weight:500;letter-spacing:.01em}
+.bigzh{font-family:var(--f-zh);font-weight:700;font-size:clamp(1.5rem,6vw,2.1rem);text-align:center;line-height:1.3}
+.bigzh .py{font-size:.95rem}
+.pic{font-size:4.2rem;text-align:center;line-height:1.1}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.btn{border:1.5px solid var(--rule);background:var(--sheet2);border-radius:16px;transition:transform .1s;padding:11px 16px;font-weight:700}
+.btn.go{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn:active:not(:disabled){transform:scale(.97)}
+.btn.play{background:var(--sky-soft);border-color:var(--py)}
+.btn.tf{min-width:110px;font-size:1.4rem}
+.btn:disabled{opacity:.45;cursor:default}
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:440px){.opts.txt{grid-template-columns:1fr}}
+.opt{border:1.5px solid var(--rule);background:var(--sheet);border-radius:18px;transition:border-color .2s,background .2s;padding:12px 8px;text-align:center;min-width:0;display:flex;flex-direction:column;gap:2px;align-items:center}
+.opt .letter{font-weight:700;color:var(--muted);font-size:.8rem}
+.opt .emo{font-size:2.6rem;line-height:1.15}
+.opt .zh{font-size:1.25rem;font-weight:700}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.ok{background:var(--green-soft)!important;border-color:var(--green)!important;color:var(--green)}
+.bad{background:var(--red-soft)!important;border-color:var(--red)!important;color:var(--red)}
+.opt:disabled{cursor:default}
+.fb{text-align:center;font-weight:700;min-height:1.4em}
+.fb.ok,.fb.bad{background:none!important;border:0}
+.reveal{background:var(--sky-soft);border-radius:16px;padding:10px 14px;text-align:center}
+.reveal .zh{font-weight:700;font-size:1.1rem}
+.reveal small{display:block;color:var(--muted)}
+.q{font-weight:700;text-align:center;font-size:1.15rem}
+.q .zh{display:block;font-size:1.35rem}
+.note{background:var(--gold-soft);border-radius:16px;padding:9px 13px;font-size:.86rem}
+
+/* set */
+.pool{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:520px){.pool{grid-template-columns:repeat(2,1fr)}}
+.pitem{border:1.5px solid var(--rule);border-radius:16px;background:var(--sheet2);padding:8px 10px;display:flex;gap:8px;align-items:flex-start;min-width:0}
+.pitem b{font-family:var(--f-display);color:var(--py)}
+.pitem .zh{font-weight:700}
+.pitem.used{opacity:.45}
+.srow{border-top:1.5px solid var(--rule);padding-top:10px;display:flex;flex-direction:column;gap:8px}
+.srow .zh{font-weight:700;font-size:1.15rem}
+.letters{display:flex;gap:6px;flex-wrap:wrap}
+.lt{width:40px;height:40px;border:1.5px solid var(--rule);border-radius:50%;background:var(--sheet2);font-family:var(--f-display);font-weight:700}
+.lt.sel{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.lt.dim{opacity:.4}
+.srow.ok,.srow.bad{border-radius:10px;padding:10px}
+.srow small{color:var(--muted)}
+
+/* keys */
+.keys{width:100%;border-collapse:collapse;font-size:.92rem}
+.keys td{border-top:1px solid var(--rule);padding:8px 6px;vertical-align:top}
+.keys td:first-child{font-family:var(--f-zh);font-weight:700;white-space:nowrap;color:var(--accent);font-size:1.05rem}
+.keys td:last-child{font-family:var(--f-zh);color:var(--muted)}
+.tblwrap{overflow-x:auto}
+.tips{display:grid;gap:8px}
+.tips div{background:var(--sheet2);border-radius:16px;padding:9px 12px;font-size:.92rem}
+.tips b{color:var(--green)}
+
+/* result */
+.stamp{align-self:center;border:3px dashed var(--accent);color:var(--accent);background:var(--accent-soft);border-radius:24px;padding:10px 22px;text-align:center;transform:rotate(-3deg)}
+.stamp.pass{border-color:var(--green);color:var(--green);background:var(--green-soft)}
+.stamp b{font-family:var(--f-display);font-size:2.6rem;display:block;line-height:1;font-variant-numeric:tabular-nums}
+.stamp span{font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.8rem}
+.scores{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.scores div{background:var(--sheet2);border-radius:16px;padding:10px;text-align:center}
+.scores b{display:block;font-family:var(--f-display);font-size:1.5rem;font-variant-numeric:tabular-nums}
+.scores small{color:var(--muted);font-weight:600}
+.partlist{font-size:.9rem;display:grid;gap:4px}
+.partlist div{display:flex;justify-content:space-between;border-top:1px solid var(--rule);padding-top:4px;font-variant-numeric:tabular-nums}
+.mist{display:grid;gap:6px}
+.mist div{background:var(--red-soft);border-radius:14px;padding:7px 11px;font-size:.88rem}
+.mist .zh{font-weight:700}
+.timer{position:absolute;top:14px;right:16px;font-family:var(--f-display);font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+
+.foot{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--muted);font-weight:600}
+.toggle input{width:18px;height:18px;accent-color:var(--accent)}
+textarea{width:100%;min-height:110px;border:1.5px solid var(--rule);border-radius:16px;background:var(--sheet2);color:var(--ink);font:inherit;font-size:.85rem;padding:10px}
+.hint{color:var(--muted);font-size:.86rem;text-align:center}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+<style>body{margin:0} [hidden]{display:none!important} img{max-width:100%}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">Лера · подготовка к пробнику №2</div>
+      <h1>Бланк <span class="zh">HSK1</span></h1>
+    </div>
+    <div class="count"><b id="days">3</b><span id="daysTxt">дня до экзамена<br>вс 18.10, 10:00</span></div>
+  </header>
+
+  <nav class="tabs" aria-label="Раздел">
+    <button class="tab" data-m="keys" aria-pressed="true"><span class="zh">钥匙</span>Ключи</button>
+    <button class="tab" data-m="listen" aria-pressed="false"><span class="zh">听力</span>Аудирование</button>
+    <button class="tab" data-m="read" aria-pressed="false"><span class="zh">阅读</span>Чтение</button>
+    <button class="tab" data-m="mock" aria-pressed="false"><span class="zh">考试</span>Пробник</button>
+  </nav>
+
+  <div class="parts" id="parts"></div>
+
+  <section class="sheet" id="sheet" aria-live="polite"></section>
+
+  <div class="foot">
+    <label class="toggle"><input type="checkbox" id="pyToggle" checked> Пиньинь в чтении (на экзамене HSK1 он тоже есть)</label>
+    <button class="btn" id="reportBtn">Отчёт для учителя</button>
+  </div>
+  <div id="reportBox" hidden>
+    <textarea id="reportTxt" readonly aria-label="Отчёт"></textarea>
+    <p class="hint" id="copyMsg"></p>
+  </div>
+</div>
+
+<script>
+/* ===================== ДАННЫЕ ===================== */
+// Аудирование 1 — верно ли картинка: [zh, py, ru, картинка, верно?, что на картинке]
+const L1=[
+ ["三本书","sān běn shū","три книги","📕📕📕",1],
+ ["两本书","liǎng běn shū","две книги","📕📕📕",0,"три книги"],
+ ["我在喝茶","wǒ zài hē chá","я пью чай","🍵",1],
+ ["他在打电话","tā zài dǎ diànhuà","он говорит по телефону","☎️",1],
+ ["下雨了","xià yǔ le","пошёл дождь","☀️",0,"солнце"],
+ ["我坐飞机去北京","wǒ zuò fēijī qù Běijīng","я лечу в Пекин на самолёте","✈️",1],
+ ["这是我的猫","zhè shì wǒ de māo","это моя кошка","🐶",0,"собака 狗"],
+ ["我在吃米饭","wǒ zài chī mǐfàn","я ем рис","🍚",1],
+ ["我们看电影吧","wǒmen kàn diànyǐng ba","давай посмотрим фильм","📖",0,"книга 书"],
+ ["我坐出租车","wǒ zuò chūzūchē","я еду на такси","🚕",1],
+ ["今天太热了","jīntiān tài rè le","сегодня очень жарко","🥶",0,"холодно 冷"],
+ ["她是医生","tā shì yīshēng","она врач","👩‍⚕️",1],
+ ["很漂亮","hěn piàoliang","очень красиво","🌸",1],
+ ["他在睡觉","tā zài shuìjiào","он спит","🏃",0,"бежит"],
+ ["我想喝水","wǒ xiǎng hē shuǐ","я хочу пить воду","💧",1],
+ ["我有一个儿子","wǒ yǒu yí ge érzi","у меня есть сын","👧",0,"девочка, дочь 女儿"]
+];
+// Аудирование 2 — выбери картинку: [zh, py, ru, [картинки], правильная]
+const L2=[
+ ["我想喝水，太热了。","Wǒ xiǎng hē shuǐ, tài rè le.","Хочу пить воду, очень жарко.",["💧","🍰","🍎"],0],
+ ["我坐火车去北京。","Wǒ zuò huǒchē qù Běijīng.","Я еду в Пекин на поезде.",["✈️","🚆","🚕"],1],
+ ["她在医院工作。","Tā zài yīyuàn gōngzuò.","Она работает в больнице.",["👩‍🏫","👩‍🍳","👩‍⚕️"],2],
+ ["他在看书。","Tā zài kàn shū.","Он читает книгу.",["📺","📖","🎬"],1],
+ ["今天很冷。","Jīntiān hěn lěng.","Сегодня холодно.",["🥶","🥵","🏖️"],0],
+ ["我们去饭店吃饭。","Wǒmen qù fàndiàn chīfàn.","Мы идём есть в ресторан.",["🏥","🏫","🍜"],2],
+ ["我的猫在椅子上。","Wǒ de māo zài yǐzi shang.","Моя кошка на стуле.",["🐱🪑","🐶🪑","🐱🛏️"],0],
+ ["我会写汉字。","Wǒ huì xiě Hànzì.","Я умею писать иероглифы.",["🎤","✍️","🏊"],1],
+ ["喂，你在哪儿？","Wéi, nǐ zài nǎr?","Алло, ты где?",["📺","🍵","☎️"],2],
+ ["这些杯子很漂亮。","Zhèxiē bēizi hěn piàoliang.","Эти чашки очень красивые.",["☕☕☕","📕📕","👕👕"],0],
+ ["他在开车。","Tā zài kāi chē.","Он ведёт машину.",["🚗","🚲","🚶"],0],
+ ["我买了三个苹果。","Wǒ mǎi le sān ge píngguǒ.","Я купила три яблока.",["🍎","🍎🍎🍎","🍊🍊🍊"],1]
+];
+// Аудирование 4 — диалог и вопрос
+const L4=[
+ ["我在北京住三天，星期天回来。","Wǒ zài Běijīng zhù sān tiān, xīngqītiān huílai.","Я поживу в Пекине три дня, вернусь в воскресенье.","他什么时候回来？","Tā shénme shíhou huílai?","Когда он вернётся?",[["星期三","xīngqīsān","в среду"],["星期天","xīngqītiān","в воскресенье"],["三点","sān diǎn","в три часа"]],1],
+ ["他是我儿子的同学，他在医院工作。","Tā shì wǒ érzi de tóngxué, tā zài yīyuàn gōngzuò.","Он одноклассник моего сына, работает в больнице.","谁在医院工作？","Shéi zài yīyuàn gōngzuò?","Кто работает в больнице?",[["我","wǒ","я"],["我儿子","wǒ érzi","мой сын"],["儿子的同学","érzi de tóngxué","одноклассник сына"]],2],
+ ["快点儿！我们三十分钟以后出发。","Kuài diǎnr! Wǒmen sānshí fēnzhōng yǐhòu chūfā.","Быстрее! Мы выходим через тридцать минут.","他们什么时候出发？","Tāmen shénme shíhou chūfā?","Когда они выходят?",[["十三分钟以后","shísān fēnzhōng yǐhòu","через 13 минут"],["三十分钟以后","sānshí fēnzhōng yǐhòu","через 30 минут"],["三点","sān diǎn","в три часа"]],1],
+ ["这个杯子二十五块，那个二十块。","Zhège bēizi èrshíwǔ kuài, nàge èrshí kuài.","Эта чашка — 25 юаней, та — 20.","这个杯子多少钱？","Zhège bēizi duōshao qián?","Сколько стоит эта чашка?",[["二十块","èrshí kuài","20 юаней"],["二十五块","èrshíwǔ kuài","25 юаней"],["五块","wǔ kuài","5 юаней"]],1],
+ ["我女儿八岁，我儿子十岁。","Wǒ nǚ'ér bā suì, wǒ érzi shí suì.","Моей дочке восемь лет, сыну десять.","女儿几岁？","Nǚ'ér jǐ suì?","Сколько лет дочке?",[["八岁","bā suì","8 лет"],["十岁","shí suì","10 лет"],["十八岁","shíbā suì","18 лет"]],0],
+ ["今天下雨了，天气很冷。","Jīntiān xià yǔ le, tiānqì hěn lěng.","Сегодня пошёл дождь, очень холодно.","今天天气怎么样？","Jīntiān tiānqì zěnmeyàng?","Какая сегодня погода?",[["很热","hěn rè","жарко"],["很冷","hěn lěng","холодно"],["很好","hěn hǎo","хорошая"]],1],
+ ["我坐出租车去学校。","Wǒ zuò chūzūchē qù xuéxiào.","Я еду в школу на такси.","他怎么去学校？","Tā zěnme qù xuéxiào?","Как он добирается до школы?",[["坐飞机","zuò fēijī","на самолёте"],["坐出租车","zuò chūzūchē","на такси"],["开车","kāi chē","сам за рулём"]],1],
+ ["我下个月去中国。","Wǒ xià ge yuè qù Zhōngguó.","В следующем месяце я еду в Китай.","他什么时候去中国？","Tā shénme shíhou qù Zhōngguó?","Когда он едет в Китай?",[["下个星期","xià ge xīngqī","на следующей неделе"],["下个月","xià ge yuè","в следующем месяце"],["明天","míngtiān","завтра"]],1],
+ ["我妈妈是医生，我爸爸是老师。","Wǒ māma shì yīshēng, wǒ bàba shì lǎoshī.","Моя мама врач, папа учитель.","谁是老师？","Shéi shì lǎoshī?","Кто учитель?",[["妈妈","māma","мама"],["爸爸","bàba","папа"],["我","wǒ","я"]],1],
+ ["她会说一点儿汉语。","Tā huì shuō yìdiǎnr Hànyǔ.","Она немного говорит по-китайски.","她会说什么？","Tā huì shuō shénme?","На каком языке она говорит?",[["汉语","Hànyǔ","китайский"],["俄语","Éyǔ","русский"],["英语","Yīngyǔ","английский"]],0],
+ ["我的书在桌子上，不在椅子上。","Wǒ de shū zài zhuōzi shang, bú zài yǐzi shang.","Моя книга на столе, не на стуле.","书在哪儿？","Shū zài nǎr?","Где книга?",[["桌子上","zhuōzi shang","на столе"],["椅子上","yǐzi shang","на стуле"],["学校里","xuéxiào li","в школе"]],0],
+ ["现在九点，我十点去学校。","Xiànzài jiǔ diǎn, wǒ shí diǎn qù xuéxiào.","Сейчас девять, в десять я иду в школу.","他几点去学校？","Tā jǐ diǎn qù xuéxiào?","Во сколько он идёт в школу?",[["九点","jiǔ diǎn","в 9"],["十点","shí diǎn","в 10"],["十二点","shí'èr diǎn","в 12"]],1]
+];
+// Чтение 1 — слово и картинка
+const R1=[
+ ["猫","māo","кошка","🐱",1],["儿子","érzi","сын","👧",0,"девочка, дочь 女儿"],["茶","chá","чай","🍚",0,"рис 米饭"],
+ ["椅子","yǐzi","стул","🪑",1],["飞机","fēijī","самолёт","✈️",1],["医生","yīshēng","врач","👨‍⚕️",1],
+ ["米饭","mǐfàn","рис","🍞",0,"хлеб"],["电视","diànshì","телевизор","📺",1],["下雨","xià yǔ","идёт дождь","☀️",0,"солнце"],
+ ["苹果","píngguǒ","яблоко","🍎",1],["出租车","chūzūchē","такси","🚌",0,"автобус"],["书","shū","книга","📖",1],
+ ["打电话","dǎ diànhuà","звонить по телефону","☎️",1],["说话","shuōhuà","говорить","👂",0,"ухо — слушать 听"],
+ ["桌子","zhuōzi","стол","🪑",0,"стул 椅子"],["狗","gǒu","собака","🐶",1],["衣服","yīfu","одежда","👕",1],["杯子","bēizi","чашка","🍽️",0,"тарелка"]
+];
+// Чтение 2 — предложение и картинка
+const R2=[
+ ["我很喜欢吃苹果。","Wǒ hěn xǐhuan chī píngguǒ.","Я очень люблю яблоки.",["🍎","🍌","🍚"],0],
+ ["他每天坐地铁去工作。","Tā měitiān zuò dìtiě qù gōngzuò.","Он каждый день ездит на работу на метро.",["🚇","🚗","✈️"],0],
+ ["你想坐哪个椅子？","Nǐ xiǎng zuò nǎge yǐzi?","На какой стул хочешь сесть?",["🛏️","🪑","🚪"],1],
+ ["我在商店买东西。","Wǒ zài shāngdiàn mǎi dōngxi.","Я покупаю вещи в магазине.",["🛍️","🏥","📚"],0],
+ ["下雨了，天气很冷。","Xià yǔ le, tiānqì hěn lěng.","Пошёл дождь, холодно.",["🌧️","☀️","🌈"],0],
+ ["他昨天去学习开车了。","Tā zuótiān qù xuéxí kāi chē le.","Вчера он ходил учиться водить машину.",["🚌","🚗","🚲"],1],
+ ["妈妈在做饭。","Māma zài zuò fàn.","Мама готовит еду.",["🍳","📺","🛌"],0],
+ ["我的狗很小。","Wǒ de gǒu hěn xiǎo.","Моя собака маленькая.",["🐶","🐱","🐟"],0],
+ ["她在看电视。","Tā zài kàn diànshì.","Она смотрит телевизор.",["📺","📖","☎️"],0],
+ ["我们一起去看电影吧。","Wǒmen yìqǐ qù kàn diànyǐng ba.","Давай вместе сходим в кино.",["🎬","🍜","🏫"],0]
+];
+// Чтение 3 — вопрос → ответ (5 вопросов, 6 ответов, один лишний)
+const R3=[
+ {opts:[["我没看。","Wǒ méi kàn.","Я не смотрела."],["是我女儿的。","Shì wǒ nǚ'ér de.","Моей дочери."],["没关系。","Méi guānxi.","Ничего страшного."],["她在打电话。","Tā zài dǎ diànhuà.","Она говорит по телефону."],["在桌子上。","Zài zhuōzi shang.","На столе."],["坐飞机去。","Zuò fēijī qù.","На самолёте."]],
+  qs:[["那个电影怎么样？","Nàge diànyǐng zěnmeyàng?","Как тебе тот фильм?",0],["这是谁的杯子？","Zhè shì shéi de bēizi?","Чья это чашка?",1],["对不起！","Duìbuqǐ!","Извини!",2],["她在家做什么？","Tā zài jiā zuò shénme?","Что она делает дома?",3],["爸爸，我的书在哪儿？","Bàba, wǒ de shū zài nǎr?","Папа, где моя книга?",4]]},
+ {opts:[["在医院。","Zài yīyuàn.","В больнице."],["下个月。","Xià ge yuè.","В следующем месяце."],["我想喝茶。","Wǒ xiǎng hē chá.","Хочу чай."],["不冷也不热。","Bù lěng yě bú rè.","Не холодно и не жарко."],["他是我的老师。","Tā shì wǒ de lǎoshī.","Это мой учитель."],["三块。","Sān kuài.","Три юаня."]],
+  qs:[["你妈妈在哪儿工作？","Nǐ māma zài nǎr gōngzuò?","Где работает твоя мама?",0],["你什么时候去北京？","Nǐ shénme shíhou qù Běijīng?","Когда ты едешь в Пекин?",1],["你想喝什么？","Nǐ xiǎng hē shénme?","Что ты хочешь пить?",2],["今天天气怎么样？","Jīntiān tiānqì zěnmeyàng?","Какая сегодня погода?",3],["他是谁？","Tā shì shéi?","Кто он?",4]]},
+ {opts:[["十块。","Shí kuài.","Десять юаней."],["八岁了。","Bā suì le.","Восемь лет."],["坐出租车去。","Zuò chūzūchē qù.","На такси."],["很好吃！","Hěn hǎochī!","Очень вкусно!"],["会，我会说一点儿。","Huì, wǒ huì shuō yìdiǎnr.","Да, немного говорю."],["在学校。","Zài xuéxiào.","В школе."]],
+  qs:[["这些苹果多少钱？","Zhèxiē píngguǒ duōshao qián?","Сколько стоят эти яблоки?",0],["你女儿几岁了？","Nǐ nǚ'ér jǐ suì le?","Сколько лет твоей дочке?",1],["你怎么去学校？","Nǐ zěnme qù xuéxiào?","Как ты добираешься до школы?",2],["这个菜怎么样？","Zhège cài zěnmeyàng?","Как тебе это блюдо?",3],["你会说汉语吗？","Nǐ huì shuō Hànyǔ ma?","Ты говоришь по-китайски?",4]]},
+ {opts:[["不客气。","Bú kèqi.","Не за что."],["我叫莉拉。","Wǒ jiào Lìlā.","Меня зовут Лила."],["三点。","Sān diǎn.","Три часа."],["我家有四口人。","Wǒ jiā yǒu sì kǒu rén.","У нас в семье четыре человека."],["我在饭店里。","Wǒ zài fàndiàn li.","Я в ресторане."],["很漂亮。","Hěn piàoliang.","Очень красиво."]],
+  qs:[["谢谢你！","Xièxie nǐ!","Спасибо тебе!",0],["你叫什么名字？","Nǐ jiào shénme míngzi?","Как тебя зовут?",1],["现在几点？","Xiànzài jǐ diǎn?","Который час?",2],["你家有几口人？","Nǐ jiā yǒu jǐ kǒu rén?","Сколько человек в твоей семье?",3],["喂，你在哪儿？","Wéi, nǐ zài nǎr?","Алло, ты где?",4]]}
+];
+// Чтение 4 — слово в пропуск
+const R4=[
+ {opts:[["能","néng"],["岁","suì"],["喜欢","xǐhuan"],["钱","qián"],["里","lǐ"],["本","běn"]],
+  qs:[["中午我＿请你吃饭吗？","Zhōngwǔ wǒ néng qǐng nǐ chīfàn ma?","Можно я приглашу тебя пообедать?",0],["王老师今年六十＿了。","Wáng lǎoshī jīnnián liùshí suì le.","Учителю Вану в этом году 60 лет.",1],["他和他妈妈都＿看电视。","Tā hé tā māma dōu xǐhuan kàn diànshì.","Он и его мама любят смотреть телевизор.",2],["这个菜多少＿？","Zhège cài duōshao qián?","Сколько стоит это блюдо?",3],["我在饭店＿，你在哪儿？","Wǒ zài fàndiàn li, nǐ zài nǎr?","Я в ресторане, а ты где?",4]]},
+ {opts:[["会","huì"],["呢","ne"],["上","shàng"],["在","zài"],["冷","lěng"],["杯","bēi"]],
+  qs:[["我＿说一点儿汉语。","Wǒ huì shuō yìdiǎnr Hànyǔ.","Я немного говорю по-китайски.",0],["我叫莉拉，你＿？","Wǒ jiào Lìlā, nǐ ne?","Меня зовут Лила, а тебя?",1],["我的猫在桌子＿。","Wǒ de māo zài zhuōzi shang.","Моя кошка на столе.",2],["我妈妈＿医院工作。","Wǒ māma zài yīyuàn gōngzuò.","Моя мама работает в больнице.",3],["今天下雨了，天气很＿。","Jīntiān xià yǔ le, tiānqì hěn lěng.","Сегодня дождь, очень холодно.",4]]},
+ {opts:[["本","běn"],["个","ge"],["杯","bēi"],["几","jǐ"],["什么","shénme"],["谁","shéi"]],
+  qs:[["我想买这＿书。","Wǒ xiǎng mǎi zhè běn shū.","Хочу купить эту книгу.",0],["桌子上有五＿苹果。","Zhuōzi shang yǒu wǔ ge píngguǒ.","На столе пять яблок.",1],["我想喝一＿茶。","Wǒ xiǎng hē yì bēi chá.","Хочу выпить чашку чая.",2],["你女儿＿岁了？","Nǐ nǚ'ér jǐ suì le?","Сколько лет твоей дочке?",3],["你想吃＿？","Nǐ xiǎng chī shénme?","Что ты хочешь съесть?",4]]},
+ {opts:[["谁","shéi"],["哪儿","nǎr"],["怎么","zěnme"],["多少","duōshao"],["什么时候","shénme shíhou"],["怎么样","zěnmeyàng"]],
+  qs:[["那个人是＿？——是我的老师。","Nàge rén shì shéi? — Shì wǒ de lǎoshī.","Кто тот человек? — Мой учитель.",0],["你家在＿？——在北京。","Nǐ jiā zài nǎr? — Zài Běijīng.","Где твой дом? — В Пекине.",1],["你＿去学校？——坐出租车。","Nǐ zěnme qù xuéxiào? — Zuò chūzūchē.","Как ты едешь в школу? — На такси.",2],["这本书＿钱？——二十块。","Zhè běn shū duōshao qián? — Èrshí kuài.","Сколько стоит книга? — 20 юаней.",3],["你＿回来？——星期天。","Nǐ shénme shíhou huílai? — Xīngqītiān.","Когда ты вернёшься? — В воскресенье.",4]]}
+];
+// Ключи
+const KEYS=[
+ ["谁","кто?","человек","老师 · 妈妈 · 我女儿"],
+ ["谁的","чей?","…的","是我女儿的 · 李小姐的"],
+ ["哪儿 / 在哪儿","где?","在 + место","在医院 · 在桌子上 · 饭店里"],
+ ["什么时候","когда?","время","下个月 · 星期天 · 三十分钟以后"],
+ ["几点","во сколько?","… 点","三点 · 十点"],
+ ["几岁","сколько лет?","… 岁","八岁 · 六十岁"],
+ ["多少钱","сколько стоит?","… 块 / 钱","十块 · 二十五块"],
+ ["几 + сч. слово","сколько?","число + 个 / 口 / 本","四口人 · 三本书"],
+ ["怎么 + глагол","как? каким способом?","坐 / 开 + транспорт","坐出租车 · 开车"],
+ ["怎么样","какой? как тебе?","прилагательное","很好 · 很冷 · 很好吃 · 很漂亮"],
+ ["什么","что?","предмет","茶 · 米饭 · 名字"],
+ ["做什么","что делает?","действие","在打电话 · 在看书"],
+ ["…吗？","да или нет?","是 / 会 / 能 / 不 / 没","会，我会说一点儿"],
+ ["对不起","извини","没关系",""],
+ ["谢谢","спасибо","不客气",""],
+ ["喂","алло","телефон ☎️",""]
+];
+const TYPES=["человек","чей (…的)","место (在…)","время","возраст (…岁)","деньги (…块)","количество","способ (坐…)","прилагательное","предмет","действие","да / нет","没关系","不客气"];
+const SPRINT=[
+ ["谁是你的老师？","Shéi shì nǐ de lǎoshī?",0],["这是谁的书？","Zhè shì shéi de shū?",1],["你家在哪儿？","Nǐ jiā zài nǎr?",2],
+ ["你妈妈在哪儿工作？","Nǐ māma zài nǎr gōngzuò?",2],["你什么时候回来？","Nǐ shénme shíhou huílai?",3],["现在几点？","Xiànzài jǐ diǎn?",3],
+ ["我们什么时候出发？","Wǒmen shénme shíhou chūfā?",3],["你女儿几岁？","Nǐ nǚ'ér jǐ suì?",4],["这个多少钱？","Zhège duōshao qián?",5],
+ ["你家有几口人？","Nǐ jiā yǒu jǐ kǒu rén?",6],["你怎么去学校？","Nǐ zěnme qù xuéxiào?",7],["今天天气怎么样？","Jīntiān tiānqì zěnmeyàng?",8],
+ ["那个电影怎么样？","Nàge diànyǐng zěnmeyàng?",8],["你想喝什么？","Nǐ xiǎng hē shénme?",9],["她在做什么？","Tā zài zuò shénme?",10],
+ ["你会说汉语吗？","Nǐ huì shuō Hànyǔ ma?",11],["对不起！","Duìbuqǐ!",12],["谢谢你！","Xièxie nǐ!",13],["他是谁？","Tā shì shéi?",0],["这个菜怎么样？","Zhège cài zěnmeyàng?",8]
+];
+const PARTS={
+ listen:[["L1","1 · Верно ли?","判断对错"],["L2","2 · Выбери картинку","选择图片"],["L4","4 · Вопрос к диалогу","选择答案"]],
+ read:[["R1","1 · Слово и картинка","判断对错"],["R2","2 · Фраза и картинка","选择图片"],["R3","3 · Вопрос → ответ","选择回答"],["R4","4 · Слово в пропуск","选词填空"]],
+ keys:[["K0","Шпаргалка",""],["K1","Ключ-спринт",""]]
+};
+const PART_TITLE={L1:["听力 · 第一部分","Послушай. Картинка подходит — ✓, нет — ✗"],L2:["听力 · 第二部分","Послушай и выбери картинку"],L4:["听力 · 第四部分","Послушай диалог и ответь на вопрос. Дослушай до конца!"],R1:["阅读 · 第一部分","Слово подходит к картинке? ✓ или ✗"],R2:["阅读 · 第二部分","Выбери картинку к предложению"],R3:["阅读 · 第三部分","Найди ответ к каждому вопросу. Один ответ лишний"],R4:["阅读 · 第四部分","Вставь слово в пропуск. Одно слово лишнее"],K1:["钥匙 · 快速","Какой ответ нужен на этот вопрос?"]};
+
+/* ===================== ОБЩЕЕ ===================== */
+const $=id=>document.getElementById(id);
+const sheet=$("sheet");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const LET="ABCDEF";
+let showPy=true; $("pyToggle").onchange=e=>{showPy=e.target.checked;rerender&&rerender();};
+const pyHtml=p=>showPy?`<span class="py">${esc(p)}</span>`:"";
+let rerender=null;
+const LOG={practice:[],mock:null,miss:[]};
+
+let zhVoice=null;
+function pickVoice(){try{const v=speechSynthesis.getVoices();zhVoice=v.find(x=>/^zh[-_]CN/i.test(x.lang))||v.find(x=>/^zh|cmn/i.test(x.lang))||null}catch(e){}}
+try{pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}catch(e){}
+function speak(t,rate){try{const s=window.speechSynthesis;if(!s)return;s.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="zh-CN";if(zhVoice)u.voice=zhVoice;u.rate=rate||.8;s.speak(u);}catch(e){}}
+const ttsNote=()=>("speechSynthesis" in window)?"":'<div class="note">Этот браузер не озвучивает текст. Открой страницу в Chrome или Safari.</div>';
+
+(function(){const exam=new Date(2026,9,18,10,0);const now=new Date();const ms=exam-now;
+ if(ms<=0){$("days").textContent="✓";$("daysTxt").innerHTML="пробник позади<br>повторяем";return;}
+ const d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5);
+ if(d>=1){$("days").textContent=d;$("daysTxt").innerHTML=(d===1?"день":d<5?"дня":"дней")+` ${h} ч до экзамена<br>вс 18.10, 10:00`;}
+ else{$("days").textContent=h;$("daysTxt").innerHTML="ч до экзамена<br>вс 18.10, 10:00 · 加油!";}
+})();
+
+/* ===================== ПОСТРОЕНИЕ ВОПРОСОВ ===================== */
+const mkTF=(r,part,audio)=>({type:"tf",part,audio,zh:r[0],py:r[1],ru:r[2],pic:r[3],ok:!!r[4],picRu:r[5]||""});
+const mkPick=(r,part,audio)=>{const o=r[3].map((e,i)=>({e,c:i===r[4]}));return {type:"pick",part,audio,zh:r[0],py:r[1],ru:r[2],opts:shuffle(o)}};
+const mkQA=r=>({type:"qa",part:"L4",audio:true,zh:r[0],py:r[1],ru:r[2],q:r[3],qpy:r[4],qru:r[5],opts:shuffle(r[6].map((o,i)=>({o,c:i===r[7]})))});
+const mkSet=(s,part)=>{const order=shuffle(s.opts.map((o,i)=>({o,i})));return {type:"set",part,opts:order.map(x=>x.o),qs:shuffle(s.qs).map(q=>({zh:q[0],py:q[1],ru:q[2],ans:order.findIndex(x=>x.i===q[3])}))}};
+const mkKey=r=>{const wrong=shuffle(TYPES.map((t,i)=>i).filter(i=>i!==r[2])).slice(0,3);return {type:"key",part:"K1",zh:r[0],py:r[1],opts:shuffle([r[2],...wrong]).map(i=>({t:TYPES[i],c:i===r[2]}))}};
+function build(part,n){
+ switch(part){
+  case"L1":return shuffle(L1).slice(0,n||L1.length).map(r=>mkTF(r,"L1",true));
+  case"L2":return shuffle(L2).slice(0,n||L2.length).map(r=>mkPick(r,"L2",true));
+  case"L4":return shuffle(L4).slice(0,n||L4.length).map(mkQA);
+  case"R1":return shuffle(R1).slice(0,n||R1.length).map(r=>mkTF(r,"R1",false));
+  case"R2":return shuffle(R2).slice(0,n||R2.length).map(r=>mkPick(r,"R2",false));
+  case"R3":return shuffle(R3).slice(0,n||R3.length).map(s=>mkSet(s,"R3"));
+  case"R4":return shuffle(R4).slice(0,n||R4.length).map(s=>mkSet(s,"R4"));
+  case"K1":return shuffle(SPRINT).slice(0,12).map(mkKey);
+ }
+}
+const weight=q=>q.type==="set"?q.qs.length:1;
+
+/* ===================== СЕССИЯ ===================== */
+let S=null, timerInt=null;
+function startSession(qs,opts){
+ clearInterval(timerInt);
+ S={qs,i:0,score:0,total:qs.reduce((a,q)=>a+weight(q),0),mock:!!opts.mock,label:opts.label,byPart:{},miss:[],t0:Date.now()};
+ qs.forEach(q=>{S.byPart[q.part]=S.byPart[q.part]||{ok:0,n:0};S.byPart[q.part].n+=weight(q)});
+ if(S.mock){timerInt=setInterval(()=>{const el=$("tmr");if(el)el.textContent=fmtT(Date.now()-S.t0)},1000);}
+ show();
+}
+const fmtT=ms=>{const s=Math.floor(ms/1000);return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
+function record(q,okCount,missText){S.score+=okCount;S.byPart[q.part].ok+=okCount;if(missText)S.miss.push(missText);}
+function next(){S.i++;show();}
+function head(q){const t=PART_TITLE[q.part];return `${S.mock?`<div class="timer" id="tmr">${fmtT(Date.now()-S.t0)}</div>`:""}
+ <div class="bar"><span>${esc(S.label)}</span><div class="prog"><i style="width:${Math.round(S.i/S.qs.length*100)}%"></i></div><span>${S.i+1} / ${S.qs.length}</span></div>
+ <div class="instr"><span class="zh">${t[0]}</span><span>${t[1]}</span></div>`}
+function nextBtn(){return `<div class="row"><button class="btn go" id="nb">${S.i+1<S.qs.length?"Дальше →":"Результат"}</button></div>`}
+function wireNext(){const b=$("nb");if(b){b.onclick=next;b.focus();}}
+function show(){
+ rerender=null;
+ if(S.i>=S.qs.length) return finish();
+ const q=S.qs[S.i];
+ ({tf:showTF,pick:showPick,qa:showQA,set:showSet,key:showKey})[q.type](q);
+}
+
+/* --- верно / неверно --- */
+function showTF(q){
+ const draw=(done)=>{
+  sheet.innerHTML=head(q)+(q.audio?ttsNote()+`<div class="row"><button class="btn play" id="pl">▶ Слушать</button><button class="btn" id="pls">🐢 Медленно</button></div>`:`<div class="bigzh">${pyHtml(q.py)}${esc(q.zh)}</div>`)+
+  `<div class="pic" aria-hidden="true">${q.pic}</div>
+   <div class="row"><button class="btn tf" data-v="1">✓</button><button class="btn tf" data-v="0">✗</button></div>
+   <div class="fb" id="fb"></div><div id="rv"></div><div id="nx"></div>`;
+  if(q.audio){$("pl").onclick=()=>speak(q.zh);$("pls").onclick=()=>speak(q.zh,.5);if(!done)setTimeout(()=>speak(q.zh),300);}
+  sheet.querySelectorAll(".tf").forEach(b=>b.onclick=()=>{
+   const v=b.dataset.v==="1", ok=v===q.ok;
+   sheet.querySelectorAll(".tf").forEach(x=>{x.disabled=true;if((x.dataset.v==="1")===q.ok)x.classList.add("ok")});
+   if(!ok)b.classList.add("bad");
+   record(q,ok?1:0,ok?null:`${q.zh} (${q.py}) — ${q.ru}; ответ: ${q.ok?"✓":"✗"}`);
+   if(!S.mock){$("fb").className="fb "+(ok?"ok":"bad");$("fb").textContent=ok?"Верно!":"Не совсем.";
+    $("rv").innerHTML=`<div class="reveal"><span class="zh">${esc(q.zh)}</span><small>${esc(q.py)} — ${esc(q.ru)}${q.ok?"":` · на картинке: ${esc(q.picRu)}`}</small></div>`;}
+   $("nx").innerHTML=nextBtn();wireNext();
+  });
+ };
+ draw(false); rerender=null;
+}
+/* --- выбор картинки --- */
+function showPick(q){
+ sheet.innerHTML=head(q)+(q.audio?ttsNote()+`<div class="row"><button class="btn play" id="pl">▶ Слушать</button><button class="btn" id="pls">🐢 Медленно</button></div>`:`<div class="bigzh">${pyHtml(q.py)}${esc(q.zh)}</div>`)+
+ `<div class="opts">${q.opts.map((o,k)=>`<button class="opt" data-k="${k}"><span class="letter">${LET[k]}</span><span class="emo" aria-hidden="true">${o.e}</span></button>`).join("")}</div>
+  <div class="fb" id="fb"></div><div id="rv"></div><div id="nx"></div>`;
+ if(q.audio){$("pl").onclick=()=>speak(q.zh);$("pls").onclick=()=>speak(q.zh,.5);setTimeout(()=>speak(q.zh),300);}
+ sheet.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+  const ok=q.opts[+b.dataset.k].c;
+  sheet.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(q.opts[+x.dataset.k].c)x.classList.add("ok")});
+  if(!ok)b.classList.add("bad");
+  record(q,ok?1:0,ok?null:`${q.zh} (${q.py}) — ${q.ru}`);
+  if(!S.mock){$("fb").className="fb "+(ok?"ok":"bad");$("fb").textContent=ok?"Верно!":"Не совсем.";
+   $("rv").innerHTML=`<div class="reveal"><span class="zh">${esc(q.zh)}</span><small>${esc(q.py)} — ${esc(q.ru)}</small></div>`;}
+  $("nx").innerHTML=nextBtn();wireNext();
+ });
+ if(!q.audio) rerender=()=>showPick(q);
+}
+/* --- вопрос к диалогу --- */
+function showQA(q){
+ sheet.innerHTML=head(q)+ttsNote()+`<div class="row"><button class="btn play" id="pl">▶ Слушать</button><button class="btn" id="pls">🐢 Медленно</button></div>
+ <div class="q"><span class="zh">${esc(q.q)}</span>${showPy?`<span class="py">${esc(q.qpy)}</span>`:""}</div>
+ <div class="opts txt">${q.opts.map((o,k)=>`<button class="opt" data-k="${k}"><span class="letter">${LET[k]}</span>${pyHtml(o.o[1])}<span class="zh">${esc(o.o[0])}</span></button>`).join("")}</div>
+ <div class="fb" id="fb"></div><div id="rv"></div><div id="nx"></div>`;
+ const full=q.zh+"。"+q.q;
+ $("pl").onclick=()=>speak(full);$("pls").onclick=()=>speak(full,.5);setTimeout(()=>speak(full),300);
+ sheet.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+  const ok=q.opts[+b.dataset.k].c, right=q.opts.find(o=>o.c).o;
+  sheet.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(q.opts[+x.dataset.k].c)x.classList.add("ok")});
+  if(!ok)b.classList.add("bad");
+  record(q,ok?1:0,ok?null:`${q.zh} ${q.q} — ответ: ${right[0]} (${right[2]})`);
+  if(!S.mock){$("fb").className="fb "+(ok?"ok":"bad");$("fb").textContent=ok?"Верно! Ты дослушала до конца 👍":"Ловушка! Послушай ещё раз и сравни.";
+   $("rv").innerHTML=`<div class="reveal"><span class="zh">${esc(q.zh)}</span><small>${esc(q.py)}<br>${esc(q.ru)} · ${esc(q.qru)} → ${esc(right[2])}</small></div>`;}
+  $("nx").innerHTML=nextBtn();wireNext();
+ });
+}
+/* --- набор: 5 вопросов, 6 ответов --- */
+function showSet(q){
+ q.pick=q.pick||Array(q.qs.length).fill(-1);
+ const draw=()=>{
+  const used=new Set(q.pick.filter(x=>x>=0));
+  const isR4=q.part==="R4";
+  sheet.innerHTML=head(q)+
+  `<div class="pool">${q.opts.map((o,k)=>`<div class="pitem ${used.has(k)?"used":""}"><b>${LET[k]}</b><div>${pyHtml(o[1])}<span class="zh">${esc(o[0])}</span></div></div>`).join("")}</div>
+  ${q.qs.map((s,n)=>{
+    const chosen=q.pick[n]>=0?q.opts[q.pick[n]][0]:"（ ）";
+    const txt=isR4?esc(s.zh).replace("＿",`<u>${esc(chosen)}</u>`):esc(s.zh);
+    const cls=q.checked?(q.pick[n]===s.ans?"ok":"bad"):"";
+    return `<div class="srow ${cls}"><div>${pyHtml(s.py)}<span class="zh">${n+1}. ${txt}</span></div>
+     <div class="letters">${q.opts.map((o,k)=>`<button class="lt ${q.pick[n]===k?"sel":""} ${used.has(k)&&q.pick[n]!==k?"dim":""}" data-n="${n}" data-k="${k}" ${q.checked?"disabled":""} aria-label="Вопрос ${n+1}, вариант ${LET[k]}">${LET[k]}</button>`).join("")}</div>
+     ${q.checked?`<small>${esc(s.ru)}${q.pick[n]===s.ans?"":` · правильно: ${LET[s.ans]} ${esc(q.opts[s.ans][0])}`}</small>`:""}</div>`}).join("")}
+  <div class="fb" id="fb"></div>
+  <div class="row" id="nx">${q.checked?"":`<button class="btn go" id="chk" ${q.pick.includes(-1)?"disabled":""}>Проверить</button>`}</div>`;
+  if(!q.checked){
+   sheet.querySelectorAll(".lt").forEach(b=>b.onclick=()=>{const n=+b.dataset.n,k=+b.dataset.k;
+    const other=q.pick.indexOf(k); if(other>=0&&other!==n) q.pick[other]=-1;
+    q.pick[n]=q.pick[n]===k?-1:k; draw();});
+   const c=$("chk"); if(c) c.onclick=()=>{
+    q.checked=true; let ok=0;
+    q.qs.forEach((s,n)=>{if(q.pick[n]===s.ans)ok++;else S.miss.push(`${s.zh} → ${q.opts[s.ans][0]} (${s.ru})`)});
+    S.score+=ok;S.byPart[q.part].ok+=ok;
+    draw();
+    if(!S.mock){$("fb").className="fb "+(ok===q.qs.length?"ok":"bad");$("fb").textContent=ok===q.qs.length?"5 из 5! 太棒了！":`${ok} из ${q.qs.length}. Посмотри разбор под каждой строкой.`;}
+    $("nx").innerHTML=nextBtn();wireNext();
+   };
+  } else {$("nx").innerHTML=nextBtn();wireNext();}
+ };
+ draw(); rerender=draw;
+}
+/* --- ключ-спринт --- */
+function showKey(q){
+ sheet.innerHTML=head(q)+`<div class="bigzh">${pyHtml(q.py)}${esc(q.zh)}</div>
+ <div class="opts txt" style="grid-template-columns:repeat(2,1fr)">${q.opts.map((o,k)=>`<button class="opt" data-k="${k}"><span class="zh" style="font-size:1rem">${esc(o.t)}</span></button>`).join("")}</div>
+ <div class="fb" id="fb"></div><div id="nx"></div>`;
+ sheet.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+  const ok=q.opts[+b.dataset.k].c, right=q.opts.find(o=>o.c).t;
+  sheet.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(q.opts[+x.dataset.k].c)x.classList.add("ok")});
+  if(!ok)b.classList.add("bad");
+  record(q,ok?1:0,ok?null:`${q.zh} → нужен ответ: ${right}`);
+  $("fb").className="fb "+(ok?"ok":"bad");$("fb").textContent=ok?"Верно!":`Нужен ответ: ${right}`;
+  $("nx").innerHTML=nextBtn();wireNext();
+ });
+ rerender=()=>showKey(q);
+}
+
+/* ===================== ИТОГ ===================== */
+function finish(){
+ clearInterval(timerInt);
+ const time=fmtT(Date.now()-S.t0);
+ if(S.mock){
+  const L=["L1","L2","L4"],R=["R1","R2","R3","R4"];
+  const sum=(ps)=>ps.reduce((a,p)=>({ok:a.ok+(S.byPart[p]?.ok||0),n:a.n+(S.byPart[p]?.n||0)}),{ok:0,n:0});
+  const l=sum(L),r=sum(R);const ls=Math.round(l.ok/l.n*100),rs=Math.round(r.ok/r.n*100),tot=ls+rs,pass=tot>=120;
+  LOG.mock={ls,rs,tot,time,byPart:JSON.parse(JSON.stringify(S.byPart)),miss:S.miss.slice()};
+  try{localStorage.setItem("lera-hsk1-mock",JSON.stringify({tot,ls,rs,d:Date.now()}))}catch(e){}
+  sheet.innerHTML=`<div class="stamp ${pass?"pass":""}"><b>${tot}</b><span>${pass?"合格 · сдано":"ещё чуть-чуть"} · из 200</span></div>
+   <div class="scores"><div><b>${ls}</b><small>听力 · аудирование / 100</small></div><div><b>${rs}</b><small>阅读 · чтение / 100</small></div></div>
+   <div class="partlist">${Object.entries(S.byPart).map(([p,v])=>`<div><span>${PART_TITLE[p][0]}</span><span>${v.ok} / ${v.n}</span></div>`).join("")}<div><span>Время</span><span>${time}</span></div></div>
+   <p class="hint">Проходной балл — 120. ${pass?"Отличный результат! В воскресенье просто повтори это.":"Посмотри ошибки ниже и потренируй эти части отдельно."}</p>
+   ${S.miss.length?`<div class="mist">${S.miss.map(m=>`<div class="zh">${esc(m)}</div>`).join("")}</div>`:""}
+   <div class="row"><button class="btn go" onclick="startMock()">Ещё один пробник</button></div>`;
+ } else {
+  LOG.practice.push({label:S.label,ok:S.score,n:S.total});
+  S.miss.forEach(m=>LOG.miss.push(m));
+  const pct=Math.round(S.score/S.total*100);
+  sheet.innerHTML=`<div class="stamp ${pct>=80?"pass":""}"><b>${S.score}/${S.total}</b><span>${esc(S.label)}</span></div>
+   <p class="hint">${pct>=90?"太棒了！ Эту часть ты знаешь.":pct>=70?"Хорошо! Повтори ошибки — и будет отлично.":"Попробуй ещё раз — второй круг всегда лучше."}</p>
+   ${S.miss.length?`<div class="mist">${S.miss.map(m=>`<div class="zh">${esc(m)}</div>`).join("")}</div>`:""}
+   <div class="row"><button class="btn go" id="again">Ещё раз</button></div>`;
+  const part=S.qs[0].part; $("again").onclick=()=>practice(part);
+ }
+}
+
+/* ===================== РЕЖИМЫ ===================== */
+let mode="keys", part="K0";
+function renderParts(){
+ const list=PARTS[mode]||[];
+ $("parts").hidden=!list.length;
+ $("parts").innerHTML=list.map(([k,t])=>`<button class="chip" data-p="${k}" aria-pressed="${k===part}">${t}</button>`).join("");
+ $("parts").querySelectorAll(".chip").forEach(c=>c.onclick=()=>{part=c.dataset.p;renderParts();practice(part)});
+}
+function practice(p){
+ if(p==="K0") return showKeys();
+ const label=[...(PARTS.listen),...(PARTS.read),...(PARTS.keys)].find(x=>x[0]===p)[1];
+ startSession(build(p),{label});
+}
+function showKeys(){
+ clearInterval(timerInt); rerender=null;
+ sheet.innerHTML=`<div class="instr"><span class="zh">钥匙</span><span>Смотри на вопросительное слово — оно подскажет, какой нужен ответ</span></div>
+ <div class="tblwrap"><table class="keys"><tbody>${KEYS.map(k=>`<tr><td>${esc(k[0])}</td><td>${esc(k[1])}<br><b>→ ${esc(k[2])}</b></td><td>${esc(k[3])}</td></tr>`).join("")}</tbody></table></div>
+ <div class="instr"><span class="zh">技巧</span><span>Тактика на экзамене</span></div>
+ <div class="tips">
+  <div><b>Дослушай до конца.</b> Ловушки почти всегда в числах: 三天 ≠ 星期三, 十三 ≠ 三十, 八 ≠ 十八.</div>
+  <div><b>Вычёркивай использованное.</b> В частях с A–F каждый ответ идёт только один раз, один всегда лишний.</div>
+  <div><b>Начинай с того, что знаешь точно.</b> Незнакомый иероглиф пропусти и вернись к нему в конце — останется 2 варианта.</div>
+  <div><b>Готовые пары:</b> 对不起 → 没关系 · 谢谢 → 不客气 · 喂 → телефон ☎️.</div>
+  <div><b>Аккуратно нажимай.</b> Один промах кликом — минус 5 баллов. Проверь ответы, если остаётся время.</div>
+ </div>
+ <div class="row"><button class="btn go" id="toSprint">Потренировать ключи →</button></div>`;
+ $("toSprint").onclick=()=>{part="K1";renderParts();practice("K1")};
+}
+function startMock(){
+ const qs=[...build("L1",5),...build("L2",5),...build("L4",5),...build("R1",5),...build("R2",5),...build("R3",1),...build("R4",1)];
+ startSession(qs,{mock:true,label:"Пробник"});
+}
+function mockIntro(){
+ clearInterval(timerInt); rerender=null;
+ let last=""; try{const m=JSON.parse(localStorage.getItem("lera-hsk1-mock")||"null"); if(m) last=`<p class="hint">Прошлый пробник на этом устройстве: <b>${m.tot}</b> / 200</p>`;}catch(e){}
+ sheet.innerHTML=`<div class="instr"><span class="zh">考试</span><span>Мини-пробник: все 7 частей экзамена, как в воскресенье</span></div>
+ <div class="tips">
+  <div><b>听力 · аудирование:</b> части 1, 2, 4 — по 5 заданий.</div>
+  <div><b>阅读 · чтение:</b> части 1–4 — по 5 заданий.</div>
+  <div>Подсказок и разбора по ходу нет — как на настоящем экзамене. Все ошибки покажу в конце. Баллы — из 200, проходной 120.</div>
+  <div>Займёт примерно 15–20 минут. Найди тихое место и надень наушники 🎧</div>
+ </div>${last}
+ <div class="row"><button class="btn go" id="go">Начать пробник</button></div>`;
+ $("go").onclick=startMock;
+}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
+ mode=b.dataset.m; document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-pressed",x===b));
+ part=mode==="keys"?"K0":mode==="listen"?"L1":mode==="read"?"R1":"";
+ renderParts();
+ if(mode==="mock") mockIntro(); else practice(part);
+});
+
+/* ===================== ОТЧЁТ ===================== */
+$("reportBtn").onclick=()=>{
+ const d=new Date().toLocaleString("ru-RU",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
+ let t=`Лера · «Бланк HSK1» · ${d}\n`;
+ if(LOG.mock){t+=`\nПробник: ${LOG.mock.tot}/200 (аудирование ${LOG.mock.ls}, чтение ${LOG.mock.rs}) · время ${LOG.mock.time}\n`;
+  t+=Object.entries(LOG.mock.byPart).map(([p,v])=>`  ${PART_TITLE[p][0]}: ${v.ok}/${v.n}`).join("\n")+"\n";
+  if(LOG.mock.miss.length) t+="Ошибки в пробнике:\n"+LOG.mock.miss.map(m=>"  • "+m).join("\n")+"\n";}
+ if(LOG.practice.length){t+="\nТренировка по частям:\n"+LOG.practice.map(p=>`  ${p.label}: ${p.ok}/${p.n}`).join("\n")+"\n";}
+ if(LOG.miss.length){t+="Ошибки в тренировке:\n"+[...new Set(LOG.miss)].map(m=>"  • "+m).join("\n")+"\n";}
+ if(!LOG.mock&&!LOG.practice.length) t+="\nПока ничего не пройдено.\n";
+ const box=$("reportBox"),ta=$("reportTxt"); box.hidden=false; ta.value=t;
+ try{navigator.clipboard.writeText(t).then(()=>{$("copyMsg").textContent="Скопировано! Отправь маме — она перешлёт учителю."},()=>{ta.select();$("copyMsg").textContent="Выдели текст и скопируй вручную."});}catch(e){ta.select();$("copyMsg").textContent="Выдели текст и скопируй вручную.";}
+};
+
+renderParts(); showKeys();
+</script>
+
+</body>
+</html>
