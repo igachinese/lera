@@ -1,0 +1,462 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Говорилка HSK2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Nunito:wght@400;600;700;800&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+/* Layout: тетрадь в клетку, сверху липкая лента станций, одна станция на экране — удобно показывать в Zoom */
+:root{
+  --bg:#F5F7FD; --grid:#E3E8F6; --card:#FFFFFF; --ink:#1D2140; --soft:#5E6486; --line:#D9DEEE;
+  --pop:#E0507A; --pop-soft:#FCE3EB; --teal:#1F9C90; --teal-soft:#DDF3F0; --sun:#F5B829; --bad:#D9483B; --bad-soft:#FBE4E1;
+  --f-disp:'Unbounded','Nunito',system-ui,sans-serif;
+  --f-body:'Nunito',system-ui,sans-serif;
+  --f-zh:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141729; --grid:#1D2140; --card:#1C2038; --ink:#ECEEFA; --soft:#A3A8C8; --line:#2D3256;
+  --pop:#FF7499; --pop-soft:#3A2240; --teal:#49C7B9; --teal-soft:#16343A; --sun:#FFC94A; --bad:#FF7A6B; --bad-soft:#3D2028; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141729; --grid:#1D2140; --card:#1C2038; --ink:#ECEEFA; --soft:#A3A8C8; --line:#2D3256;
+  --pop:#FF7499; --pop-soft:#3A2240; --teal:#49C7B9; --teal-soft:#16343A; --sun:#FFC94A; --bad:#FF7A6B; --bad-soft:#3D2028; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{
+  background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;
+  color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0 60px;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:900px;margin:0 auto}
+.zh{font-family:var(--f-zh)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px;border-radius:8px}
+
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:34px 18px}
+.brand{display:flex;flex-direction:column;gap:4px;min-width:0}
+.brand .eyebrow{font-weight:800;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pop)}
+h1{font-family:var(--f-disp);font-weight:800;font-size:clamp(1.8rem,5vw,2.7rem);line-height:1.05;margin:0;text-wrap:balance}
+h1 .zh{color:var(--pop);font-weight:900}
+.score{display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:8px 14px;box-shadow:3px 3px 0 var(--ink);font-weight:800}
+.score svg{width:24px;height:24px}
+.score b{font-family:var(--f-disp);font-size:1.3rem;font-variant-numeric:tabular-nums}
+
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;margin-bottom:22px;border-bottom:2px dashed var(--line)}
+.tabrow{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.tabrow::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:12px;border:2px solid var(--line);background:var(--card);font-weight:800;font-size:.92rem;white-space:nowrap}
+.tab .n{font-family:var(--f-disp);font-size:.8rem;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:var(--grid);color:var(--soft)}
+.tab .min{font-weight:600;color:var(--soft);font-size:.8rem}
+.tab[aria-selected="true"]{border-color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.tab[aria-selected="true"] .n{background:var(--pop);color:#fff}
+
+.station-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+h2{font-family:var(--f-disp);font-weight:700;font-size:1.5rem;margin:0}
+h2 .zh{color:var(--teal);font-weight:900;margin-right:8px}
+.lead{color:var(--soft);margin:0 0 20px;max-width:62ch}
+
+.btn{border:2px solid var(--ink);background:var(--card);border-radius:12px;padding:10px 18px;font-weight:800;box-shadow:3px 3px 0 var(--ink);transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn.primary{background:var(--pop);color:#fff;border-color:var(--ink)}
+.btn.ghost{box-shadow:none;border-color:var(--line)}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+.say{border:none;background:var(--teal-soft);color:var(--teal);width:36px;height:36px;border-radius:50%;display:inline-grid;place-items:center;flex:0 0 auto}
+.say svg{width:18px;height:18px}
+
+/* 1. Карточки */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
+.card{perspective:900px;height:230px;cursor:pointer}
+.inner{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
+.card.flip .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:2px solid var(--ink);border-radius:18px;background:var(--card);padding:14px;display:flex;flex-direction:column}
+.front{align-items:center;justify-content:center;gap:6px;box-shadow:4px 4px 0 var(--ink)}
+.front .big{font-family:var(--f-zh);font-weight:900;font-size:3.2rem;line-height:1}
+.front .hint{font-size:.78rem;color:var(--soft);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.front .num{position:absolute;top:10px;left:12px;font-family:var(--f-disp);font-size:.75rem;color:var(--soft)}
+.back{transform:rotateY(180deg);gap:5px;background:var(--pop-soft);box-shadow:4px 4px 0 var(--pop)}
+.back .top-line{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.back .w{font-family:var(--f-zh);font-weight:900;font-size:1.7rem}
+.back .py{color:var(--pop);font-weight:800;font-size:1.05rem}
+.back .ru{font-weight:800}
+.back .ex{font-family:var(--f-zh);font-size:1rem;margin-top:auto}
+.back .expy{font-size:.82rem;color:var(--soft)}
+.back .etym{font-size:.78rem;color:var(--soft);font-style:italic;border-top:1px dashed var(--line);padding-top:4px}
+@media (prefers-reduced-motion:reduce){.inner{transition:none}}
+
+/* общий «лист» для станций */
+.sheet{background:var(--card);border:2px solid var(--ink);border-radius:20px;box-shadow:5px 5px 0 var(--ink);padding:22px}
+.progress{display:flex;gap:6px;margin-bottom:16px}
+.progress i{flex:1;height:6px;border-radius:4px;background:var(--line)}
+.progress i.done{background:var(--teal)}
+.progress i.now{background:var(--pop)}
+
+/* 2. Собери */
+.task-ru{font-family:var(--f-disp);font-weight:700;font-size:1.2rem;margin-bottom:16px;text-wrap:balance}
+.slot{min-height:84px;border:2px dashed var(--line);border-radius:14px;padding:10px;display:flex;gap:8px;flex-wrap:wrap;align-content:flex-start;margin-bottom:14px;transition:background .2s,border-color .2s}
+.slot.ok{border-color:var(--teal);background:var(--teal-soft)}
+.slot.no{border-color:var(--bad);background:var(--bad-soft)}
+.slot .empty{color:var(--soft);font-size:.9rem;align-self:center;padding-left:4px}
+.pool{display:flex;gap:8px;flex-wrap:wrap;min-height:60px;margin-bottom:18px}
+.tile{border:2px solid var(--ink);background:var(--card);border-radius:12px;padding:6px 12px;display:flex;flex-direction:column;align-items:center;box-shadow:2px 2px 0 var(--ink)}
+.tile .h{font-family:var(--f-zh);font-weight:700;font-size:1.45rem;line-height:1.2}
+.tile .p{font-size:.75rem;color:var(--soft);font-weight:700}
+.slot .tile{background:var(--sun);border-color:var(--ink)}
+.slot .tile .p{color:var(--ink)}
+.verdict{font-weight:800;min-height:1.6em;margin-top:12px}
+.verdict.ok{color:var(--teal)} .verdict.no{color:var(--bad)}
+.answer{font-family:var(--f-zh);font-size:1.15rem;margin-top:4px}
+
+/* 3. Говорилка */
+.talk{display:grid;grid-template-columns:1fr;gap:16px}
+.topic{display:inline-flex;align-items:center;gap:8px;background:var(--teal-soft);color:var(--teal);font-weight:800;border-radius:30px;padding:5px 14px;font-size:.9rem}
+.q{font-family:var(--f-zh);font-weight:900;font-size:clamp(1.8rem,5vw,2.5rem);line-height:1.2;margin:14px 0 2px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.qpy{color:var(--pop);font-weight:800;font-size:1.05rem}
+.qru{color:var(--soft);margin-top:4px}
+.frames{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:18px}
+.frame{border:2px solid var(--line);border-radius:14px;padding:12px 14px;min-width:0}
+.frame .lbl{font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);margin-bottom:4px}
+.frame .zhl{font-family:var(--f-zh);font-size:1.3rem;font-weight:700}
+.frame .pyl{font-size:.85rem;color:var(--soft)}
+.must{border-color:var(--pop);background:var(--pop-soft)}
+.must .zhl{color:var(--pop);font-size:1.8rem;font-weight:900}
+.stars{display:flex;align-items:center;gap:10px;margin-top:18px;flex-wrap:wrap}
+.stars .lbl{font-weight:800;color:var(--soft);font-size:.92rem}
+.star{border:none;background:none;padding:2px}
+.star svg{width:40px;height:40px;transition:transform .15s}
+.star svg path{fill:var(--line);stroke:var(--ink);stroke-width:1.5}
+.star.on svg path{fill:var(--sun)}
+.star.on svg{transform:scale(1.12) rotate(-8deg)}
+@media (prefers-reduced-motion:reduce){.star svg{transition:none}}
+.spin-anim{animation:pop .35s ease}
+@keyframes pop{0%{transform:scale(.96);opacity:.4}100%{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.spin-anim{animation:none}}
+
+/* 4. Допиши */
+.half{font-family:var(--f-zh);font-weight:700;font-size:clamp(1.5rem,4.5vw,2.1rem);line-height:1.3;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.half .dots{color:var(--pop)}
+.reveal{margin-top:16px;padding:14px;border-radius:14px;background:var(--teal-soft)}
+.reveal .zhr{font-family:var(--f-zh);font-size:1.3rem;font-weight:700}
+.swap{margin-top:18px;font-size:.92rem;color:var(--soft);border-top:1px dashed var(--line);padding-top:12px}
+
+/* 5. Финал */
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}
+.opt{border:2px solid var(--ink);background:var(--card);border-radius:14px;padding:12px;box-shadow:3px 3px 0 var(--ink);display:flex;flex-direction:column;align-items:center}
+.opt .h{font-family:var(--f-zh);font-weight:900;font-size:1.6rem}
+.opt .p{font-size:.8rem;color:var(--soft);font-weight:700}
+.opt.right{background:var(--teal-soft);border-color:var(--teal);box-shadow:3px 3px 0 var(--teal)}
+.opt.wrong{background:var(--bad-soft);border-color:var(--bad);box-shadow:3px 3px 0 var(--bad)}
+.gap{font-family:var(--f-zh);font-weight:700;font-size:clamp(1.4rem,4.2vw,1.9rem)}
+.gap .blank{display:inline-block;min-width:2.6em;border-bottom:3px solid var(--pop);text-align:center;color:var(--pop)}
+.gappy{color:var(--soft);font-size:.92rem}
+.result{text-align:center;padding:20px 0}
+.result .big{font-family:var(--f-disp);font-size:3.2rem;font-weight:800;color:var(--pop);font-variant-numeric:tabular-nums}
+.result .zhr{font-family:var(--f-zh);font-size:1.6rem;font-weight:900;margin-top:6px}
+
+footer{margin-top:40px;color:var(--soft);font-size:.85rem;text-align:center}
+@media (max-width:480px){.opts{grid-template-columns:1fr 1fr}.card{height:240px}.sheet{padding:16px}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <span class="eyebrow">Мост к HSK2 · лёгкий урок</span>
+      <h1>Говорилка <span class="zh">说吧！</span></h1>
+    </div>
+    <div class="score" aria-live="polite">
+      <svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5L2.5 9.3l6.6-.8z" fill="var(--sun)" stroke="var(--ink)" stroke-width="1.5"/></svg>
+      <span>Сказано: <b id="total">0</b></span>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Станции урока">
+    <div class="tabrow" role="tablist" id="tabrow"></div>
+  </nav>
+
+  <!-- 1 -->
+  <section class="station" id="st-words" role="tabpanel">
+    <div class="station-head"><h2><span class="zh">新词</span>Новые слова</h2></div>
+    <p class="lead">8 слов HSK2, которые помогают говорить длиннее. Нажми на карточку, чтобы перевернуть. Сначала угадай перевод сама.</p>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <!-- 2 -->
+  <section class="station" id="st-build" role="tabpanel" hidden>
+    <div class="station-head"><h2><span class="zh">拼句子</span>Собери предложение</h2></div>
+    <p class="lead">Нажимай на слова по порядку. Ошиблась — нажми на слово в строке, и оно вернётся.</p>
+    <div class="sheet">
+      <div class="progress" id="bProg"></div>
+      <div class="task-ru" id="bRu"></div>
+      <div class="slot" id="bSlot"></div>
+      <div class="pool" id="bPool"></div>
+      <div class="row">
+        <button class="btn primary" id="bCheck">Проверить</button>
+        <button class="btn ghost" id="bShow">Показать ответ</button>
+        <button class="btn" id="bNext">Дальше →</button>
+      </div>
+      <div class="verdict" id="bVerdict" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="station" id="st-talk" role="tabpanel" hidden>
+    <div class="station-head"><h2><span class="zh">聊天</span>Говорилка</h2></div>
+    <p class="lead">Тяни тему. Учитель задаёт вопрос, ты отвечаешь по каркасу и обязательно используешь слово дня. Каждое сказанное предложение — звезда.</p>
+    <div class="sheet" id="talkCard">
+      <div class="row" style="justify-content:space-between">
+        <span class="topic" id="tTopic"></span>
+        <span style="color:var(--soft);font-weight:700;font-size:.88rem" id="tCount"></span>
+      </div>
+      <div class="q"><span id="tQ"></span><button class="say" data-say-from="tQ" aria-label="Послушать вопрос"></button></div>
+      <div class="qpy" id="tPy"></div>
+      <div class="qru" id="tRu" hidden></div>
+      <div class="frames">
+        <div class="frame"><div class="lbl">Каркас</div><div class="zhl" id="tFrame"></div><div class="pyl" id="tFramePy"></div></div>
+        <div class="frame must"><div class="lbl">Слово дня</div><div class="zhl" id="tMust"></div><div class="pyl" id="tMustPy"></div></div>
+      </div>
+      <div class="stars" id="tStars"><span class="lbl">Мои предложения:</span></div>
+      <div class="row" style="margin-top:20px">
+        <button class="btn primary" id="tSpin">Новая тема</button>
+        <button class="btn ghost" id="tHint">Перевод вопроса</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="station" id="st-finish" role="tabpanel" hidden>
+    <div class="station-head"><h2><span class="zh">接着说</span>Допиши вслух</h2></div>
+    <p class="lead">Начало уже есть. Закончи предложение своими словами. Правильных вариантов много, пример — только один из них.</p>
+    <div class="sheet">
+      <div class="progress" id="fProg"></div>
+      <div class="half"><span id="fZh"></span><span class="dots">……</span><button class="say" id="fSay" aria-label="Послушать"></button></div>
+      <div class="qpy" id="fPy" style="margin-top:4px"></div>
+      <div class="qru" id="fRu"></div>
+      <div class="reveal" id="fReveal" hidden>
+        <div style="font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--teal)">Например</div>
+        <div class="zhr" id="fEnd"></div>
+        <div class="pyl" style="color:var(--soft);font-size:.88rem" id="fEndPy"></div>
+      </div>
+      <div class="row" style="margin-top:18px">
+        <button class="btn ghost" id="fPrev">← Назад</button>
+        <button class="btn" id="fShow">Пример</button>
+        <button class="btn primary" id="fNext">Дальше →</button>
+      </div>
+      <div class="swap"><b>Поменяйтесь ролями:</b> теперь ты придумываешь начало с 因为, 但是 или 我觉得, а учитель заканчивает.</div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="station" id="st-quiz" role="tabpanel" hidden>
+    <div class="station-head"><h2><span class="zh">小测验</span>Какое слово пропало?</h2></div>
+    <p class="lead">Быстрый финал: 8 предложений, выбери слово для пропуска.</p>
+    <div class="sheet" id="quiz"></div>
+  </section>
+
+  <footer>加油，莉拉！· Мост к HSK2</footer>
+</div>
+
+<script>
+const SPK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+const canSpeak=('speechSynthesis' in window);
+function say(t){if(!canSpeak)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=.82;speechSynthesis.speak(u);}catch(e){}}
+function sayBtn(el,text){if(!canSpeak){el.hidden=true;return;}el.innerHTML=SPK;el.onclick=e=>{e.stopPropagation();say(typeof text==='function'?text():text);};}
+
+let total=0;const totalEl=document.getElementById('total');
+function addStar(d){total=Math.max(0,total+d);totalEl.textContent=total;}
+
+/* ---------- ВКЛАДКИ ---------- */
+const STATIONS=[
+ {id:'words',t:'Слова',m:'7 мин'},
+ {id:'build',t:'Собери',m:'7 мин'},
+ {id:'talk',t:'Говорилка',m:'10 мин'},
+ {id:'finish',t:'Допиши',m:'5 мин'},
+ {id:'quiz',t:'Финал',m:'4 мин'}];
+const tabrow=document.getElementById('tabrow');
+STATIONS.forEach((s,i)=>{
+  const b=document.createElement('button');b.className='tab';b.role='tab';b.id='tab-'+s.id;
+  b.innerHTML=`<span class="n">${i+1}</span>${s.t}<span class="min">${s.m}</span>`;
+  b.onclick=()=>openTab(s.id);tabrow.appendChild(b);
+});
+function openTab(id){
+  STATIONS.forEach(s=>{document.getElementById('st-'+s.id).hidden=s.id!==id;document.getElementById('tab-'+s.id).setAttribute('aria-selected',s.id===id);});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+openTab('words');
+
+/* ---------- 1. СЛОВА ---------- */
+const WORDS=[
+ {h:'觉得',p:'juéde',r:'считать, думать (моё мнение)',ex:'我觉得今天很冷。',exp:'Wǒ juéde jīntiān hěn lěng.',e:'Внизу 见 «видеть»: увидела → поняла → считаю.'},
+ {h:'因为',p:'yīnwèi',r:'потому что',ex:'因为很冷，所以我喝热茶。',exp:'Yīnwèi hěn lěng, suǒyǐ wǒ hē rè chá.',e:'Пара с твоим 所以: 因为… 所以…'},
+ {h:'但是',p:'dànshì',r:'но, однако',ex:'我喜欢猫，但是我没有猫。',exp:'Wǒ xǐhuan māo, dànshì wǒ méiyǒu māo.',e:'Слева 亻 «человек»: человек передумал.'},
+ {h:'可以',p:'kěyǐ',r:'можно, могу',ex:'我可以看电视吗？',exp:'Wǒ kěyǐ kàn diànshì ma?',e:'Вопрос «можно?» — 可以…吗？'},
+ {h:'一起',p:'yìqǐ',r:'вместе',ex:'我们一起去吃饭吧！',exp:'Wǒmen yìqǐ qù chī fàn ba!',e:'В 起 спрятан 走 «идти». 吧 в конце = «давай!»'},
+ {h:'已经',p:'yǐjīng',r:'уже',ex:'我已经十二岁了。',exp:'Wǒ yǐjīng shí\'èr suì le.',e:'Не путай: 已 (уже) и 己 (сам). Почти всегда с 了 в конце.'},
+ {h:'最',p:'zuì',r:'самый, больше всего',ex:'我最喜欢喝茶。',exp:'Wǒ zuì xǐhuan hē chá.',e:'Сверху 日 «солнце», снизу 取 «взять»: взять лучшее под солнцем.'},
+ {h:'开始',p:'kāishǐ',r:'начинать',ex:'我们七点开始学习。',exp:'Wǒmen qī diǎn kāishǐ xuéxí.',e:'开 ты уже знаешь: «открыть» дело = начать.'}
+];
+const cardsEl=document.getElementById('cards');
+WORDS.forEach((w,i)=>{
+  const c=document.createElement('div');c.className='card';c.tabIndex=0;c.setAttribute('role','button');c.setAttribute('aria-label','Карточка '+w.h);
+  c.innerHTML=`<div class="inner">
+    <div class="face front"><span class="num">${i+1}/8</span><span class="big">${w.h}</span><span class="hint">нажми</span></div>
+    <div class="face back">
+      <div class="top-line"><span class="w">${w.h}</span><button class="say" aria-label="Послушать"></button></div>
+      <div class="py">${w.p}</div><div class="ru">${w.r}</div>
+      <div class="ex">${w.ex}</div><div class="expy">${w.exp}</div>
+      <div class="etym">${w.e}</div>
+    </div></div>`;
+  sayBtn(c.querySelector('.say'),()=>w.h+'。'+w.ex);
+  const flip=()=>c.classList.toggle('flip');
+  c.onclick=flip;c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip();}};
+  cardsEl.appendChild(c);
+});
+
+/* ---------- 2. СОБЕРИ ---------- */
+const BUILD=[
+ {r:'Мне кажется, сегодня жарко.',t:[['我','wǒ'],['觉得','juéde'],['今天','jīntiān'],['很','hěn'],['热','rè']],a:['我觉得今天很热','今天我觉得很热'],f:'我觉得今天很热。'},
+ {r:'Больше всего я люблю пить чай.',t:[['我','wǒ'],['最','zuì'],['喜欢','xǐhuan'],['喝','hē'],['茶','chá']],a:['我最喜欢喝茶'],f:'我最喜欢喝茶。'},
+ {r:'Давай вместе посмотрим фильм!',t:[['我们','wǒmen'],['一起','yìqǐ'],['看','kàn'],['电影','diànyǐng'],['吧','ba']],a:['我们一起看电影吧'],f:'我们一起看电影吧！'},
+ {r:'Я уже поела.',t:[['我','wǒ'],['已经','yǐjīng'],['吃饭','chī fàn'],['了','le']],a:['我已经吃饭了'],f:'我已经吃饭了。'},
+ {r:'Так как холодно, я пью горячий чай.',t:[['因为','yīnwèi'],['很冷','hěn lěng'],['所以','suǒyǐ'],['我','wǒ'],['喝热茶','hē rè chá']],a:['因为很冷所以我喝热茶'],f:'因为很冷，所以我喝热茶。'},
+ {r:'Можно мне пойти к тебе домой?',t:[['我','wǒ'],['可以','kěyǐ'],['去','qù'],['你家','nǐ jiā'],['吗','ma']],a:['我可以去你家吗'],f:'我可以去你家吗？'},
+ {r:'Я люблю собак, но мама не любит.',t:[['我','wǒ'],['喜欢','xǐhuan'],['狗','gǒu'],['但是','dànshì'],['妈妈','māma'],['不喜欢','bù xǐhuan']],a:['我喜欢狗但是妈妈不喜欢'],f:'我喜欢狗，但是妈妈不喜欢。'},
+ {r:'Мы начинаем учиться в восемь.',t:[['我们','wǒmen'],['八点','bā diǎn'],['开始','kāishǐ'],['学习','xuéxí']],a:['我们八点开始学习','八点我们开始学习'],f:'我们八点开始学习。'}
+];
+let bi=0,bPicked=[],bPool=[],bDone=new Set();
+const bSlot=document.getElementById('bSlot'),bPoolEl=document.getElementById('bPool'),bVer=document.getElementById('bVerdict');
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function tileHTML(t){return `<span class="h">${t[0]}</span><span class="p">${t[1]}</span>`;}
+function bLoad(){
+  const it=BUILD[bi];document.getElementById('bRu').textContent=it.r;
+  bPicked=[];let s=shuffle(it.t);
+  while(s.length>2 && s.map(x=>x[0]).join('')===it.a[0]) s=shuffle(it.t);
+  bPool=s;bVer.textContent='';bVer.className='verdict';bSlot.className='slot';bDraw();
+  document.getElementById('bNext').textContent=bi===BUILD.length-1?'Сначала ↺':'Дальше →';
+  document.getElementById('bProg').innerHTML=BUILD.map((_,k)=>`<i class="${k===bi?'now':bDone.has(k)?'done':''}"></i>`).join('');
+}
+function bDraw(){
+  bSlot.innerHTML=bPicked.length?'':'<span class="empty">Сюда встанут слова…</span>';
+  bPicked.forEach((t,k)=>{const b=document.createElement('button');b.className='tile';b.innerHTML=tileHTML(t);b.onclick=()=>{bPool.push(t);bPicked.splice(k,1);bSlot.className='slot';bVer.textContent='';bDraw();};bSlot.appendChild(b);});
+  bPoolEl.innerHTML='';
+  bPool.forEach((t,k)=>{const b=document.createElement('button');b.className='tile';b.innerHTML=tileHTML(t);b.onclick=()=>{bPicked.push(t);bPool.splice(k,1);bDraw();};bPoolEl.appendChild(b);});
+}
+document.getElementById('bCheck').onclick=()=>{
+  const it=BUILD[bi];if(bPool.length){bVer.textContent='Используй все слова.';bVer.className='verdict no';return;}
+  const s=bPicked.map(x=>x[0]).join('');
+  if(it.a.includes(s)){bSlot.className='slot ok';bVer.innerHTML='对！Отлично. Теперь прочитай вслух.';bVer.className='verdict ok';if(!bDone.has(bi)){bDone.add(bi);addStar(1);}say(it.f);}
+  else{bSlot.className='slot no';bVer.textContent='Почти. Подумай, где стоит время и слово-связка.';bVer.className='verdict no';}
+  document.getElementById('bProg').innerHTML=BUILD.map((_,k)=>`<i class="${k===bi?'now':bDone.has(k)?'done':''}"></i>`).join('');
+};
+document.getElementById('bShow').onclick=()=>{const it=BUILD[bi];bVer.innerHTML=`<div class="answer">${it.f}</div><div style="font-size:.88rem;color:var(--soft)">${it.t.map(x=>x[1]).join(' ')}</div>`;bVer.className='verdict';};
+document.getElementById('bNext').onclick=()=>{bi=(bi+1)%BUILD.length;bLoad();};
+bLoad();
+
+/* ---------- 3. ГОВОРИЛКА ---------- */
+const TALK=[
+ {tp:'Выходные',q:'星期六你做什么？',qp:'Xīngqīliù nǐ zuò shénme?',qr:'Что ты делаешь в субботу?',fr:'星期六我和……一起……',frp:'Xīngqīliù wǒ hé … yìqǐ …',m:'一起',mp:'yìqǐ'},
+ {tp:'Еда',q:'你最喜欢吃什么？',qp:'Nǐ zuì xǐhuan chī shénme?',qr:'Что ты больше всего любишь есть?',fr:'我最喜欢吃……，因为……',frp:'Wǒ zuì xǐhuan chī …, yīnwèi …',m:'最',mp:'zuì'},
+ {tp:'Погода',q:'今天天气怎么样？',qp:'Jīntiān tiānqì zěnmeyàng?',qr:'Какая сегодня погода?',fr:'我觉得今天……',frp:'Wǒ juéde jīntiān …',m:'觉得',mp:'juéde'},
+ {tp:'Школа',q:'你几点开始上课？',qp:'Nǐ jǐ diǎn kāishǐ shàngkè?',qr:'Во сколько у тебя начинаются уроки?',fr:'我……点开始……',frp:'Wǒ … diǎn kāishǐ …',m:'开始',mp:'kāishǐ'},
+ {tp:'Китайский',q:'你已经会说什么了？',qp:'Nǐ yǐjīng huì shuō shénme le?',qr:'Что ты уже умеешь говорить?',fr:'我已经会说……了',frp:'Wǒ yǐjīng huì shuō … le',m:'已经',mp:'yǐjīng'},
+ {tp:'Дома',q:'在家你可以做什么？',qp:'Zài jiā nǐ kěyǐ zuò shénme?',qr:'Что тебе можно делать дома?',fr:'在家我可以……，但是不可以……',frp:'Zài jiā wǒ kěyǐ …, dànshì bù kěyǐ …',m:'可以',mp:'kěyǐ'},
+ {tp:'Люблю / не люблю',q:'你喜欢什么？不喜欢什么？',qp:'Nǐ xǐhuan shénme? Bù xǐhuan shénme?',qr:'Что ты любишь? А что не любишь?',fr:'我喜欢……，但是我不喜欢……',frp:'Wǒ xǐhuan …, dànshì wǒ bù xǐhuan …',m:'但是',mp:'dànshì'},
+ {tp:'Почему китайский',q:'你为什么学汉语？',qp:'Nǐ wèishénme xué Hànyǔ?',qr:'Почему ты учишь китайский?',fr:'因为……，所以我学汉语。',frp:'Yīnwèi …, suǒyǐ wǒ xué Hànyǔ.',m:'因为',mp:'yīnwèi'},
+ {tp:'Друзья',q:'你和朋友一起做什么？',qp:'Nǐ hé péngyou yìqǐ zuò shénme?',qr:'Что вы делаете вместе с друзьями?',fr:'我们一起……，我觉得……',frp:'Wǒmen yìqǐ …, wǒ juéde …',m:'一起',mp:'yìqǐ'},
+ {tp:'Цвета и одежда',q:'你最喜欢什么颜色？',qp:'Nǐ zuì xǐhuan shénme yánsè?',qr:'Какой цвет ты любишь больше всего?',fr:'我最喜欢……色，因为……',frp:'Wǒ zuì xǐhuan … sè, yīnwèi …',m:'最',mp:'zuì'},
+ {tp:'Животные',q:'你喜欢猫吗？狗呢？',qp:'Nǐ xǐhuan māo ma? Gǒu ne?',qr:'Ты любишь кошек? А собак?',fr:'我觉得猫很……，但是狗……',frp:'Wǒ juéde māo hěn …, dànshì gǒu …',m:'觉得',mp:'juéde'},
+ {tp:'Вечер',q:'你晚上几点开始睡觉？',qp:'Nǐ wǎnshang jǐ diǎn kāishǐ shuìjiào?',qr:'Во сколько вечером ложишься спать?',fr:'我……点睡觉，因为……',frp:'Wǒ … diǎn shuìjiào, yīnwèi …',m:'开始',mp:'kāishǐ'}
+];
+let tOrder=shuffle([...TALK.keys()]),tPos=0,tStarsOn=0;
+const STAR='<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5L2.5 9.3l6.6-.8z"/></svg>';
+function tLoad(){
+  const it=TALK[tOrder[tPos]];
+  const set=(id,v)=>document.getElementById(id).textContent=v;
+  set('tTopic',it.tp);set('tQ',it.q);set('tPy',it.qp);set('tRu',it.qr);set('tFrame',it.fr);set('tFramePy',it.frp);set('tMust',it.m);set('tMustPy',it.mp);
+  set('tCount',`Тема ${tPos+1} из ${TALK.length}`);
+  document.getElementById('tRu').hidden=true;document.getElementById('tHint').textContent='Перевод вопроса';
+  const st=document.getElementById('tStars');st.querySelectorAll('.star').forEach(s=>s.remove());tStarsOn=0;
+  for(let k=0;k<3;k++){const b=document.createElement('button');b.className='star';b.innerHTML=STAR;b.setAttribute('aria-label','Предложение '+(k+1));
+    b.onclick=()=>{b.classList.toggle('on');const on=b.classList.contains('on');addStar(on?1:-1);};st.appendChild(b);}
+  const card=document.getElementById('talkCard');card.classList.remove('spin-anim');void card.offsetWidth;card.classList.add('spin-anim');
+}
+sayBtn(document.querySelector('[data-say-from="tQ"]'),()=>document.getElementById('tQ').textContent);
+document.getElementById('tSpin').onclick=()=>{tPos++;if(tPos>=tOrder.length){tOrder=shuffle([...TALK.keys()]);tPos=0;}tLoad();};
+document.getElementById('tHint').onclick=e=>{const r=document.getElementById('tRu');r.hidden=!r.hidden;e.target.textContent=r.hidden?'Перевод вопроса':'Спрятать перевод';};
+tLoad();
+
+/* ---------- 4. ДОПИШИ ---------- */
+const FIN=[
+ {z:'因为今天很冷，所以',p:'Yīnwèi jīntiān hěn lěng, suǒyǐ',r:'Так как сегодня холодно, поэтому…',e:'我不想出去。',ep:'wǒ bù xiǎng chūqù.'},
+ {z:'我很喜欢猫，但是',p:'Wǒ hěn xǐhuan māo, dànshì',r:'Я очень люблю кошек, но…',e:'我家没有猫。',ep:'wǒ jiā méiyǒu māo.'},
+ {z:'星期六我们一起',p:'Xīngqīliù wǒmen yìqǐ',r:'В субботу мы вместе…',e:'去商店吧！',ep:'qù shāngdiàn ba!'},
+ {z:'我已经',p:'Wǒ yǐjīng',r:'Я уже…',e:'会写很多汉字了。',ep:'huì xiě hěn duō Hànzì le.'},
+ {z:'我最喜欢的颜色是',p:'Wǒ zuì xǐhuan de yánsè shì',r:'Мой самый любимый цвет —',e:'粉红色。',ep:'fěnhóngsè.'},
+ {z:'我觉得汉语',p:'Wǒ juéde Hànyǔ',r:'Мне кажется, китайский…',e:'很好，我很喜欢。',ep:'hěn hǎo, wǒ hěn xǐhuan.'},
+ {z:'下午四点我们开始',p:'Xiàwǔ sì diǎn wǒmen kāishǐ',r:'В 4 часа дня мы начинаем…',e:'看电影。',ep:'kàn diànyǐng.'},
+ {z:'妈妈，我可以',p:'Māma, wǒ kěyǐ',r:'Мама, можно мне…',e:'看电视吗？',ep:'kàn diànshì ma?'}
+];
+let fi=0;
+function fLoad(){
+  const it=FIN[fi];
+  document.getElementById('fZh').textContent=it.z;document.getElementById('fPy').textContent=it.p+' …';document.getElementById('fRu').textContent=it.r;
+  document.getElementById('fEnd').textContent=it.z+it.e;document.getElementById('fEndPy').textContent=it.p+' '+it.ep;
+  document.getElementById('fReveal').hidden=true;
+  document.getElementById('fPrev').disabled=fi===0;
+  document.getElementById('fNext').textContent=fi===FIN.length-1?'Сначала ↺':'Дальше →';
+  document.getElementById('fProg').innerHTML=FIN.map((_,k)=>`<i class="${k===fi?'now':k<fi?'done':''}"></i>`).join('');
+}
+sayBtn(document.getElementById('fSay'),()=>FIN[fi].z);
+document.getElementById('fShow').onclick=()=>{document.getElementById('fReveal').hidden=false;say(FIN[fi].z+FIN[fi].e);};
+document.getElementById('fNext').onclick=()=>{fi=(fi+1)%FIN.length;fLoad();};
+document.getElementById('fPrev').onclick=()=>{if(fi>0){fi--;fLoad();}};
+fLoad();
+
+/* ---------- 5. ФИНАЛ ---------- */
+const PY={'觉得':'juéde','因为':'yīnwèi','但是':'dànshì','可以':'kěyǐ','一起':'yìqǐ','已经':'yǐjīng','最':'zuì','开始':'kāishǐ'};
+const QUIZ=[
+ {s:['我','最','喜欢粉红色。'],p:'Wǒ ___ xǐhuan fěnhóngsè.',r:'Я больше всего люблю розовый.',o:['最','已经','但是','一起']},
+ {s:['我们','一起','去商店吧！'],p:'Wǒmen ___ qù shāngdiàn ba!',r:'Давай вместе пойдём в магазин!',o:['可以','一起','因为','最']},
+ {s:['我','已经','十二岁了。'],p:'Wǒ ___ shí\'èr suì le.',r:'Мне уже двенадцать.',o:['开始','觉得','已经','一起']},
+ {s:['','因为','今天很冷，所以我不想出去。'],p:'___ jīntiān hěn lěng, suǒyǐ wǒ bù xiǎng chūqù.',r:'Так как сегодня холодно, я не хочу выходить.',o:['但是','因为','已经','可以']},
+ {s:['我','觉得','这个苹果很好吃。'],p:'Wǒ ___ zhège píngguǒ hěn hǎochī.',r:'Мне кажется, это яблоко очень вкусное.',o:['觉得','开始','一起','最']},
+ {s:['我喜欢喝茶，','但是','我不喜欢喝咖啡。'],p:'Wǒ xǐhuan hē chá, ___ wǒ bù xǐhuan hē kāfēi.',r:'Я люблю чай, но не люблю кофе.',o:['因为','可以','但是','已经']},
+ {s:['妈妈，我','可以','看电视吗？'],p:'Māma, wǒ ___ kàn diànshì ma?',r:'Мама, можно мне посмотреть телевизор?',o:['可以','最','觉得','开始']},
+ {s:['九点我们','开始','学习。'],p:'Jiǔ diǎn wǒmen ___ xuéxí.',r:'В девять мы начинаем учиться.',o:['一起','已经','开始','但是']}
+];
+let qi=0,qScore=0;const quizEl=document.getElementById('quiz');
+function qLoad(){
+  if(qi>=QUIZ.length){
+    const msg=qScore>=7?'太棒了！':qScore>=5?'很好！':'加油！';
+    quizEl.innerHTML=`<div class="result"><div class="big">${qScore}/${QUIZ.length}</div><div class="zhr">${msg}</div>
+      <p class="lead" style="margin:10px auto 18px">Ты сегодня собрала <b>${total}</b> ${total%10===1&&total%100!==11?'звезду':(total%10>=2&&total%10<=4&&(total%100<10||total%100>=20))?'звезды':'звёзд'}.</p>
+      <button class="btn primary" id="qAgain">Ещё раз</button></div>`;
+    document.getElementById('qAgain').onclick=()=>{qi=0;qScore=0;qLoad();};return;
+  }
+  const it=QUIZ[qi];
+  quizEl.innerHTML=`<div class="progress">${QUIZ.map((_,k)=>`<i class="${k===qi?'now':k<qi?'done':''}"></i>`).join('')}</div>
+    <div class="gap">${it.s[0]}<span class="blank" id="qBlank">?</span>${it.s[2]}</div>
+    <div class="gappy">${it.p}</div>
+    <div class="opts" id="qOpts"></div>
+    <div class="verdict" id="qVer" aria-live="polite"></div>
+    <div class="row" style="margin-top:8px"><button class="btn primary" id="qNext" hidden>Дальше →</button></div>`;
+  const opts=document.getElementById('qOpts');let answered=false;
+  it.o.forEach(o=>{const b=document.createElement('button');b.className='opt';b.innerHTML=`<span class="h">${o}</span><span class="p">${PY[o]}</span>`;
+    b.onclick=()=>{if(answered)return;answered=true;
+      const ok=o===it.s[1];if(ok){qScore++;addStar(1);}
+      opts.querySelectorAll('.opt').forEach(x=>{if(x.querySelector('.h').textContent===it.s[1])x.classList.add('right');});
+      if(!ok)b.classList.add('wrong');
+      const bl=document.getElementById('qBlank');bl.textContent=it.s[1];
+      const v=document.getElementById('qVer');v.className='verdict '+(ok?'ok':'no');v.innerHTML=(ok?'对！':'Правильно: '+it.s[1]+'. ')+`<span style="color:var(--soft);font-weight:600">${it.r}</span>`;
+      say(it.s.join(''));
+      document.getElementById('qNext').hidden=false;document.getElementById('qNext').focus();};
+    opts.appendChild(b);});
+  document.getElementById('qNext').onclick=()=>{qi++;qLoad();};
+}
+qLoad();
+</script>
+
+</body></html>

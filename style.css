@@ -296,6 +296,8 @@ body{background:
 @keyframes bob{50%{transform:translateY(-3px) rotate(-6deg)}}
 .sndbtn{margin-left:auto;border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:.84rem;font-weight:700;cursor:pointer}
 .sndbtn[aria-pressed="false"]{color:var(--muted)}
+.sndlink{margin-left:auto;text-decoration:none;color:var(--ink);display:inline-block}
+.sndlink + .sndbtn{margin-left:0}
 .mode{border-width:2px}
 .mode button{font-weight:700}
 .mode button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
