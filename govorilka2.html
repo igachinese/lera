@@ -1,0 +1,2091 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Говорилка HSK2 · Урок 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Nunito:wght@400;600;700;800&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+/* Layout: тетрадь в клетку, сверху липкая лента станций, одна станция на экране — удобно показывать в Zoom */
+:root {
+  color-scheme: light;
+  --bg: #F5F7FD;
+  --grid: #E3E8F6;
+  --card: #FFFFFF;
+  --ink: #1D2140;
+  --soft: #5E6486;
+  --line: #D9DEEE;
+  --pop: #E0507A;
+  --pop-soft: #FCE3EB;
+  --teal: #1F9C90;
+  --teal-soft: #DDF3F0;
+  --sun: #F5B829;
+  --sun-soft: #FFF5D6;
+  --bad: #D9483B;
+  --bad-soft: #FBE4E1;
+  --f-disp: 'Unbounded', 'Nunito', system-ui, sans-serif;
+  --f-body: 'Nunito', system-ui, sans-serif;
+  --f-zh: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141729;
+    --grid: #1D2140;
+    --card: #1C2038;
+    --ink: #ECEEFA;
+    --soft: #A3A8C8;
+    --line: #2D3256;
+    --pop: #FF7499;
+    --pop-soft: #3A2240;
+    --teal: #49C7B9;
+    --teal-soft: #16343A;
+    --sun: #FFC94A;
+    --sun-soft: #383018;
+    --bad: #FF7A6B;
+    --bad-soft: #3D2028;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141729;
+  --grid: #1D2140;
+  --card: #1C2038;
+  --ink: #ECEEFA;
+  --soft: #A3A8C8;
+  --line: #2D3256;
+  --pop: #FF7499;
+  --pop-soft: #3A2240;
+  --teal: #49C7B9;
+  --teal-soft: #16343A;
+  --sun: #FFC94A;
+  --sun-soft: #383018;
+  --bad: #FF7A6B;
+  --bad-soft: #3D2028;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden]:not([hidden=until-found i]) { display: none !important; }
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 28px 28px;
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 17px;
+  line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 60px;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--bg);
+}
+
+.wrap { max-width: 920px; margin: 0 auto; }
+.zh { font-family: var(--f-zh); }
+button, select { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; border-radius: 8px; }
+
+/* Шапка */
+header.top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-block: 30px 16px;
+}
+.brand { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.brand .eyebrow {
+  font-weight: 800;
+  font-size: .78rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--pop);
+}
+h1 {
+  font-family: var(--f-disp);
+  font-weight: 800;
+  font-size: clamp(1.75rem, 4.8vw, 2.6rem);
+  line-height: 1.05;
+  margin: 0;
+  text-wrap: balance;
+}
+h1 .zh { color: var(--pop); font-weight: 900; }
+
+.head-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Панель выбора детского голоса Edge */
+.voice-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--card);
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  padding: 5px 10px;
+  font-size: .82rem;
+  font-weight: 700;
+}
+.voice-box .v-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--teal);
+  flex: 0 0 auto;
+}
+.voice-select {
+  border: none;
+  background: transparent;
+  font-weight: 800;
+  max-width: 185px;
+  text-overflow: ellipsis;
+  padding: 2px 4px;
+}
+.rate-btn, .theme-btn {
+  border: 1.5px solid var(--line);
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 2px 7px;
+  font-weight: 800;
+  font-size: .76rem;
+}
+.rate-btn:hover, .theme-btn:hover { border-color: var(--ink); }
+
+.score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  padding: 8px 14px;
+  box-shadow: 3px 3px 0 var(--ink);
+  font-weight: 800;
+}
+.score svg { width: 24px; height: 24px; }
+.score b {
+  font-family: var(--f-disp);
+  font-size: 1.3rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Навигация по станциям */
+nav.tabs {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 5;
+  background: var(--bg);
+  padding-block: 10px;
+  margin-bottom: 22px;
+  border-bottom: 2px dashed var(--line);
+}
+.tabrow {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 3px;
+}
+.tabrow::-webkit-scrollbar { display: none; }
+.tab {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 13px;
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  background: var(--card);
+  font-weight: 800;
+  font-size: .9rem;
+  white-space: nowrap;
+  transition: transform .08s, box-shadow .08s;
+}
+.tab .n {
+  font-family: var(--f-disp);
+  font-size: .78rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  background: var(--grid);
+  color: var(--soft);
+}
+.tab .min { font-weight: 600; color: var(--soft); font-size: .78rem; }
+.tab[aria-selected="true"] {
+  border-color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.tab[aria-selected="true"] .n { background: var(--pop); color: #fff; }
+
+/* Заголовки станций и общие элементы */
+.station-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+h2 { font-family: var(--f-disp); font-weight: 700; font-size: 1.5rem; margin: 0; }
+h2 .zh { color: var(--teal); font-weight: 900; margin-right: 8px; }
+.lead { color: var(--soft); margin: 0 0 20px; max-width: 66ch; }
+
+.btn {
+  border: 2px solid var(--ink);
+  background: var(--card);
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-weight: 800;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform .08s, box-shadow .08s;
+}
+.btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+.btn.primary { background: var(--pop); color: #fff; border-color: var(--ink); }
+.btn.teal { background: var(--teal); color: #fff; border-color: var(--ink); }
+.btn.sun { background: var(--sun); color: #1D2140; border-color: var(--ink); }
+.btn.ghost { box-shadow: none; border-color: var(--line); }
+.btn.sm { padding: 6px 12px; font-size: .86rem; border-radius: 10px; box-shadow: 2px 2px 0 var(--ink); }
+.btn:disabled { opacity: .45; cursor: default; }
+
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+.say {
+  border: none;
+  background: var(--teal-soft);
+  color: var(--teal);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  transition: transform .12s;
+}
+.say:hover { transform: scale(1.08); }
+.say svg { width: 18px; height: 18px; }
+
+.sheet {
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  box-shadow: 5px 5px 0 var(--ink);
+  padding: 22px;
+}
+.progress { display: flex; gap: 6px; margin-bottom: 16px; }
+.progress i { flex: 1; height: 6px; border-radius: 4px; background: var(--line); }
+.progress i.done { background: var(--teal); }
+.progress i.now { background: var(--pop); }
+
+/* Переключатель подрежимов внутри станции */
+.submodes {
+  display: inline-flex;
+  gap: 6px;
+  background: var(--bg);
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 4px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.subbtn {
+  border: none;
+  background: transparent;
+  padding: 7px 14px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: .9rem;
+  color: var(--soft);
+}
+.subbtn.active {
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+  border: 1.5px solid var(--ink);
+}
+
+/* СТАНЦИЯ 1: ПОВТОР ПРОШЛЫХ СЛОВ */
+.rev-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.rev-card {
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  background: var(--card);
+  padding: 14px;
+  box-shadow: 3px 3px 0 var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: background .2s, border-color .2s;
+}
+.rev-card.done {
+  border-color: var(--teal);
+  background: var(--teal-soft);
+}
+.rev-top { display: flex; justify-content: space-between; align-items: center; }
+.rev-zh { font-family: var(--f-zh); font-weight: 900; font-size: 2.1rem; line-height: 1.1; }
+.rev-secret {
+  border-top: 1px dashed var(--line);
+  padding-top: 8px;
+  margin-top: 2px;
+}
+.rev-py { color: var(--pop); font-weight: 800; font-size: .98rem; }
+.rev-ru { font-weight: 700; font-size: .92rem; }
+.rev-combo { font-family: var(--f-zh); font-size: .9rem; color: var(--soft); margin-top: 2px; }
+
+/* Игра Парочки (Matching) */
+.match-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 10px;
+}
+.match-col { display: flex; flex-direction: column; gap: 10px; }
+.match-item {
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  background: var(--card);
+  padding: 12px 14px;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform .1s, background .15s;
+}
+.match-item.zh-item { font-family: var(--f-zh); font-size: 1.45rem; font-weight: 900; }
+.match-item.selected { background: var(--sun-soft); border-color: var(--sun); transform: scale(1.02); }
+.match-item.matched {
+  background: var(--teal-soft);
+  border-color: var(--teal);
+  color: var(--teal);
+  box-shadow: none;
+  opacity: .75;
+  cursor: default;
+}
+.match-item.wrong { background: var(--bad-soft); border-color: var(--bad); }
+
+/* СТАНЦИЯ 2: 3D КАРТОЧКИ НОВЫХ СЛОВ */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+.card { perspective: 900px; height: 248px; cursor: pointer; }
+.inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform .45s;
+  transform-style: preserve-3d;
+}
+.card.flip .inner { transform: rotateY(180deg); }
+.face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  background: var(--card);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+}
+.front {
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.front .big { font-family: var(--f-zh); font-weight: 900; font-size: 2.9rem; line-height: 1.05; text-align: center; }
+.front .pair-tag {
+  font-size: .74rem;
+  background: var(--teal-soft);
+  color: var(--teal);
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-weight: 800;
+}
+.front .hint { font-size: .76rem; color: var(--soft); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.front .num { position: absolute; top: 10px; left: 12px; font-family: var(--f-disp); font-size: .75rem; color: var(--soft); }
+.back {
+  transform: rotateY(180deg);
+  gap: 4px;
+  background: var(--pop-soft);
+  box-shadow: 4px 4px 0 var(--pop);
+}
+.back .top-line { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.back .w { font-family: var(--f-zh); font-weight: 900; font-size: 1.55rem; }
+.back .py { color: var(--pop); font-weight: 800; font-size: 1rem; }
+.back .ru { font-weight: 800; font-size: .93rem; line-height: 1.25; }
+.back .ex { font-family: var(--f-zh); font-size: .96rem; margin-top: auto; font-weight: 700; }
+.back .expy { font-size: .78rem; color: var(--soft); line-height: 1.2; }
+.back .etym {
+  font-size: .75rem;
+  color: var(--soft);
+  font-style: italic;
+  border-top: 1px dashed var(--line);
+  padding-top: 4px;
+  line-height: 1.25;
+}
+
+/* СТАНЦИЯ 3: ТРЕНАЖЁР СЛОВ И СВЯЗОК */
+.drill-box {
+  text-align: center;
+  padding: 18px 12px;
+  border: 2px dashed var(--line);
+  border-radius: 16px;
+  margin-bottom: 16px;
+  background: var(--bg);
+}
+.drill-tag {
+  display: inline-block;
+  font-size: .76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--pop-soft);
+  color: var(--pop);
+  margin-bottom: 8px;
+}
+.drill-prompt {
+  font-family: var(--f-disp);
+  font-size: clamp(1.35rem, 4vw, 1.85rem);
+  font-weight: 800;
+  margin: 6px 0;
+}
+.drill-zh-big {
+  font-family: var(--f-zh);
+  font-size: clamp(2rem, 5.5vw, 2.9rem);
+  font-weight: 900;
+  color: var(--ink);
+  margin: 4px 0;
+}
+.drill-answer {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--teal-soft);
+  border: 2px solid var(--teal);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: min(100%, 340px);
+}
+.drill-answer .azh { font-family: var(--f-zh); font-size: 1.9rem; font-weight: 900; }
+.drill-answer .apy { color: var(--pop); font-weight: 800; font-size: 1.05rem; }
+.drill-answer .anote { font-size: .85rem; color: var(--soft); }
+
+/* СТАНЦИЯ 4: СОБЕРИ ПРЕДЛОЖЕНИЕ */
+.task-ru { font-family: var(--f-disp); font-weight: 700; font-size: 1.18rem; margin-bottom: 14px; text-wrap: balance; }
+.slot {
+  min-height: 84px;
+  border: 2px dashed var(--line);
+  border-radius: 14px;
+  padding: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  margin-bottom: 14px;
+  transition: background .2s, border-color .2s;
+}
+.slot.ok { border-color: var(--teal); background: var(--teal-soft); }
+.slot.no { border-color: var(--bad); background: var(--bad-soft); }
+.slot .empty { color: var(--soft); font-size: .9rem; align-self: center; padding-left: 4px; }
+.pool { display: flex; gap: 8px; flex-wrap: wrap; min-height: 60px; margin-bottom: 18px; }
+.tile {
+  border: 2px solid var(--ink);
+  background: var(--card);
+  border-radius: 12px;
+  padding: 6px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.tile .h { font-family: var(--f-zh); font-weight: 700; font-size: 1.42rem; line-height: 1.2; }
+.tile .p { font-size: .75rem; color: var(--soft); font-weight: 700; }
+.slot .tile { background: var(--sun); border-color: var(--ink); }
+.slot .tile .p { color: #1D2140; }
+.verdict { font-weight: 800; min-height: 1.6em; margin-top: 12px; }
+.verdict.ok { color: var(--teal); }
+.verdict.no { color: var(--bad); }
+.answer { font-family: var(--f-zh); font-size: 1.15rem; margin-top: 4px; }
+
+/* СТАНЦИЯ 5: ЧУЙКА HSK2 */
+.sense-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--sun-soft);
+  border: 1.5px solid var(--sun);
+  color: var(--ink);
+  font-weight: 800;
+  font-size: .82rem;
+  padding: 4px 11px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+.gap { font-family: var(--f-zh); font-weight: 700; font-size: clamp(1.35rem, 4vw, 1.85rem); line-height: 1.4; }
+.gap .blank {
+  display: inline-block;
+  min-width: 2.5em;
+  border-bottom: 3px solid var(--pop);
+  text-align: center;
+  color: var(--pop);
+  padding: 0 6px;
+}
+.gappy { color: var(--soft); font-size: .95rem; margin-top: 4px; }
+.clue-box {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--sun-soft);
+  border-left: 4px solid var(--sun);
+  font-size: .92rem;
+  font-weight: 700;
+}
+.opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
+.opt {
+  border: 2px solid var(--ink);
+  background: var(--card);
+  border-radius: 14px;
+  padding: 11px;
+  box-shadow: 3px 3px 0 var(--ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.opt .h { font-family: var(--f-zh); font-weight: 900; font-size: 1.5rem; }
+.opt .p { font-size: .8rem; color: var(--soft); font-weight: 700; }
+.opt.right { background: var(--teal-soft); border-color: var(--teal); box-shadow: 3px 3px 0 var(--teal); }
+.opt.wrong { background: var(--bad-soft); border-color: var(--bad); box-shadow: 3px 3px 0 var(--bad); }
+
+/* СТАНЦИЯ 6: ГОВОРИЛКА */
+.topic {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--teal-soft);
+  color: var(--teal);
+  font-weight: 800;
+  border-radius: 30px;
+  padding: 5px 14px;
+  font-size: .9rem;
+}
+.q {
+  font-family: var(--f-zh);
+  font-weight: 900;
+  font-size: clamp(1.75rem, 4.8vw, 2.4rem);
+  line-height: 1.25;
+  margin: 14px 0 2px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.qpy { color: var(--pop); font-weight: 800; font-size: 1.05rem; }
+.qru { color: var(--soft); margin-top: 4px; font-weight: 700; }
+.frames {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+.frame {
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  min-width: 0;
+}
+.frame .lbl {
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--soft);
+  margin-bottom: 4px;
+}
+.frame .zhl { font-family: var(--f-zh); font-size: 1.28rem; font-weight: 700; }
+.frame .pyl { font-size: .85rem; color: var(--soft); }
+.must { border-color: var(--pop); background: var(--pop-soft); }
+.must .zhl { color: var(--pop); font-size: 1.55rem; font-weight: 900; }
+.ask-back {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--teal-soft);
+  border: 2px dashed var(--teal);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.stars { display: flex; align-items: center; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+.stars .lbl { font-weight: 800; color: var(--soft); font-size: .92rem; }
+.star { border: none; background: none; padding: 2px; }
+.star svg { width: 40px; height: 40px; transition: transform .15s; }
+.star svg path { fill: var(--line); stroke: var(--ink); stroke-width: 1.5; }
+.star.on svg path { fill: var(--sun); }
+.star.on svg { transform: scale(1.12) rotate(-8deg); }
+
+.spin-anim { animation: pop .35s ease; }
+@keyframes pop { 0% { transform: scale(.96); opacity: .4; } 100% { transform: scale(1); opacity: 1; } }
+
+/* СТАНЦИЯ 7: ДОПИШИ ВСЛУХ */
+.half {
+  font-family: var(--f-zh);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 4.5vw, 2.1rem);
+  line-height: 1.3;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.half .dots { color: var(--pop); }
+.reveal { margin-top: 16px; padding: 14px; border-radius: 14px; background: var(--teal-soft); }
+.reveal .zhr { font-family: var(--f-zh); font-size: 1.3rem; font-weight: 700; }
+.swap { margin-top: 18px; font-size: .92rem; color: var(--soft); border-top: 1px dashed var(--line); padding-top: 12px; }
+
+.result { text-align: center; padding: 20px 0; }
+.result .big { font-family: var(--f-disp); font-size: 3.2rem; font-weight: 800; color: var(--pop); font-variant-numeric: tabular-nums; }
+.result .zhr { font-family: var(--f-zh); font-size: 1.6rem; font-weight: 900; margin-top: 6px; }
+
+footer { margin-top: 40px; color: var(--soft); font-size: .85rem; text-align: center; }
+
+@media (max-width: 560px) {
+  .opts { grid-template-columns: 1fr 1fr; }
+  .match-board { grid-template-columns: 1fr; }
+  .card { height: 256px; }
+  .sheet { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <span class="eyebrow"><a href="index.html" style="color:inherit;text-decoration:none;">🐼 Мост к HSK2</a> · <a href="govorilka.html" style="color:inherit;text-decoration:none;">Урок 1</a> · <b>Урок 2</b> · 莉拉</span>
+      <h1>Говорилка 2.0 <span class="zh">继续说吧！</span></h1>
+    </div>
+
+    <div class="head-right">
+      <!-- Выбор детского голоса Microsoft Edge + скорость -->
+      <div class="voice-box" title="В браузере Microsoft Edge автоматически выбирается детский голос Xiaoshuang или Xiaoyi">
+        <span class="v-dot" id="vDot"></span>
+        <span>🔊</span>
+        <select class="voice-select" id="voiceSelect" aria-label="Выбор китайского голоса">
+          <option value="">Загрузка голосов…</option>
+        </select>
+        <button class="rate-btn" id="rateBtn" title="Скорость озвучки">0.82x</button>
+        <button class="theme-btn" id="themeBtn" title="Светлая / тёмная тетрадка">🌓</button>
+      </div>
+
+      <!-- Счётчик звёзд -->
+      <div class="score" aria-live="polite">
+        <svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5L2.5 9.3l6.6-.8z" fill="var(--sun)" stroke="var(--ink)" stroke-width="1.5"/></svg>
+        <span>Звёзд: <b id="total">0</b></span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Станции урока">
+    <div class="tabrow" role="tablist" id="tabrow"></div>
+  </nav>
+
+  <!-- ==================== 1. ПОВТОР ПРОШЛЫХ СЛОВ ==================== -->
+  <section class="station" id="st-review" role="tabpanel">
+    <div class="station-head">
+      <h2><span class="zh">温故</span>Вспоминаем 8 слов с прошлого урока</h2>
+    </div>
+    <p class="lead">Сначала разогреем память! Эти 8 слов Лера уже брала. Назови их вслух, а потом соедини парочки.</p>
+
+    <div class="submodes" role="tablist">
+      <button class="subbtn active" id="revMode1Btn" onclick="setRevMode('cards')">1. Блиц вслух (8 слов)</button>
+      <button class="subbtn" id="revMode2Btn" onclick="setRevMode('match')">2. Игра «Найди пару»</button>
+    </div>
+
+    <!-- Подрежим 1: Блиц-карточки -->
+    <div id="revCardsWrap">
+      <div class="row" style="margin-bottom:14px;justify-content:space-between">
+        <span style="font-size:.9rem;color:var(--soft);font-weight:700">Нажимай «Проверить», когда Лера прочитала и перевела слово:</span>
+        <button class="btn sm ghost" id="revResetBtn">Сбросить все ↺</button>
+      </div>
+      <div class="rev-grid" id="revGrid"></div>
+    </div>
+
+    <!-- Подрежим 2: Игра Найди Пару -->
+    <div id="revMatchWrap" hidden>
+      <div class="sheet">
+        <div class="row" style="justify-content:space-between;margin-bottom:10px">
+          <span style="font-weight:800" id="matchRoundTitle">Раунд 1 из 2 · Соедини иероглиф и перевод</span>
+          <button class="btn sm ghost" id="matchRestartBtn">Перемешать ↺</button>
+        </div>
+        <div class="match-board">
+          <div class="match-col" id="matchLeft"></div>
+          <div class="match-col" id="matchRight"></div>
+        </div>
+        <div class="verdict" id="matchVerdict" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 2. НОВЫЕ СЛОВА ==================== -->
+  <section class="station" id="st-words" role="tabpanel" hidden>
+    <div class="station-head">
+      <h2><span class="zh">新词</span>Новые слова HSK2</h2>
+      <button class="btn sm ghost" id="flipAllBtn">Перевернуть все</button>
+    </div>
+    <p class="lead">8 новых слов-помощников. Обрати внимание: они образуют супер-комбо с твоими прошлыми словами (<b class="zh">因为 + 所以</b>, <b class="zh">虽然 + 但是</b>)!</p>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <!-- ==================== 3. ТРЕНАЖЁР СЛОВ ДО ГОВОРИЛКИ ==================== -->
+  <section class="station" id="st-drill" role="tabpanel" hidden>
+    <div class="station-head">
+      <h2><span class="zh">练一练</span>Отработка слов и связок</h2>
+    </div>
+    <p class="lead">Прежде чем строить большие истории, отработаем новые слова вместе со старыми до автоматизма.</p>
+
+    <div class="submodes">
+      <button class="subbtn active" id="drTab1" onclick="setDrillMode('sayzh')">🎤 Скажи по-китайски</button>
+      <button class="subbtn" id="drTab2" onclick="setDrillMode('trans')">👀 Переведи связку</button>
+      <button class="subbtn" id="drTab3" onclick="setDrillMode('pairs')">🧩 Сладкие парочки</button>
+    </div>
+
+    <!-- Тренажёр А: RU -> ZH устно -->
+    <div class="sheet" id="drillSayWrap">
+      <div class="progress" id="drSayProg"></div>
+      <div class="drill-box">
+        <span class="drill-tag" id="drSayTag">Новое + старое слово</span>
+        <div style="color:var(--soft);font-size:.9rem;font-weight:700">Как Лера скажет по-китайски:</div>
+        <div class="drill-prompt" id="drSayRu"></div>
+        <div id="drSayHint" style="color:var(--soft);font-size:.88rem"></div>
+
+        <div id="drSayReveal" hidden>
+          <div class="drill-answer">
+            <div class="row" style="justify-content:center">
+              <span class="azh" id="drSayZh"></span>
+              <button class="say" id="drSayAudio" aria-label="Послушать"></button>
+            </div>
+            <div class="apy" id="drSayPy"></div>
+            <div class="anote" id="drSayNote"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="justify-content:space-between">
+        <div class="row">
+          <button class="btn primary" id="drShowBtn">Показать и послушать 🔊</button>
+          <button class="btn sun" id="drStarBtn" hidden>Лера сказала сама! +1 ⭐</button>
+        </div>
+        <div class="row">
+          <button class="btn ghost" id="drPrevBtn">←</button>
+          <button class="btn" id="drNextBtn">Дальше →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Тренажёр Б: ZH -> RU выбор перевода комбинации -->
+    <div class="sheet" id="drillTransWrap" hidden>
+      <div class="progress" id="drTrProg"></div>
+      <div class="drill-box" style="padding:14px">
+        <span class="drill-tag">Комбинация HSK2</span>
+        <div class="row" style="justify-content:center;gap:10px">
+          <div class="drill-zh-big" id="drTrZh"></div>
+          <button class="say" id="drTrAudio" aria-label="Послушать"></button>
+        </div>
+        <div class="qpy" id="drTrPy"></div>
+      </div>
+      <div class="opts" id="drTrOpts"></div>
+      <div class="verdict" id="drTrVer" aria-live="polite"></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn primary" id="drTrNext" hidden>Дальше →</button>
+      </div>
+    </div>
+
+    <!-- Тренажёр В: Сладкие парочки (соедини части фраз) -->
+    <div class="sheet" id="drillPairsWrap" hidden>
+      <div class="row" style="justify-content:space-between;margin-bottom:8px">
+        <span style="font-weight:800">Соедини начало и продолжение связки:</span>
+        <button class="btn sm ghost" id="pairsResetBtn">Ещё раз ↺</button>
+      </div>
+      <div class="match-board">
+        <div class="match-col" id="pairsLeft"></div>
+        <div class="match-col" id="pairsRight"></div>
+      </div>
+      <div class="verdict" id="pairsVerdict" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ==================== 4. СОБЕРИ ПРЕДЛОЖЕНИЕ ==================== -->
+  <section class="station" id="st-build" role="tabpanel" hidden>
+    <div class="station-head">
+      <h2><span class="zh">拼句子</span>Собери предложение</h2>
+    </div>
+    <p class="lead">В каждом предложении встречаются слова из прошлого и сегодняшнего уроков. Нажимай на карточки по порядку!</p>
+    <div class="sheet">
+      <div class="progress" id="bProg"></div>
+      <div class="task-ru" id="bRu"></div>
+      <div class="slot" id="bSlot"></div>
+      <div class="pool" id="bPool"></div>
+      <div class="row">
+        <button class="btn primary" id="bCheck">Проверить</button>
+        <button class="btn ghost" id="bShow">Показать ответ</button>
+        <button class="btn" id="bNext">Дальше →</button>
+      </div>
+      <div class="verdict" id="bVerdict" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ==================== 5. ЧУЙКА HSK2 ==================== -->
+  <section class="station" id="st-sense" role="tabpanel" hidden>
+    <div class="station-head">
+      <h2><span class="zh">语感</span>Экзаменационная чуйка HSK2</h2>
+    </div>
+    <p class="lead">Как на настоящем HSK 2: посмотри на соседние слова-маячки и почувствуй, какое слово просится в пропуск.</p>
+    <div class="sheet" id="senseSheet"></div>
+  </section>
+
+  <!-- ==================== 6. ГОВОРИЛКА ==================== -->
+  <section class="station" id="st-talk" role="tabpanel" hidden>
+    <div class="station-head">
+      <h2><span class="zh">聊天</span>Говорилка · Комбо старых и новых слов</h2>
+    </div>
+    <p class="lead">Отвечай на вопрос учителя по каркасу, используя сразу <b>два слова</b> (прошлое + новое). А потом задай встречный вопрос учителю!</p>
+    <div class="sheet" id="talkCard">
+      <div class="row" style="justify-content:space-between">
+        <span class="topic" id="tTopic"></span>
+        <span style="color:var(--soft);font-weight:700;font-size:.88rem" id="tCount"></span>
+      </div>
+      <div class="q">
+        <span id="tQ"></span>
+        <button class="say" data-say-from="tQ" aria-label="Послушать вопрос"></button>
+      </div>
+      <div class="qpy" id="tPy"></div>
+      <div class="qru" id="tRu" hidden></div>
+
+      <div class="frames">
+        <div class="frame">
+          <div class="lbl">Каркас ответа</div>
+          <div class="zhl" id="tFrame"></div>
+          <div class="pyl" id="tFramePy"></div>
+        </div>
+        <div class="frame must">
+          <div class="lbl">Супер-комбо (Старое + Новое)</div>
+          <div class="zhl" id="tMust"></div>
+          <div class="pyl" id="tMustPy"></div>
+        </div>
+      </div>
+
+      <!-- Встречный вопрос от Леры учителю -->
+      <div class="ask-back">
+        <div>
+          <div style="font-size:.73rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--teal)">🎤 А теперь Лера спрашивает учителя:</div>
+          <div class="zh" style="font-weight:800;font-size:1.15rem;margin-top:2px" id="tAskZh"></div>
+          <div style="font-size:.84rem;color:var(--soft)" id="tAskPy"></div>
+        </div>
+        <button class="say" id="tAskSay" aria-label="Послушать вопрос учителю"></button>
+      </div>
+
+      <div class="stars" id="tStars"><span class="lbl">Мои предложения:</span></div>
+
+      <div class="row" style="margin-top:20px">
+        <button class="btn primary" id="tSpin">Новая тема 🎲</button>
+        <button class="btn ghost" id="tHint">Перевод вопроса</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 7. ДОПИШИ ВСЛУХ ==================== -->
+  <section class="station" id="st-finish" role="tabpanel" hidden>
+    <div class="station-head">
+      <h2><span class="zh">接着说</span>Допиши историю вслух</h2>
+    </div>
+    <p class="lead">Начало предложения уже есть. Закончи его вслух своими словами! Затем посмотри пример и забери звезду.</p>
+    <div class="sheet">
+      <div class="progress" id="fProg"></div>
+      <div class="half">
+        <span id="fZh"></span><span class="dots">……</span>
+        <button class="say" id="fSay" aria-label="Послушать начало"></button>
+      </div>
+      <div class="qpy" id="fPy" style="margin-top:4px"></div>
+      <div class="qru" id="fRu"></div>
+
+      <div class="reveal" id="fReveal" hidden>
+        <div style="font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--teal)">Например</div>
+        <div class="zhr" id="fEnd"></div>
+        <div class="pyl" style="color:var(--soft);font-size:.88rem" id="fEndPy"></div>
+      </div>
+
+      <div class="row" style="margin-top:18px;justify-content:space-between">
+        <div class="row">
+          <button class="btn ghost" id="fPrev">← Назад</button>
+          <button class="btn" id="fShow">Пример 🔊</button>
+          <button class="btn sun" id="fStarBtn">Сказала! +1 ⭐</button>
+        </div>
+        <button class="btn primary" id="fNext">Дальше →</button>
+      </div>
+
+      <div class="swap">
+        <b>Поменяйтесь ролями:</b> теперь Лера придумывает начало с <span class="zh">虽然…但是…</span>, <span class="zh">因为…所以…</span> или <span class="zh">我已经准备…</span>, а учитель заканчивает!
+      </div>
+    </div>
+  </section>
+
+  <footer>加油，莉拉！· Мост к HSK2 · Урок 2 (16 активных слов HSK2 в кармане)</footer>
+</div>
+
+<script>
+/* =====================================================================
+   ГОЛОСОВОЙ ДВИЖОК (Приоритет детского голоса Microsoft Edge: Xiaoshuang / Xiaoyi)
+   ===================================================================== */
+const SPK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+const canSpeak = ('speechSynthesis' in window);
+let zhVoices = [];
+let selectedVoice = null;
+let speechRate = 0.84;
+
+const voiceSelect = document.getElementById('voiceSelect');
+const rateBtn = document.getElementById('rateBtn');
+
+function scoreVoice(v) {
+  const n = (v.name || '').toLowerCase();
+  const l = (v.lang || '').toLowerCase();
+  if (!l.includes('zh') && !n.includes('chinese')) return -1;
+  // Приоритет 1: Детский и мультяшный голос в Microsoft Edge
+  if (n.includes('xiaoshuang')) return 100; // Microsoft Xiaoshuang Online (Natural) - детский голос!
+  if (n.includes('xiaoyi')) return 95;      // Microsoft Xiaoyi Online (Natural) - звонкий молодой голос
+  if (n.includes('xiaoxiao')) return 90;    // Microsoft Xiaoxiao Online (Natural)
+  if (n.includes('yunxia')) return 88;      // Microsoft Yunxia Online (Natural) - мальчик/подросток
+  if (n.includes('natural') && l.includes('zh-cn')) return 80;
+  if (n.includes('microsoft') && l.includes('zh-cn')) return 70;
+  if (l === 'zh-cn' || l === 'zh_cn') return 60;
+  return 40;
+}
+
+function formatVoiceLabel(v) {
+  const n = v.name;
+  if (/xiaoshuang/i.test(n)) return '👧 Xiaoshuang (Детский Edge)';
+  if (/xiaoyi/i.test(n)) return '🧒 Xiaoyi (Юный Edge)';
+  if (/yunxia/i.test(n)) return '👦 Yunxia (Мальчик Edge)';
+  if (/xiaoxiao/i.test(n)) return '👩 Xiaoxiao (Natural Edge)';
+  return n.replace(/Microsoft |Online \(Natural\) - |Chinese \(Mainland\)/g, '').trim() + ' (' + v.lang + ')';
+}
+
+function loadVoices() {
+  if (!canSpeak) {
+    voiceSelect.innerHTML = '<option>Озвучка недоступна</option>';
+    return;
+  }
+  const all = speechSynthesis.getVoices() || [];
+  zhVoices = all
+    .filter(v => scoreVoice(v) > 0)
+    .sort((a, b) => scoreVoice(b) - scoreVoice(a));
+
+  voiceSelect.innerHTML = '';
+  if (!zhVoices.length) {
+    const opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = 'Стандартный zh-CN';
+    voiceSelect.appendChild(opt);
+    selectedVoice = null;
+    return;
+  }
+
+  zhVoices.forEach((v, idx) => {
+    const opt = document.createElement('option');
+    opt.value = String(idx);
+    opt.textContent = formatVoiceLabel(v);
+    voiceSelect.appendChild(opt);
+  });
+
+  selectedVoice = zhVoices[0];
+  voiceSelect.value = '0';
+}
+
+if (canSpeak) {
+  loadVoices();
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+voiceSelect.onchange = () => {
+  const idx = Number(voiceSelect.value);
+  if (zhVoices[idx]) {
+    selectedVoice = zhVoices[idx];
+    say('你好，莉拉！');
+  }
+};
+
+rateBtn.onclick = () => {
+  speechRate = speechRate < 0.9 ? 1.0 : 0.82;
+  rateBtn.textContent = speechRate + 'x';
+};
+
+document.getElementById('themeBtn').onclick = () => {
+  const root = document.documentElement;
+  const cur = root.getAttribute('data-theme');
+  root.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+};
+
+function say(text) {
+  if (!canSpeak || !text) return;
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'zh-CN';
+    u.rate = speechRate;
+    if (selectedVoice) {
+      u.voice = selectedVoice;
+      // Если вдруг выбран не детский голос, чуть повышаем тон для мягкости
+      if (!/xiaoshuang|xiaoyi/i.test(selectedVoice.name)) {
+        u.pitch = 1.08;
+      }
+    } else {
+      u.pitch = 1.1;
+    }
+    speechSynthesis.speak(u);
+  } catch (e) {}
+}
+
+function sayBtn(el, text) {
+  if (!canSpeak) { el.hidden = true; return; }
+  el.innerHTML = SPK;
+  el.onclick = e => {
+    e.stopPropagation();
+    say(typeof text === 'function' ? text() : text);
+  };
+}
+
+/* ---------- СЧЁТЧИК ЗВЁЗД ---------- */
+let total = 0;
+const totalEl = document.getElementById('total');
+function addStar(d) {
+  total = Math.max(0, total + d);
+  totalEl.textContent = total;
+}
+
+function shuffle(a) {
+  a = a.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ---------- НАВИГАЦИЯ ПО 7 СТАНЦИЯМ ---------- */
+const STATIONS = [
+  { id: 'review', t: 'Повтор',    m: '4 мин' },
+  { id: 'words',  t: 'Новые слова', m: '6 мин' },
+  { id: 'drill',  t: 'Тренажёр',  m: '6 мин' },
+  { id: 'build',  t: 'Собери',    m: '6 мин' },
+  { id: 'sense',  t: 'Чуйка HSK2', m: '6 мин' },
+  { id: 'talk',   t: 'Говорилка', m: '8 мин' },
+  { id: 'finish', t: 'Допиши',    m: '5 мин' }
+];
+const tabrow = document.getElementById('tabrow');
+STATIONS.forEach((s, i) => {
+  const b = document.createElement('button');
+  b.className = 'tab';
+  b.role = 'tab';
+  b.id = 'tab-' + s.id;
+  b.innerHTML = `<span class="n">${i + 1}</span>${s.t}<span class="min">${s.m}</span>`;
+  b.onclick = () => openTab(s.id);
+  tabrow.appendChild(b);
+});
+function openTab(id) {
+  STATIONS.forEach(s => {
+    document.getElementById('st-' + s.id).hidden = s.id !== id;
+    document.getElementById('tab-' + s.id).setAttribute('aria-selected', s.id === id);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+openTab('review');
+
+/* =====================================================================
+   СТАНЦИЯ 1: ПОВТОР 8 ПРОШЛЫХ СЛОВ
+   ===================================================================== */
+const OLD_WORDS = [
+  { h: '觉得', p: 'juéde',  r: 'считать, думать', ex: '我觉得很有意思。' },
+  { h: '因为', p: 'yīnwèi', r: 'потому что',      ex: '因为很冷，所以喝热茶。' },
+  { h: '但是', p: 'dànshì', r: 'но, однако',       ex: '虽然难，但是很有意思。' },
+  { h: '可以', p: 'kěyǐ',   r: 'можно, могу',      ex: '我可以看电视吗？' },
+  { h: '一起', p: 'yìqǐ',   r: 'вместе',           ex: '我们一起开始吧！' },
+  { h: '已经', p: 'yǐjīng', r: 'уже',              ex: '我已经准备好了。' },
+  { h: '最',   p: 'zuì',    r: 'самый, больше всего', ex: '我最喜欢喝茶。' },
+  { h: '开始', p: 'kāishǐ', r: 'начинать',         ex: '我们八点开始学习。' }
+];
+
+const revGrid = document.getElementById('revGrid');
+let revDone = new Set();
+
+function renderRevCards() {
+  revGrid.innerHTML = '';
+  OLD_WORDS.forEach((w, idx) => {
+    const card = document.createElement('div');
+    card.className = 'rev-card' + (revDone.has(idx) ? ' done' : '');
+    card.innerHTML = `
+      <div class="rev-top">
+        <span class="rev-zh">${w.h}</span>
+        <button class="say" aria-label="Послушать"></button>
+      </div>
+      <div class="rev-secret" hidden>
+        <div class="rev-py">${w.p}</div>
+        <div class="rev-ru">${w.r}</div>
+        <div class="rev-combo">${w.ex}</div>
+      </div>
+      <div class="row" style="margin-top:auto;padding-top:6px">
+        <button class="btn sm ghost rev-check-btn" style="flex:1">Проверить</button>
+        <button class="btn sm sun rev-star-btn" hidden>Вспомнила! ⭐</button>
+      </div>
+    `;
+    sayBtn(card.querySelector('.say'), () => w.h + '。' + w.ex);
+    const sec = card.querySelector('.rev-secret');
+    const chk = card.querySelector('.rev-check-btn');
+    const stb = card.querySelector('.rev-star-btn');
+
+    chk.onclick = () => {
+      sec.hidden = !sec.hidden;
+      stb.hidden = sec.hidden || revDone.has(idx);
+      chk.textContent = sec.hidden ? 'Проверить' : 'Скрыть';
+      if (!sec.hidden) say(w.h);
+    };
+    stb.onclick = () => {
+      if (!revDone.has(idx)) {
+        revDone.add(idx);
+        addStar(1);
+        card.classList.add('done');
+        stb.hidden = true;
+        chk.textContent = '✓ Вспомнила!';
+      }
+    };
+    revGrid.appendChild(card);
+  });
+}
+renderRevCards();
+
+document.getElementById('revResetBtn').onclick = () => {
+  revDone.clear();
+  renderRevCards();
+};
+
+function setRevMode(m) {
+  document.getElementById('revMode1Btn').classList.toggle('active', m === 'cards');
+  document.getElementById('revMode2Btn').classList.toggle('active', m === 'match');
+  document.getElementById('revCardsWrap').hidden = m !== 'cards';
+  document.getElementById('revMatchWrap').hidden = m !== 'match';
+  if (m === 'match') initRevMatch(0);
+}
+
+/* Подрежим 2: Игра Найди пару (2 раунда по 4 слова) */
+let matchRound = 0;
+let mLeftSel = null, mRightSel = null, mSolved = 0;
+
+function initRevMatch(round) {
+  matchRound = round;
+  mLeftSel = null;
+  mRightSel = null;
+  mSolved = 0;
+  const slice = OLD_WORDS.slice(round * 4, round * 4 + 4);
+  document.getElementById('matchRoundTitle').textContent = `Раунд ${round + 1} из 2 · Соедини иероглиф и перевод`;
+  document.getElementById('matchVerdict').textContent = '';
+
+  const leftEl = document.getElementById('matchLeft');
+  const rightEl = document.getElementById('matchRight');
+  leftEl.innerHTML = '';
+  rightEl.innerHTML = '';
+
+  const leftItems = shuffle(slice);
+  const rightItems = shuffle(slice);
+
+  leftItems.forEach(item => {
+    const b = document.createElement('button');
+    b.className = 'match-item zh-item';
+    b.textContent = item.h;
+    b.dataset.key = item.h;
+    b.onclick = () => {
+      if (b.classList.contains('matched')) return;
+      say(item.h);
+      leftEl.querySelectorAll('.match-item').forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+      mLeftSel = b;
+      checkMatchPair(leftEl, rightEl, slice.length, true);
+    };
+    leftEl.appendChild(b);
+  });
+
+  rightItems.forEach(item => {
+    const b = document.createElement('button');
+    b.className = 'match-item';
+    b.innerHTML = `<div>${item.r}</div><div style="font-size:.78rem;color:var(--soft)">${item.p}</div>`;
+    b.dataset.key = item.h;
+    b.onclick = () => {
+      if (b.classList.contains('matched')) return;
+      rightEl.querySelectorAll('.match-item').forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+      mRightSel = b;
+      checkMatchPair(leftEl, rightEl, slice.length, true);
+    };
+    rightEl.appendChild(b);
+  });
+}
+
+function checkMatchPair(leftEl, rightEl, totalPairs, isRevGame) {
+  if (!mLeftSel || !mRightSel) return;
+  const l = mLeftSel, r = mRightSel;
+  mLeftSel = null;
+  mRightSel = null;
+
+  if (l.dataset.key === r.dataset.key) {
+    l.classList.remove('selected');
+    r.classList.remove('selected');
+    l.classList.add('matched');
+    r.classList.add('matched');
+    mSolved++;
+    addStar(1);
+    if (mSolved === totalPairs) {
+      const ver = document.getElementById(isRevGame ? 'matchVerdict' : 'pairsVerdict');
+      if (isRevGame && matchRound === 0) {
+        ver.className = 'verdict ok';
+        ver.innerHTML = 'Отлично! Переходим ко второй четвёрке слов…';
+        setTimeout(() => initRevMatch(1), 900);
+      } else {
+        ver.className = 'verdict ok';
+        ver.innerHTML = '太棒了！Все пары собраны! 🌟';
+      }
+    }
+  } else {
+    l.classList.add('wrong');
+    r.classList.add('wrong');
+    setTimeout(() => {
+      l.classList.remove('wrong', 'selected');
+      r.classList.remove('wrong', 'selected');
+    }, 450);
+  }
+}
+
+document.getElementById('matchRestartBtn').onclick = () => initRevMatch(0);
+
+/* =====================================================================
+   СТАНЦИЯ 2: 8 НОВЫХ СЛОВ (В СВЯЗКЕ С ПРОШЛЫМИ)
+   ===================================================================== */
+const WORDS = [
+  {
+    h: '所以', p: 'suǒyǐ', r: 'поэтому, так что',
+    pair: 'пара к 因为',
+    ex: '因为今天很冷，所以我喝热茶。',
+    exp: 'Yīnwèi jīntiān hěn lěng, suǒyǐ wǒ hē rè chá.',
+    e: 'Супер-связка с твоим прошлым словом: 因为 (потому что)…，所以 (поэтому)…'
+  },
+  {
+    h: '虽然', p: 'suīrán', r: 'хотя, несмотря на то что',
+    pair: 'пара к 但是',
+    ex: '虽然汉语很难，但是我觉得很有意思。',
+    exp: 'Suīrán Hànyǔ hěn nán, dànshì wǒ juéde hěn yǒuyìsi.',
+    e: 'Вторая главная парочка HSK2: 虽然 (хотя)…，但是 (но)…'
+  },
+  {
+    h: '还', p: 'hái', r: 'ещё, всё ещё, вдобавок',
+    pair: 'дружит с 已经 / 可以',
+    ex: '我已经吃了一个苹果，还想吃一个。',
+    exp: 'Wǒ yǐjīng chīle yí gè píngguǒ, hái xiǎng chī yí gè.',
+    e: 'Ставится перед глаголом: 还要 (ещё хочу), 还可以 (ещё можно), 还在 (всё ещё).'
+  },
+  {
+    h: '准备', p: 'zhǔnbèi', r: 'готовиться, собираться',
+    pair: 'дружит с 已经 / 开始',
+    ex: '我已经准备好了，我们开始吧！',
+    exp: 'Wǒ yǐjīng zhǔnbèi hǎo le, wǒmen kāishǐ ba!',
+    e: '准备好 (zhǔnbèi hǎo) = «полностью приготовиться / я готова!»'
+  },
+  {
+    h: '需要', p: 'xūyào', r: 'нуждаться, нужно',
+    pair: 'дружит с 因为 / 还',
+    ex: '我需要准备明天的考试。',
+    exp: 'Wǒ xūyào zhǔnbèi míngtiān de kǎoshì.',
+    e: 'Сверху 雨 «дождь»: урожаю нужен дождь → 需要 «нуждаться».'
+  },
+  {
+    h: '非常', p: 'fēicháng', r: 'очень, чрезвычайно (сильнее 很)',
+    pair: 'дружит с 觉得 / 最',
+    ex: '我非常喜欢和小猫一起玩。',
+    exp: 'Wǒ fēicháng xǐhuan hé xiǎo māo yìqǐ wán.',
+    e: 'Вместо обычного 很 скажи 非常 — речь сразу звучит на уровень выше!'
+  },
+  {
+    h: '有意思', p: 'yǒuyìsi', r: 'интересный, увлекательный',
+    pair: 'дружит с 觉得 / 非常',
+    ex: '我觉得这本书非常有意思。',
+    exp: 'Wǒ juéde zhè běn shū fēicháng yǒuyìsi.',
+    e: 'Дословно «есть смысл / изюминка». Неинтересный = 没意思 (méi yìsi).'
+  },
+  {
+    h: '可能', p: 'kěnéng', r: 'возможно, может быть',
+    pair: 'похоже на 可以',
+    ex: '明天可能下雨，我们不可以去公园。',
+    exp: 'Míngtiān kěnéng xià yǔ, wǒmen bù kěyǐ qù gōngyuán.',
+    e: 'Не путай: 可以 = «можно (разрешено)», а 可能 = «возможно (наверное)».'
+  }
+];
+
+const cardsEl = document.getElementById('cards');
+WORDS.forEach((w, i) => {
+  const c = document.createElement('div');
+  c.className = 'card';
+  c.tabIndex = 0;
+  c.setAttribute('role', 'button');
+  c.setAttribute('aria-label', 'Карточка ' + w.h);
+  c.innerHTML = `<div class="inner">
+    <div class="face front">
+      <span class="num">${i + 1}/8</span>
+      <span class="pair-tag">${w.pair}</span>
+      <span class="big">${w.h}</span>
+      <span class="hint">нажми</span>
+    </div>
+    <div class="face back">
+      <div class="top-line"><span class="w">${w.h}</span><button class="say" aria-label="Послушать"></button></div>
+      <div class="py">${w.p}</div>
+      <div class="ru">${w.r}</div>
+      <div class="ex">${w.ex}</div>
+      <div class="expy">${w.exp}</div>
+      <div class="etym">${w.e}</div>
+    </div>
+  </div>`;
+  sayBtn(c.querySelector('.say'), () => w.h + '。' + w.ex);
+  const flip = () => c.classList.toggle('flip');
+  c.onclick = flip;
+  c.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } };
+  cardsEl.appendChild(c);
+});
+
+let allFlipped = false;
+document.getElementById('flipAllBtn').onclick = e => {
+  allFlipped = !allFlipped;
+  cardsEl.querySelectorAll('.card').forEach(c => c.classList.toggle('flip', allFlipped));
+  e.target.textContent = allFlipped ? 'Закрыть все' : 'Перевернуть все';
+};
+
+/* =====================================================================
+   СТАНЦИЯ 3: ТРЕНАЖЁР СЛОВ И СВЯЗОК (ДО ГОВОРИЛКИ)
+   ===================================================================== */
+function setDrillMode(mode) {
+  document.getElementById('drTab1').classList.toggle('active', mode === 'sayzh');
+  document.getElementById('drTab2').classList.toggle('active', mode === 'trans');
+  document.getElementById('drTab3').classList.toggle('active', mode === 'pairs');
+  document.getElementById('drillSayWrap').hidden = mode !== 'sayzh';
+  document.getElementById('drillTransWrap').hidden = mode !== 'trans';
+  document.getElementById('drillPairsWrap').hidden = mode !== 'pairs';
+  if (mode === 'pairs') initDrillPairs();
+}
+
+/* --- Тренажёр А: Скажи по-китайски (RU -> ZH устно) --- */
+const DRILL_SAY = [
+  { tag: 'Новое слово', ru: 'Поэтому', hint: 'Вторая половинка для 因为…', zh: '所以', py: 'suǒyǐ', note: '因为…，所以… (Потому что…, поэтому…)' },
+  { tag: 'Новое слово', ru: 'Хотя', hint: 'Первая половинка для …但是', zh: '虽然', py: 'suīrán', note: '虽然…，但是… (Хотя…, но…)' },
+  { tag: 'Супер-комбо', ru: 'Мне кажется, это очень интересно!', hint: 'Используй 觉得 + 非常 + 有意思', zh: '我觉得非常有意思！', py: 'Wǒ juéde fēicháng yǒuyìsi!', note: '3 слова в одной фразе!' },
+  { tag: 'Супер-комбо', ru: 'Я уже приготовилась!', hint: 'Используй 已经 + 准备 + 好了', zh: '我已经准备好了！', py: 'Wǒ yǐjīng zhǔnbèi hǎo le!', note: 'Отличная фраза для начала урока' },
+  { tag: 'Супер-комбо', ru: 'Ещё можно… / Мне ещё нужно…', hint: 'Используй 还 + 可以 / 需要', zh: '还可以 / 还需要', py: 'hái kěyǐ / hái xūyào', note: '还 ставится прямо перед глаголом' },
+  { tag: 'Супер-комбо', ru: 'Возможно, мы пойдём вместе', hint: 'Используй 可能 + 一起 + 去', zh: '我们可能一起去。', py: 'Wǒmen kěnéng yìqǐ qù.', note: '可能 = возможно, 一起 = вместе' },
+  { tag: 'Супер-комбо', ru: 'Хотя холодно, но я очень рада', hint: '虽然…，但是… + 非常', zh: '虽然很冷，但是我非常高兴。', py: 'Suīrán hěn lěng, dànshì wǒ fēicháng gāoxìng.', note: 'Классическая конструкция HSK2' },
+  { tag: 'Супер-комбо', ru: 'Давай вместе начнём готовиться!', hint: '一起 + 开始 + 准备 + 吧', zh: '我们一起开始准备吧！', py: 'Wǒmen yìqǐ kāishǐ zhǔnbèi ba!', note: 'Сразу 3 глагола подряд!' }
+];
+let dsi = 0;
+let dsStarred = new Set();
+
+function loadDrillSay() {
+  const it = DRILL_SAY[dsi];
+  document.getElementById('drSayTag').textContent = `${dsi + 1}/${DRILL_SAY.length} · ${it.tag}`;
+  document.getElementById('drSayRu').textContent = it.ru;
+  document.getElementById('drSayHint').textContent = 'Подсказка: ' + it.hint;
+  document.getElementById('drSayZh').textContent = it.zh;
+  document.getElementById('drSayPy').textContent = it.py;
+  document.getElementById('drSayNote').textContent = it.note;
+  document.getElementById('drSayReveal').hidden = true;
+  document.getElementById('drStarBtn').hidden = true;
+  document.getElementById('drSayProg').innerHTML = DRILL_SAY.map((_, k) => `<i class="${k === dsi ? 'now' : dsStarred.has(k) ? 'done' : ''}"></i>`).join('');
+}
+sayBtn(document.getElementById('drSayAudio'), () => DRILL_SAY[dsi].zh);
+
+document.getElementById('drShowBtn').onclick = () => {
+  document.getElementById('drSayReveal').hidden = false;
+  if (!dsStarred.has(dsi)) document.getElementById('drStarBtn').hidden = false;
+  say(DRILL_SAY[dsi].zh);
+};
+document.getElementById('drStarBtn').onclick = () => {
+  if (!dsStarred.has(dsi)) {
+    dsStarred.add(dsi);
+    addStar(1);
+    document.getElementById('drStarBtn').hidden = true;
+    document.getElementById('drSayProg').innerHTML = DRILL_SAY.map((_, k) => `<i class="${k === dsi ? 'now' : dsStarred.has(k) ? 'done' : ''}"></i>`).join('');
+  }
+};
+document.getElementById('drNextBtn').onclick = () => { dsi = (dsi + 1) % DRILL_SAY.length; loadDrillSay(); };
+document.getElementById('drPrevBtn').onclick = () => { dsi = (dsi - 1 + DRILL_SAY.length) % DRILL_SAY.length; loadDrillSay(); };
+loadDrillSay();
+
+/* --- Тренажёр Б: Переведи связку (ZH -> RU тест) --- */
+const DRILL_TRANS = [
+  { zh: '虽然……，但是……', py: 'suīrán …, dànshì …', r: 'Хотя…, но…', o: ['Хотя…, но…', 'Потому что…, поэтому…', 'Уже началось', 'Возможно, можно'] },
+  { zh: '因为……，所以……', py: 'yīnwèi …, suǒyǐ …', r: 'Потому что…, поэтому…', o: ['Потому что…, поэтому…', 'Хотя…, но…', 'Считать интересным', 'Нужно готовиться'] },
+  { zh: '觉得非常有意思', py: 'juéde fēicháng yǒuyìsi', r: 'Считать очень интересным', o: ['Считать очень интересным', 'Самый любимый цвет', 'Уже пора начинать', 'Возможно, завтра'] },
+  { zh: '已经准备好了', py: 'yǐjīng zhǔnbèi hǎo le', r: 'Уже приготовилась', o: ['Уже приготовилась', 'Ещё нужно время', 'Начинаем вместе', 'Очень вкусно'] },
+  { zh: '还需要准备', py: 'hái xūyào zhǔnbèi', r: 'Ещё нужно подготовиться', o: ['Ещё нужно подготовиться', 'Уже можно идти', 'Самый интересный', 'Думаю, что можно'] },
+  { zh: '可能不可以', py: 'kěnéng bù kěyǐ', r: 'Возможно, нельзя', o: ['Возможно, нельзя', 'Конечно, можно', 'Ещё не началось', 'Очень нужно'] },
+  { zh: '最喜欢一起玩', py: 'zuì xǐhuan yìqǐ wán', r: 'Больше всего люблю играть вместе', o: ['Больше всего люблю играть вместе', 'Уже поиграли вместе', 'Нужно играть дома', 'Хотя играть интересно'] },
+  { zh: '现在可以开始了', py: 'xiànzài kěyǐ kāishǐ le', r: 'Сейчас уже можно начинать', o: ['Сейчас уже можно начинать', 'Возможно, скоро начнём', 'Ещё не готово', 'Потому что мы начали'] }
+];
+let dti = 0;
+
+function loadDrillTrans() {
+  const it = DRILL_TRANS[dti];
+  document.getElementById('drTrProg').innerHTML = DRILL_TRANS.map((_, k) => `<i class="${k === dti ? 'now' : k < dti ? 'done' : ''}"></i>`).join('');
+  document.getElementById('drTrZh').textContent = it.zh;
+  document.getElementById('drTrPy').textContent = it.py;
+  document.getElementById('drTrVer').textContent = '';
+  document.getElementById('drTrNext').hidden = true;
+
+  const optsEl = document.getElementById('drTrOpts');
+  optsEl.innerHTML = '';
+  let answered = false;
+  shuffle(it.o).forEach(optText => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.innerHTML = `<span style="font-weight:800;font-size:1rem">${optText}</span>`;
+    b.onclick = () => {
+      if (answered) return;
+      answered = true;
+      const ok = optText === it.r;
+      if (ok) addStar(1);
+      optsEl.querySelectorAll('.opt').forEach(x => {
+        if (x.textContent === it.r) x.classList.add('right');
+      });
+      if (!ok) b.classList.add('wrong');
+      const v = document.getElementById('drTrVer');
+      v.className = 'verdict ' + (ok ? 'ok' : 'no');
+      v.textContent = ok ? '对！Верно!' : 'Правильный перевод: ' + it.r;
+      say(it.zh.replace(/……/g, ''));
+      document.getElementById('drTrNext').hidden = false;
+    };
+    optsEl.appendChild(b);
+  });
+}
+sayBtn(document.getElementById('drTrAudio'), () => DRILL_TRANS[dti].zh.replace(/……/g, ''));
+document.getElementById('drTrNext').onclick = () => { dti = (dti + 1) % DRILL_TRANS.length; loadDrillTrans(); };
+loadDrillTrans();
+
+/* --- Тренажёр В: Сладкие парочки (соедини половинки фраз) --- */
+const COLLOC_PAIRS = [
+  { k: '1', l: '因为今天下雨', lp: 'Так как идёт дождь…', r: '所以我不想出去', rp: '…поэтому не хочу идти гулять' },
+  { k: '2', l: '虽然汉语很难', lp: 'Хотя китайский трудный…', r: '但是非常有意思', rp: '…но очень интересный' },
+  { k: '3', l: '我已经', lp: 'Я уже…', r: '准备好了', rp: '…полностью готова!' },
+  { k: '4', l: '我们一起', lp: 'Давай вместе…', r: '开始学习吧', rp: '…начнём учиться!' },
+  { k: '5', l: '我还', lp: 'Мне ещё…', r: '需要一本书', rp: '…нужна одна книга' }
+];
+
+function initDrillPairs() {
+  mLeftSel = null;
+  mRightSel = null;
+  mSolved = 0;
+  document.getElementById('pairsVerdict').textContent = '';
+  const leftEl = document.getElementById('pairsLeft');
+  const rightEl = document.getElementById('pairsRight');
+  leftEl.innerHTML = '';
+  rightEl.innerHTML = '';
+
+  shuffle(COLLOC_PAIRS).forEach(item => {
+    const b = document.createElement('button');
+    b.className = 'match-item';
+    b.dataset.key = item.k;
+    b.innerHTML = `<div class="zh" style="font-size:1.3rem;font-weight:900">${item.l}</div><div style="font-size:.78rem;color:var(--soft)">${item.lp}</div>`;
+    b.onclick = () => {
+      if (b.classList.contains('matched')) return;
+      say(item.l);
+      leftEl.querySelectorAll('.match-item').forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+      mLeftSel = b;
+      checkMatchPair(leftEl, rightEl, COLLOC_PAIRS.length, false);
+    };
+    leftEl.appendChild(b);
+  });
+
+  shuffle(COLLOC_PAIRS).forEach(item => {
+    const b = document.createElement('button');
+    b.className = 'match-item';
+    b.dataset.key = item.k;
+    b.innerHTML = `<div class="zh" style="font-size:1.3rem;font-weight:900">${item.r}</div><div style="font-size:.78rem;color:var(--soft)">${item.rp}</div>`;
+    b.onclick = () => {
+      if (b.classList.contains('matched')) return;
+      say(item.r);
+      rightEl.querySelectorAll('.match-item').forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+      mRightSel = b;
+      checkMatchPair(leftEl, rightEl, COLLOC_PAIRS.length, false);
+    };
+    rightEl.appendChild(b);
+  });
+}
+document.getElementById('pairsResetBtn').onclick = initDrillPairs;
+
+/* =====================================================================
+   СТАНЦИЯ 4: СОБЕРИ ПРЕДЛОЖЕНИЕ (СТАРЫЕ + НОВЫЕ СЛОВА)
+   ===================================================================== */
+const BUILD = [
+  {
+    r: 'Мне кажется, эта книга очень интересная.',
+    t: [['我','wǒ'],['觉得','juéde'],['这本书','zhè běn shū'],['非常','fēicháng'],['有意思','yǒuyìsi']],
+    a: ['我觉得这本书非常有意思'],
+    f: '我觉得这本书非常有意思。'
+  },
+  {
+    r: 'Так как идёт дождь, поэтому мы не можем пойти.',
+    t: [['因为','yīnwèi'],['下雨','xià yǔ'],['所以','suǒyǐ'],['我们','wǒmen'],['不可以去','bù kěyǐ qù']],
+    a: ['因为下雨所以我们不可以去'],
+    f: '因为下雨，所以我们不可以去。'
+  },
+  {
+    r: 'Хотя китайский трудный, но я больше всего его люблю.',
+    t: [['虽然','suīrán'],['汉语很难','Hànyǔ hěn nán'],['但是','dànshì'],['我','wǒ'],['最喜欢','zuì xǐhuan']],
+    a: ['虽然汉语很难但是我最喜欢'],
+    f: '虽然汉语很难，但是我最喜欢。'
+  },
+  {
+    r: 'Я уже приготовилась, давай начинать!',
+    t: [['我','wǒ'],['已经','yǐjīng'],['准备好了','zhǔnbèi hǎo le'],['我们','wǒmen'],['开始吧','kāishǐ ba']],
+    a: ['我已经准备好了我们开始吧'],
+    f: '我已经准备好了，我们开始吧！'
+  },
+  {
+    r: 'Завтра мы, возможно, вместе пойдём в кино.',
+    t: [['明天','míngtiān'],['我们','wǒmen'],['可能','kěnéng'],['一起','yìqǐ'],['去看电影','qù kàn diànyǐng']],
+    a: ['明天我们可能一起去看电影','我们明天可能一起去看电影'],
+    f: '明天我们可能一起去看电影。'
+  },
+  {
+    r: 'Мне ещё нужно купить одну тетрадь.',
+    t: [['我','wǒ'],['还','hái'],['需要','xūyào'],['买','mǎi'],['一个本子','yí gè běnzi']],
+    a: ['我还需要买一个本子'],
+    f: '我还需要买一个本子。'
+  },
+  {
+    r: 'Я собираюсь вместе с мамой готовить ужин.',
+    t: [['我','wǒ'],['准备','zhǔnbèi'],['和妈妈','hé māma'],['一起','yìqǐ'],['做饭','zuò fàn']],
+    a: ['我准备和妈妈一起做饭'],
+    f: '我准备和妈妈一起做饭。'
+  },
+  {
+    r: 'Можно мне ещё посмотреть телевизор?',
+    t: [['我','wǒ'],['还','hái'],['可以','kěyǐ'],['看电视','kàn diànshì'],['吗','ma']],
+    a: ['我还可以看电视吗'],
+    f: '我还可以看电视吗？'
+  }
+];
+
+let bi = 0, bPicked = [], bPool = [], bDone = new Set();
+const bSlot = document.getElementById('bSlot'), bPoolEl = document.getElementById('bPool'), bVer = document.getElementById('bVerdict');
+
+function tileHTML(t) { return `<span class="h">${t[0]}</span><span class="p">${t[1]}</span>`; }
+
+function bLoad() {
+  const it = BUILD[bi];
+  document.getElementById('bRu').textContent = it.r;
+  bPicked = [];
+  let s = shuffle(it.t);
+  while (s.length > 2 && s.map(x => x[0]).join('') === it.a[0]) s = shuffle(it.t);
+  bPool = s;
+  bVer.textContent = '';
+  bVer.className = 'verdict';
+  bSlot.className = 'slot';
+  bDraw();
+  document.getElementById('bNext').textContent = bi === BUILD.length - 1 ? 'Сначала ↺' : 'Дальше →';
+  document.getElementById('bProg').innerHTML = BUILD.map((_, k) => `<i class="${k === bi ? 'now' : bDone.has(k) ? 'done' : ''}"></i>`).join('');
+}
+
+function bDraw() {
+  bSlot.innerHTML = bPicked.length ? '' : '<span class="empty">Сюда встанут слова…</span>';
+  bPicked.forEach((t, k) => {
+    const b = document.createElement('button');
+    b.className = 'tile';
+    b.innerHTML = tileHTML(t);
+    b.onclick = () => {
+      bPool.push(t);
+      bPicked.splice(k, 1);
+      bSlot.className = 'slot';
+      bVer.textContent = '';
+      bDraw();
+    };
+    bSlot.appendChild(b);
+  });
+  bPoolEl.innerHTML = '';
+  bPool.forEach((t, k) => {
+    const b = document.createElement('button');
+    b.className = 'tile';
+    b.innerHTML = tileHTML(t);
+    b.onclick = () => {
+      bPicked.push(t);
+      bPool.splice(k, 1);
+      bDraw();
+    };
+    bPoolEl.appendChild(b);
+  });
+}
+
+document.getElementById('bCheck').onclick = () => {
+  const it = BUILD[bi];
+  if (bPool.length) {
+    bVer.textContent = 'Используй все карточки со словами.';
+    bVer.className = 'verdict no';
+    return;
+  }
+  const s = bPicked.map(x => x[0]).join('');
+  if (it.a.includes(s)) {
+    bSlot.className = 'slot ok';
+    bVer.innerHTML = '对！Супер! Теперь прочитай всё предложение вслух.';
+    bVer.className = 'verdict ok';
+    if (!bDone.has(bi)) { bDone.add(bi); addStar(1); }
+    say(it.f);
+  } else {
+    bSlot.className = 'slot no';
+    bVer.textContent = 'Почти! Проверь порядок связок (因为→所以, 虽然→但是, уже/ещё перед глаголом).';
+    bVer.className = 'verdict no';
+  }
+  document.getElementById('bProg').innerHTML = BUILD.map((_, k) => `<i class="${k === bi ? 'now' : bDone.has(k) ? 'done' : ''}"></i>`).join('');
+};
+
+document.getElementById('bShow').onclick = () => {
+  const it = BUILD[bi];
+  bVer.innerHTML = `<div class="answer">${it.f}</div><div style="font-size:.88rem;color:var(--soft)">${it.t.map(x => x[1]).join(' ')}</div>`;
+  bVer.className = 'verdict';
+  say(it.f);
+};
+document.getElementById('bNext').onclick = () => { bi = (bi + 1) % BUILD.length; bLoad(); };
+bLoad();
+
+/* =====================================================================
+   СТАНЦИЯ 5: ЧУЙКА HSK2 (ВСТАВЬ СЛОВО ПО КОНТЕКСТУ И МАЯЧКАМ)
+   ===================================================================== */
+const ALL_PY = {
+  '觉得':'juéde', '因为':'yīnwèi', '但是':'dànshì', '可以':'kěyǐ',
+  '一起':'yìqǐ', '已经':'yǐjīng', '最':'zuì', '开始':'kāishǐ',
+  '所以':'suǒyǐ', '虽然':'suīrán', '还':'hái', '准备':'zhǔnbèi',
+  '需要':'xūyào', '非常':'fēicháng', '有意思':'yǒuyìsi', '可能':'kěnéng'
+};
+
+const SENSE_QUIZ = [
+  {
+    s: ['', '虽然', '外边很冷，但是我还要去公园。'],
+    p: '___ wàibian hěn lěng, dànshì wǒ hái yào qù gōngyuán.',
+    r: 'Хотя на улице холодно, но я всё равно пойду в парк.',
+    clue: 'Маячок во второй части — слово 但是 (но). Какая уступка всегда дружит с 但是?',
+    o: ['虽然', '因为', '所以', '已经']
+  },
+  {
+    s: ['因为明天有考试，', '所以', '我今天要学习。'],
+    p: 'Yīnwèi míngtiān yǒu kǎoshì, ___ wǒ jīntiān yào xuéxí.',
+    r: 'Так как завтра экзамен, поэтому сегодня мне надо учиться.',
+    clue: 'Предложение начинается с 因为 (потому что). Значит, во второй части ставим следствие!',
+    o: ['所以', '但是', '虽然', '可能']
+  },
+  {
+    s: ['我觉得这个电影很', '有意思', '，我们一起看吧！'],
+    p: 'Wǒ juéde zhège diànyǐng hěn ___, wǒmen yìqǐ kàn ba!',
+    r: 'Мне кажется, этот фильм очень интересный, давай посмотрим вместе!',
+    clue: 'После слова 很 (очень) просится описание фильма, почему его хочется посмотреть.',
+    o: ['有意思', '准备', '需要', '开始']
+  },
+  {
+    s: ['我已经吃了一个包子，', '还', '想吃一个。'],
+    p: 'Wǒ yǐjīng chīle yí gè bāozi, ___ xiǎng chī yí gè.',
+    r: 'Я уже съела один баоцзы и ещё хочу съесть один.',
+    clue: 'Один уже съела (已经), и вдобавок перед глаголом 想 (хочу) нужно слово «ещё».',
+    o: ['还', '最', '已经', '因为']
+  },
+  {
+    s: ['妈妈，明天我', '需要', '七点起床吗？'],
+    p: 'Māma, míngtiān wǒ ___ qī diǎn qǐchuáng ma?',
+    r: 'Мама, мне завтра нужно вставать в 7 утра?',
+    clue: 'Спрашиваем про необходимость: «нужно ли мне вставать в 7 часов?».',
+    o: ['需要', '觉得', '有意思', '非常']
+  },
+  {
+    s: ['他没来上课，', '可能', '生病了。'],
+    p: 'Tā méi lái shàngkè, ___ shēngbìng le.',
+    r: 'Он не пришёл на урок, возможно, заболел.',
+    clue: 'Мы точно не знаем причину, а делаем предположение («наверное / возможно»).',
+    o: ['可能', '可以', '一起', '开始']
+  },
+  {
+    s: ['我', '已经', '准备好了，我们开始吧！'],
+    p: 'Wǒ ___ zhǔnbèi hǎo le, wǒmen kāishǐ ba!',
+    r: 'Я уже приготовилась, давай начинать!',
+    clue: 'В конце первой части стоит 好了 (действие завершено к этому моменту). Ищем «уже»!',
+    o: ['已经', '虽然', '因为', '最']
+  },
+  {
+    s: ['我', '非常', '喜欢小猫，它们太可爱了！'],
+    p: 'Wǒ ___ xǐhuan xiǎo māo, tāmen tài kě\'ài le!',
+    r: 'Я чрезвычайно люблю котят, они такие милые!',
+    clue: 'Перед глаголом 喜欢 (любить) нужно сильное слово «очень / чрезвычайно».',
+    o: ['非常', '有意思', '准备', '所以']
+  },
+  {
+    s: ['星期天我', '准备', '和朋友一起去买东西。'],
+    p: 'Xīngqītiān wǒ ___ hé péngyou yìqǐ qù mǎi dōngxi.',
+    r: 'В воскресенье я собираюсь (планирую) пойти с друзьями за покупками.',
+    clue: 'Речь о планах на воскресенье: «я собираюсь / готовлюсь пойти…».',
+    o: ['准备', '因为', '但是', '已经']
+  },
+  {
+    s: ['虽然这个菜很贵，', '但是', '非常好吃！'],
+    p: 'Suīrán zhège cài hěn guì, ___ fēicháng hǎochī!',
+    r: 'Хотя это блюдо дорогое, но оно необыкновенно вкусное!',
+    clue: 'В начале стоит Хотя (虽然), а блюдо всё равно вкусное — ставим противопоставление!',
+    o: ['但是', '所以', '因为', '可能']
+  }
+];
+
+let si = 0, sScore = 0;
+const senseEl = document.getElementById('senseSheet');
+
+function sLoad() {
+  if (si >= SENSE_QUIZ.length) {
+    const msg = sScore >= 9 ? '太棒了，莉拉！Чуйка на 100%!' : sScore >= 7 ? '非常好！Отличное чувство языка!' : '加油！Ещё чуть-чуть практики!';
+    senseEl.innerHTML = `<div class="result">
+      <div class="big">${sScore}/${SENSE_QUIZ.length}</div>
+      <div class="zhr">${msg}</div>
+      <p class="lead" style="margin:10px auto 18px">В твоей копилке уже <b>${total}</b> ⭐ за урок!</p>
+      <button class="btn primary" id="sAgain">Пройти ещё раз ↺</button>
+    </div>`;
+    document.getElementById('sAgain').onclick = () => { si = 0; sScore = 0; sLoad(); };
+    return;
+  }
+
+  const it = SENSE_QUIZ[si];
+  senseEl.innerHTML = `
+    <div class="progress">${SENSE_QUIZ.map((_, k) => `<i class="${k === si ? 'now' : k < si ? 'done' : ''}"></i>`).join('')}</div>
+    <div class="row" style="justify-content:space-between;margin-bottom:6px">
+      <span class="sense-badge">🎯 Вопрос ${si + 1} из ${SENSE_QUIZ.length}</span>
+      <button class="btn sm ghost" id="sClueBtn">💡 Подсказка для чуйки</button>
+    </div>
+    <div class="gap">${it.s[0]}<span class="blank" id="sBlank">?</span>${it.s[2]}</div>
+    <div class="gappy">${it.p}</div>
+    <div class="clue-box" id="sClueBox" hidden>${it.clue}</div>
+    <div class="opts" id="sOpts"></div>
+    <div class="verdict" id="sVer" aria-live="polite"></div>
+    <div class="row" style="margin-top:8px"><button class="btn primary" id="sNext" hidden>Дальше →</button></div>
+  `;
+
+  document.getElementById('sClueBtn').onclick = () => {
+    const cb = document.getElementById('sClueBox');
+    cb.hidden = !cb.hidden;
+  };
+
+  const opts = document.getElementById('sOpts');
+  let answered = false;
+  shuffle(it.o).forEach(o => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.innerHTML = `<span class="h">${o}</span><span class="p">${ALL_PY[o] || ''}</span>`;
+    b.onclick = () => {
+      if (answered) return;
+      answered = true;
+      const ok = o === it.s[1];
+      if (ok) { sScore++; addStar(1); }
+      opts.querySelectorAll('.opt').forEach(x => {
+        if (x.querySelector('.h').textContent === it.s[1]) x.classList.add('right');
+      });
+      if (!ok) b.classList.add('wrong');
+      document.getElementById('sBlank').textContent = it.s[1];
+      document.getElementById('sClueBox').hidden = false;
+      const v = document.getElementById('sVer');
+      v.className = 'verdict ' + (ok ? 'ok' : 'no');
+      v.innerHTML = (ok ? '对！Чуйка сработала! ' : 'Правильно: ' + it.s[1] + '. ') +
+        `<span style="color:var(--soft);font-weight:600">${it.r}</span>`;
+      say(it.s.join(''));
+      document.getElementById('sNext').hidden = false;
+      document.getElementById('sNext').focus();
+    };
+    opts.appendChild(b);
+  });
+
+  document.getElementById('sNext').onclick = () => { si++; sLoad(); };
+}
+sLoad();
+
+/* =====================================================================
+   СТАНЦИЯ 6: ГОВОРИЛКА (КОМБО СТАРОГО И НОВОГО СЛОВА + ВОПРОС УЧИТЕЛЮ)
+   ===================================================================== */
+const TALK = [
+  {
+    tp: 'Интересное дело',
+    q: '你觉得学汉语有意思吗？',
+    qp: 'Nǐ juéde xué Hànyǔ yǒuyìsi ma?',
+    qr: 'Тебе кажется, учить китайский интересно?',
+    fr: '我觉得学汉语……，因为……',
+    frp: 'Wǒ juéde xué Hànyǔ …, yīnwèi …',
+    m: '觉得 + 非常有意思',
+    mp: 'juéde + fēicháng yǒuyìsi',
+    ask: '老师，你觉得什么书最有意思？',
+    askp: 'Lǎoshī, nǐ juéde shénme shū zuì yǒuyìsi?'
+  },
+  {
+    tp: 'Хотя трудно, но…',
+    q: '写汉字难不难？你喜欢吗？',
+    qp: 'Xiě Hànzì nán bu nán? Nǐ xǐhuan ma?',
+    qr: 'Писать иероглифы трудно? Тебе нравится?',
+    fr: '虽然写汉字……，但是我……',
+    frp: 'Suīrán xiě Hànzì …, dànshì wǒ …',
+    m: '虽然 + 但是',
+    mp: 'suīrán … dànshì … (хотя…, но…)',
+    ask: '老师，你最喜欢写什么汉字？',
+    askp: 'Lǎoshī, nǐ zuì xǐhuan xiě shénme Hànzì?'
+  },
+  {
+    tp: 'Потому что… поэтому!',
+    q: '你为什么今天很高兴？',
+    qp: 'Nǐ wèishénme jīntiān hěn gāoxìng?',
+    qr: 'Почему ты сегодня такая радостная?',
+    fr: '因为今天……，所以我非常高兴！',
+    frp: 'Yīnwèi jīntiān …, suǒyǐ wǒ fēicháng gāoxìng!',
+    m: '因为 + 所以',
+    mp: 'yīnwèi … suǒyǐ … (потому что…, поэтому…)',
+    ask: '老师，你今天为什么高兴？',
+    askp: 'Lǎoshī, nǐ jīntiān wèishénme gāoxìng?'
+  },
+  {
+    tp: 'Планы на выходные',
+    q: '这个星期六你准备做什么？',
+    qp: 'Zhège xīngqīliù nǐ zhǔnbèi zuò shénme?',
+    qr: 'Что ты собираешься делать в эту субботу?',
+    fr: '星期六我准备和……一起……',
+    frp: 'Xīngqīliù wǒ zhǔnbèi hé … yìqǐ …',
+    m: '准备 + 一起',
+    mp: 'zhǔnbèi + yìqǐ (собираюсь + вместе)',
+    ask: '老师，星期六你准备去哪儿？',
+    askp: 'Lǎoshī, xīngqīliù nǐ zhǔnbèi qù nǎr?'
+  },
+  {
+    tp: 'Чего ещё хочется',
+    q: '你已经会说汉语了，还想学什么？',
+    qp: 'Nǐ yǐjīng huì shuō Hànyǔ le, hái xiǎng xué shénme?',
+    qr: 'Ты уже умеешь говорить по-китайски, а чему ещё хочешь научиться?',
+    fr: '我已经会……了，我还想……',
+    frp: 'Wǒ yǐjīng huì … le, wǒ hái xiǎng …',
+    m: '已经 + 还',
+    mp: 'yǐjīng + hái (уже + ещё)',
+    ask: '老师，你还会说什么语言？',
+    askp: 'Lǎoshī, nǐ hái huì shuō shénme yǔyán?'
+  },
+  {
+    tp: 'Что нам нужно',
+    q: '去学校上课，你需要准备什么？',
+    qp: 'Qù xuéxiào shàngkè, nǐ xūyào zhǔnbèi shénme?',
+    qr: 'Что тебе нужно приготовить, когда идёшь в школу?',
+    fr: '我需要准备……，还需要……',
+    frp: 'Wǒ xūyào zhǔnbèi …, hái xūyào …',
+    m: '需要 + 准备',
+    mp: 'xūyào + zhǔnbèi (нужно + приготовить)',
+    ask: '老师，今天上课我们需要什么？',
+    askp: 'Lǎoshī, jīntiān shàngkè wǒmen xūyào shénme?'
+  },
+  {
+    tp: 'Угадай-ка про завтра',
+    q: '明天天气可能怎么样？可以去玩吗？',
+    qp: 'Míngtiān tiānqì kěnéng zěnmeyàng? Kěyǐ qù wán ma?',
+    qr: 'Какая завтра, возможно, будет погода? Можно пойти гулять?',
+    fr: '明天可能……，我们可以 / 不可以……',
+    frp: 'Míngtiān kěnéng …, wǒmen kěyǐ / bù kěyǐ …',
+    m: '可能 + 可以',
+    mp: 'kěnéng + kěyǐ (возможно + можно)',
+    ask: '老师，明天你可能做什么？',
+    askp: 'Lǎoshī, míngtiān nǐ kěnéng zuò shénme?'
+  },
+  {
+    tp: 'Любимое занятие',
+    q: '下课以后，你最喜欢做什么？',
+    qp: 'Xiàkè yǐhòu, nǐ zuì xǐhuan zuò shénme?',
+    qr: 'Что ты больше всего любишь делать после уроков?',
+    fr: '我最喜欢……，因为我觉得非常……',
+    frp: 'Wǒ zuì xǐhuan …, yīnwèi wǒ juéde fēicháng …',
+    m: '最 + 非常',
+    mp: 'zuì + fēicháng (больше всего + чрезвычайно)',
+    ask: '老师，你最喜欢看什么电影？',
+    askp: 'Lǎoshī, nǐ zuì xǐhuan kàn shénme diànyǐng?'
+  }
+];
+
+let tOrder = shuffle([...TALK.keys()]), tPos = 0;
+const STAR = '<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5L2.5 9.3l6.6-.8z"/></svg>';
+
+function tLoad() {
+  const it = TALK[tOrder[tPos]];
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  set('tTopic', it.tp);
+  set('tQ', it.q);
+  set('tPy', it.qp);
+  set('tRu', it.qr);
+  set('tFrame', it.fr);
+  set('tFramePy', it.frp);
+  set('tMust', it.m);
+  set('tMustPy', it.mp);
+  set('tAskZh', it.ask);
+  set('tAskPy', it.askp);
+  set('tCount', `Тема ${tPos + 1} из ${TALK.length}`);
+
+  document.getElementById('tRu').hidden = true;
+  document.getElementById('tHint').textContent = 'Перевод вопроса';
+
+  const st = document.getElementById('tStars');
+  st.querySelectorAll('.star').forEach(s => s.remove());
+  for (let k = 0; k < 3; k++) {
+    const b = document.createElement('button');
+    b.className = 'star';
+    b.innerHTML = STAR;
+    b.setAttribute('aria-label', 'Предложение ' + (k + 1));
+    b.onclick = () => {
+      b.classList.toggle('on');
+      const on = b.classList.contains('on');
+      addStar(on ? 1 : -1);
+    };
+    st.appendChild(b);
+  }
+
+  const card = document.getElementById('talkCard');
+  card.classList.remove('spin-anim');
+  void card.offsetWidth;
+  card.classList.add('spin-anim');
+}
+
+sayBtn(document.querySelector('[data-say-from="tQ"]'), () => document.getElementById('tQ').textContent);
+sayBtn(document.getElementById('tAskSay'), () => document.getElementById('tAskZh').textContent);
+
+document.getElementById('tSpin').onclick = () => {
+  tPos++;
+  if (tPos >= tOrder.length) { tOrder = shuffle([...TALK.keys()]); tPos = 0; }
+  tLoad();
+};
+document.getElementById('tHint').onclick = e => {
+  const r = document.getElementById('tRu');
+  r.hidden = !r.hidden;
+  e.target.textContent = r.hidden ? 'Перевод вопроса' : 'Спрятать перевод';
+};
+tLoad();
+
+/* =====================================================================
+   СТАНЦИЯ 7: ДОПИШИ ИСТОРИЮ ВСЛУХ
+   ===================================================================== */
+const FIN = [
+  {
+    z: '虽然今天有很多作业，但是',
+    p: 'Suīrán jīntiān yǒu hěn duō zuòyè, dànshì',
+    r: 'Хотя сегодня много домашки, но…',
+    e: '我已经做完了！',
+    ep: 'wǒ yǐjīng zuò wán le!'
+  },
+  {
+    z: '因为我很喜欢小动物，所以',
+    p: 'Yīnwèi wǒ hěn xǐhuan xiǎo dòngwù, suǒyǐ',
+    r: 'Так как я очень люблю зверюшек, поэтому…',
+    e: '我想去动物园看大熊猫。',
+    ep: 'wǒ xiǎng qù dòngwùyuán kàn dàxióngmāo.'
+  },
+  {
+    z: '我觉得这个游戏非常',
+    p: 'Wǒ juéde zhège yóuxì fēicháng',
+    r: 'Мне кажется, эта игра чрезвычайно…',
+    e: '有意思，我们一起玩吧！',
+    ep: 'yǒuyìsi, wǒmen yìqǐ wán ba!'
+  },
+  {
+    z: '明天是星期日，我准备',
+    p: 'Míngtiān shì xīngqīrì, wǒ zhǔnbèi',
+    r: 'Завтра воскресенье, я собираюсь…',
+    e: '和妈妈一起去做蛋糕。',
+    ep: 'hé māma yìqǐ qù zuò dàngāo.'
+  },
+  {
+    z: '我已经喝了一杯茶，还',
+    p: 'Wǒ yǐjīng hēle yì bēi chá, hái',
+    r: 'Я уже выпила чашку чая и ещё…',
+    e: '想吃一点儿水果。',
+    ep: 'xiǎng chī yìdiǎnr shuǐguǒ.'
+  },
+  {
+    z: '明天可能下雨，所以我们',
+    p: 'Míngtiān kěnéng xià yǔ, suǒyǐ wǒmen',
+    r: 'Завтра, возможно, пойдёт дождь, поэтому мы…',
+    e: '在家看电影吧。',
+    ep: 'zài jiā kàn diànyǐng ba.'
+  },
+  {
+    z: '现在八点了，我们需要开始',
+    p: 'Xiànzài bā diǎn le, wǒmen xūyào kāishǐ',
+    r: 'Сейчас уже 8 часов, нам нужно начинать…',
+    e: '上汉语课了！',
+    ep: 'shàng Hànyǔ kè le!'
+  }
+];
+
+let fi = 0;
+let fStarred = new Set();
+
+function fLoad() {
+  const it = FIN[fi];
+  document.getElementById('fZh').textContent = it.z;
+  document.getElementById('fPy').textContent = it.p + ' …';
+  document.getElementById('fRu').textContent = it.r;
+  document.getElementById('fEnd').textContent = it.z + it.e;
+  document.getElementById('fEndPy').textContent = it.p + ' ' + it.ep;
+  document.getElementById('fReveal').hidden = true;
+  document.getElementById('fPrev').disabled = fi === 0;
+  document.getElementById('fStarBtn').disabled = fStarred.has(fi);
+  document.getElementById('fStarBtn').textContent = fStarred.has(fi) ? '✓ Звезда получена' : 'Сказала! +1 ⭐';
+  document.getElementById('fNext').textContent = fi === FIN.length - 1 ? 'Сначала ↺' : 'Дальше →';
+  document.getElementById('fProg').innerHTML = FIN.map((_, k) => `<i class="${k === fi ? 'now' : fStarred.has(k) ? 'done' : ''}"></i>`).join('');
+}
+
+sayBtn(document.getElementById('fSay'), () => FIN[fi].z);
+document.getElementById('fShow').onclick = () => {
+  document.getElementById('fReveal').hidden = false;
+  say(FIN[fi].z + FIN[fi].e);
+};
+document.getElementById('fStarBtn').onclick = () => {
+  if (!fStarred.has(fi)) {
+    fStarred.add(fi);
+    addStar(1);
+    fLoad();
+  }
+};
+document.getElementById('fNext').onclick = () => { fi = (fi + 1) % FIN.length; fLoad(); };
+document.getElementById('fPrev').onclick = () => { if (fi > 0) { fi--; fLoad(); } };
+fLoad();
+</script>
+
+</body>
+</html>
