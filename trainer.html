@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panda Explorer · Тренажёр</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Nunito:wght@400;600;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="trainer.css">
+</head>
+<body>
+
+<!-- Sticky Top Navigation Back to Main Menu -->
+<div style="position: sticky; top: 0; z-index: 99999; background: #ffffff; border-bottom: 2px solid #e0e7ff; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 16px rgba(0,0,0,0.06); font-family: 'Nunito', system-ui, -apple-system, sans-serif;">
+  <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; background: #4f46e5; color: #ffffff; text-decoration: none; padding: 10px 22px; border-radius: 9999px; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);">
+    ⬅️ Вернуться назад в Главное меню
+  </a>
+  <span style="font-weight: 700; color: #64748b; font-size: 0.95rem;">
+    Тренажёры по всем темам · Лера (莉拉)
+  </span>
+</div>
+
+<div class="wrap">
+
+<header>
+  <a href="index.html" class="mascot-link" title="Вернуться в главное меню">
+  <svg class="mascot" viewBox="0 0 64 64" aria-hidden="true">
+    <ellipse cx="17" cy="21" rx="8" ry="8" fill="#23201F"/>
+    <ellipse cx="47" cy="21" rx="8" ry="8" fill="#23201F"/>
+    <ellipse cx="32" cy="36" rx="21" ry="19" fill="#fff" stroke="#23201F" stroke-width="2.4"/>
+    <ellipse cx="24" cy="35" rx="6" ry="7" fill="#23201F"/>
+    <ellipse cx="40" cy="35" rx="6" ry="7" fill="#23201F"/>
+    <circle cx="25" cy="34" r="2.2" fill="#fff"/><circle cx="41" cy="34" r="2.2" fill="#fff"/>
+    <ellipse cx="32" cy="44" rx="3.4" ry="2.6" fill="#23201F"/>
+    <path d="M8 20 Q32 10 56 20 Q32 25 8 20Z" fill="#3E7B5E"/>
+    <path d="M20 20 Q32 2 44 20Z" fill="#3E7B5E"/>
+    <path d="M20 17 Q32 13 44 17" stroke="#D6402C" stroke-width="3" fill="none"/>
+  </svg></a>
+  <div class="brand">Panda Explorer<small id="whoLine">Загрузка…</small></div>
+  <div class="hdr-right" style="display:flex;align-items:center;gap:8px">
+    <button class="streak" id="sndBtn" title="Звук">🔊 Звук</button>
+    <div class="streak" id="streak">🔥 0</div>
+  </div>
+</header>
+
+<section id="home">
+  <div id="focus"></div>
+  <p class="section-label" id="homeLabel">Выбери тему</p>
+  <div class="grid" id="topicGrid"></div>
+</section>
+
+<section id="modes" class="hide">
+  <button class="back" data-go="home">← Все темы</button>
+  <h2 id="modeTitle"></h2>
+  <p class="hint" id="modeSub"></p>
+  <div class="modes" id="modeList"></div>
+</section>
+
+<section id="play" class="hide">
+  <button class="back" data-go="modes">← Другой режим</button>
+  <div class="progress-row">
+    <div class="pbar"><i id="pbar"></i></div>
+    <div class="count" id="count"></div>
+  </div>
+  <div class="stage" id="stage"></div>
+  <div class="actions" id="actions"></div>
+</section>
+
+<section id="results" class="hide">
+  <div class="stage results-stage">
+    <div class="score" id="scoreLine"></div>
+    <p class="hint" id="scoreSub"></p>
+    <div class="mistakes hide" id="mistakes"><p class="section-label">Повторить</p><ul></ul></div>
+    <div class="actions">
+      <button class="btn" id="again">Ещё раз</button>
+      <button class="btn ghost" data-go="modes">Другой режим</button>
+      <button class="btn ghost" data-go="home">К темам</button>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+/* ================= настройки режимов ================= */
+const MODES=[
+ {id:"cards",    cn:"认字", t:"Карточки",        d:"Смотришь иероглиф, вспоминаешь сам. Без счёта очков."},
+ {id:"choice",   cn:"选择", t:"Выбери перевод",  d:"Иероглиф → четыре варианта. Быстрая проверка."},
+ {id:"listen",   cn:"听力", t:"На слух",         d:"Слушаешь озвучку и находишь нужное слово."},
+ {id:"truefalse",cn:"对不对",t:"Верно или нет?", d:"Видишь перевод, слышишь слово. Совпало — 对, нет — 不对."},
+ {id:"trap",     cn:"易混", t:"Ловушки",         d:"Похожие слова, которые легко перепутать. Слушай и выбирай.", only:"traps"},
+ {id:"tones",    cn:"声调", t:"Тоны",            d:"Слушаешь слово и выбираешь, с какими тонами оно звучит.", needs:"tones"},
+ {id:"sounds",   cn:"声母", t:"Звуки",           d:"j или zh? q или ch? Слушаешь и выбираешь верный пиньинь.", needs:"sounds"},
+ {id:"speak",    cn:"说",   t:"Скажи сам",       d:"Говоришь слово в микрофон — панда проверяет произношение."},
+ {id:"pinyin",   cn:"拼音", t:"Впиши пиньинь",   d:"Печатаешь чтение. Тоны ставить не обязательно."},
+ {id:"sent",     cn:"造句", t:"Собери фразу",    d:"Расставь слова в правильном порядке.", needsSent:true},
+ {id:"fill",     cn:"填空", t:"Вставь слово",    d:"В фразе пропуск — найди слово, которого не хватает.", needsSent:true},
+ {id:"hearsent", cn:"听句", t:"Фраза на слух",   d:"Слушаешь целую фразу и выбираешь её перевод.", needsSent:true},
+ {id:"blitz",    cn:"闪电", t:"Молния · 60 сек", d:"Сколько слов успеешь за минуту? Есть рекорд."},
+ {id:"memory",   cn:"配对", t:"Пары",            d:"Найди иероглиф и его перевод. Игра на память."}
+];
+
+/* ================= хранилище ================= */
+const mem={};
+const store={
+  get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return k in mem?mem[k]:d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){mem[k]=v}}
+};
+
+/* ================= озвучка ================= */
+let zhVoice=null;
+/* приоритет голосов: 云夏 (детский) → 晓晓 → любой zh-CN → любой китайский */
+const VOICE_RANK=[
+  v=>/yunxia|云夏/i.test(v.name),
+  v=>/xiaoxiao|晓晓/i.test(v.name),
+  v=>/yunxi|云希/i.test(v.name),
+  v=>v.lang==='zh-CN',
+  v=>v.lang&&v.lang.toLowerCase().startsWith('zh')
+];
+function pickVoice(){
+  const vs=speechSynthesis.getVoices();
+  for(const test of VOICE_RANK){const hit=vs.find(test);if(hit){zhVoice=hit;return}}
+  zhVoice=null;
+}
+if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+
+let SOUND=true;
+function speak(t){
+  if(!SOUND||!t||!('speechSynthesis' in window))return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  u.lang='zh-CN';u.rate=.8;if(zhVoice)u.voice=zhVoice;
+  speechSynthesis.speak(u);
+}
+/* небольшая пауза, чтобы озвучка не наложилась на отрисовку */
+function autoSay(t,ms){setTimeout(()=>speak(t),ms||280)}
+
+/* ================= распознавание речи ================= */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition||null;
+let SR_OK=!!SR;
+
+/* ================= утилиты ================= */
+const $=s=>document.querySelector(s);
+const shuffle=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+const strip=s=>s.normalize('NFD').replace(/[̀-̏]/g,'').replace(/[\s']/g,'').toLowerCase();
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pykey=p=>p.toLowerCase().replace(/[\s'-]/g,'');
+const hasZh=s=>/[一-鿿]/.test(s);
+const PY=()=>!!(DB&&DB.showPinyin);
+/* иероглиф + пиньинь мелко (для тех, кто пока не читает иероглифы) */
+const hz=w=>`<span class="zh">${w[0]}</span>`+(PY()&&w[1]?`<small class="py">${w[1]}</small>`:'');
+const pyLine=w=>PY()?`<div class="pinyin">${w[1]}</div>`:'';
+
+/* ---------- тоны ---------- */
+const TV={a:'āáǎà',e:'ēéěè',i:'īíǐì',o:'ōóǒò',u:'ūúǔù',ü:'ǖǘǚǜ',A:'ĀÁǍÀ',E:'ĒÉĚÈ',O:'ŌÓǑÒ'};
+const T2B={};
+Object.entries(TV).forEach(([b,str])=>[...str].forEach((c,i)=>T2B[c]=[b,i+1]));
+const tonesOf=p=>[...p].filter(c=>T2B[c]).map(c=>T2B[c][1]);
+function retone(p,ts){let k=0;return [...p].map(c=>T2B[c]?TV[T2B[c][0]][ts[k++]-1]:c).join('')}
+/* как слово реально звучит: 3+3 → 2+3 */
+function sandhi(ts){const r=ts.slice();for(let i=0;i<r.length-1;i++)if(ts[i]===3&&ts[i+1]===3)r[i]=2;return r}
+const sameArr=(a,b)=>a.length===b.length&&a.every((x,i)=>x===b[i]);
+function toneOptions(p){
+  const ts=tonesOf(p), real=sandhi(ts), set=new Set([p]);
+  if(ts.length===1)[1,2,3,4].forEach(t=>set.add(retone(p,[t])));
+  else for(let g=0;set.size<4&&g<80;g++){
+    const v=ts.slice(), k=Math.floor(Math.random()*v.length);
+    let nt;do{nt=1+Math.floor(Math.random()*4)}while(nt===v[k]);
+    v[k]=nt;
+    if(g>30){const k2=Math.floor(Math.random()*v.length);v[k2]=1+Math.floor(Math.random()*4)}
+    if(sameArr(v,ts)||sameArr(v,real))continue;
+    set.add(retone(p,v));
+  }
+  return shuffle([...set]);
+}
+const TONE_SIGN=['','—','↗','∨','↘'];
+const toneLabel=p=>tonesOf(p).map(t=>t+TONE_SIGN[t]).join(' · ');
+
+/* ---------- звуки (начальные согласные) ---------- */
+const VOW='aeiouüāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ';
+const isV=c=>!!c&&VOW.includes(c.toLowerCase());
+const I_SET='iīíǐì', U_SET='uūúǔù', A_SET='aāáǎà', O_SET='oōóǒò';
+const I2E={i:'e',ī:'ē',í:'é',ǐ:'ě',ì:'è'}, E2I={e:'i',ē:'ī',é:'í',ě:'ǐ',è:'ì'};
+const E2O={e:'o',ē:'ō',é:'ó',ě:'ǒ',è:'ò'}, O2E={o:'e',ō:'ē',ó:'é',ǒ:'ě',ò:'è'};
+/* пары, которые путают русскоязычные ученики */
+const CONF={j:['zh','z','d'],q:['ch','c','t'],x:['sh','s'],zh:['z','j'],ch:['c','q'],sh:['s','x'],
+  z:['zh','j'],c:['ch','q'],s:['sh','x'],d:['t','j'],t:['d','q'],b:['p'],p:['b'],g:['k'],k:['g'],n:['l'],l:['n']};
+const PAL=['j','q','x'];
+/* меняем согласную и подправляем гласную, чтобы получился настоящий слог */
+function swapRest(from,to,rest){
+  const r0=rest[0], r1=rest[1];
+  const fromPal=PAL.includes(from), toPal=PAL.includes(to);
+  if(fromPal===toPal)return rest;
+  if(fromPal){                                   /* j/q/x → zh/z/d… */
+    if(U_SET.includes(r0)){                      /* ü пишется как u */
+      if(to==='d'||to==='t')return rest;
+      return E2O[r1]?r0+E2O[r1]+rest.slice(2):rest;
+    }
+    if(!I_SET.includes(r0))return null;
+    if(to==='d'||to==='t')return (r1==='n'&&rest[2]!=='g')?null:rest;
+    if(isV(r1))return rest.slice(1);             /* jiě → zhě, xiǎo → shǎo */
+    if(r1==='n')return I2E[r0]+rest.slice(1);   /* jīn → zhēn, xìng → shèng */
+    return rest;                                 /* qī → chī */
+  }
+  /* zh/z/d… → j/q/x */
+  if(I_SET.includes(r0))return rest;             /* shì → xì, diàn → jiàn */
+  if(E2I[r0]&&r1==='n')return E2I[r0]+rest.slice(1);       /* zhēn → jīn */
+  if(E2I[r0])return (r1==='i'||r1==='r')?null:'i'+rest;    /* zhè → jiè */
+  if(A_SET.includes(r0))return r1==='i'?null:'i'+rest;     /* shàng → xiàng */
+  if(O_SET.includes(r0))return rest.slice(1,3)==='ng'?'i'+rest:null;
+  if(U_SET.includes(r0)){
+    if(O2E[r1])return r0+O2E[r1]+rest.slice(2);            /* shuō → xuē */
+    if(A_SET.includes(r1))return (rest[2]==='n'&&rest[3]!=='g')?rest:null;
+    return isV(r1)?null:rest;                               /* zhù → jù */
+  }
+  return null;
+}
+function soundVariants(p){
+  const cap=p[0]!==p[0].toLowerCase();
+  const s=cap?p[0].toLowerCase()+p.slice(1):p;
+  const m=s.match(/^(zh|ch|sh|[bpdtgkjqxzcsnl])(.*)$/);
+  if(!m||!isV(m[2][0]))return[];
+  const out=new Set();
+  (CONF[m[1]]||[]).forEach(to=>{
+    const r=swapRest(m[1],to,m[2]);if(r==null)return;
+    let v=to+r;if(cap)v=v[0].toUpperCase()+v.slice(1);
+    if(v!==p)out.add(v);
+  });
+  return [...out];
+}
+
+/* ---------- числа для распознавания речи (12 → 十二) ---------- */
+function cnNum(s){
+  const D={零:0,一:1,二:2,两:2,三:3,四:4,五:5,六:6,七:7,八:8,九:9};
+  if(!/^[零一二两三四五六七八九十百]+$/.test(s))return null;
+  let total=0,cur=0;
+  for(const ch of s){
+    if(ch in D)cur=D[ch];
+    else if(ch==='十'){total+=(cur||1)*10;cur=0}
+    else if(ch==='百'){total+=(cur||1)*100;cur=0}
+  }
+  return total+cur;
+}
+
+/* ================= состояние ================= */
+let DB=null, SID='lera', ALL=[], TRAPS=null, PYMAP={}, HOMO={};
+let S={topic:null,mode:null,queue:[],i:0,ok:0,wrong:[],locked:false,timer:null};
+/* номер запуска: отложенные таймеры старого режима не трогают новый */
+let RUN=0;
+const later=(fn,ms)=>{const r=RUN;setTimeout(()=>{if(r===RUN)fn()},ms)};
+
+function show(id){['home','modes','play','results'].forEach(s=>$('#'+s).classList.toggle('hide',s!==id));
+  window.scrollTo({top:0,behavior:'smooth'})}
+function stopTimers(){RUN++;if(S.timer){clearInterval(S.timer);S.timer=null}}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');
+  if(g){stopTimers();show(g.dataset.go);if(g.dataset.go==='home')renderHome()}});
+
+const topics=()=>TRAPS?[TRAPS,...DB.topics]:DB.topics;
+const findTopic=id=>topics().find(t=>t.id===id);
+
+/* ================= загрузка ================= */
+(async function boot(){
+  SID=new URLSearchParams(location.search).get('student')||'lera';
+  try{
+    const r=await fetch('data/'+SID+'.json');
+    if(!r.ok)throw 0;
+    DB=await r.json();
+  }catch(e){
+    $('#whoLine').textContent='ошибка';
+    $('#topicGrid').innerHTML='<p class="hint">Не удалось загрузить словарь <b>data/'+esc(SID)+
+      '.json</b>. Если открываешь файл с диска — нужен локальный сервер или GitHub Pages.</p>';
+    return;
+  }
+  ALL=DB.topics.flatMap(t=>t.w);
+  if(DB.traps&&DB.traps.length){
+    const seen=new Set(), w=[];
+    DB.traps.forEach(g=>g.w.forEach(x=>{if(!seen.has(x[0])){seen.add(x[0]);w.push(x)}}));
+    TRAPS={id:'traps',lesson:0,tag:'Похожие слова',em:'🎯',t:'Ловушки',cn:'易混词',w,isTraps:true};
+  }
+  [...ALL,...(TRAPS?TRAPS.w:[])].forEach(w=>{
+    if(!PYMAP[w[0]])PYMAP[w[0]]=w[1];
+    const k=pykey(w[1]);(HOMO[k]=HOMO[k]||new Set()).add(w[0]);
+  });
+  $('#whoLine').textContent=DB.name+' · '+DB.book;
+  document.title='Panda Explorer · '+DB.name;
+  $('#homeLabel').textContent='Выбери тему · '+DB.topics.length+' тем · '+ALL.length+' слов';
+  renderHome();
+})();
+
+/* ================= стрик ================= */
+function touchStreak(){const today=new Date().toISOString().slice(0,10);
+  const st=store.get('pe_streak',{last:null,n:0});if(st.last===today)return;
+  const y=new Date(Date.now()-864e5).toISOString().slice(0,10);
+  st.n=st.last===y?st.n+1:1;st.last=today;store.set('pe_streak',st)}
+function paintStreak(){$('#streak').textContent='🔥 '+store.get('pe_streak',{n:0}).n}
+
+SOUND=store.get('pe_sound',true);
+function paintSound(){$('#sndBtn').textContent=SOUND?'🔊 Звук':'🔇 Тихо'}
+$('#sndBtn').onclick=()=>{SOUND=!SOUND;store.set('pe_sound',SOUND);paintSound();
+  if(!SOUND&&'speechSynthesis' in window)speechSynthesis.cancel()};
+paintSound();
+
+/* ================= главный экран ================= */
+const K=n=>'pe_'+SID+'_'+n;
+const tagOf=t=>t.tag||(t.lesson?'Урок '+t.lesson:'Сверх учебника');
+function renderHome(){
+  paintStreak();renderFocus();
+  const best=store.get(K('best'),{});
+  $('#topicGrid').innerHTML=topics().map(t=>{
+    const p=best[t.id]||0;
+    return `<button class="topic${t.isTraps?' trap':''}" data-topic="${t.id}">
+      <span class="row1"><span class="em">${t.em}</span><span class="lesson">${esc(tagOf(t))}</span></span>
+      <span class="t">${esc(t.t)}</span><span class="cn zh">${t.cn}</span>
+      <span class="meta"><span>${t.w.length} слов</span>
+      <span class="bar"><i style="width:${p}%"></i></span><span>${p}%</span></span>
+    </button>`}).join('');
+  $('#topicGrid').querySelectorAll('[data-topic]').forEach(b=>b.onclick=()=>openTopic(b.dataset.topic));
+}
+
+/* ---------- задания от учителя ---------- */
+function focusDone(){
+  const f=DB.focus, st=store.get(K('focus'),{});
+  return st.date===f.date?st:{date:f.date,d:{}};
+}
+function renderFocus(){
+  const f=DB.focus, box=$('#focus');
+  if(!f||!f.tasks||!f.tasks.length){box.innerHTML='';return}
+  const st=focusDone();
+  const items=f.tasks.map((t,i)=>({t,i,m:MODES.find(x=>x.id===t.mode),tp:findTopic(t.topic)})).filter(x=>x.m&&x.tp);
+  const n=items.filter(x=>st.d[x.t.topic+'|'+x.t.mode]).length;
+  box.innerHTML=`<div class="focus">
+    <div class="focus-hd"><span class="focus-tag">Задания от учителя${f.date?' · '+esc(f.date):''}</span>
+      <b>${esc(f.title||'')}</b></div>
+    ${f.note?`<p class="hint">${esc(f.note)}</p>`:''}
+    <div class="focus-list">${items.map(({t,i,m,tp},k)=>{
+      const ok=st.d[t.topic+'|'+t.mode];
+      return `<button class="ftask${ok?' done':''}" data-i="${i}">
+        <span class="fcheck">${ok?'✓':k+1}</span>
+        <span class="ftxt"><b>${esc(t.label||m.t)}</b><small>${tp.em} ${esc(tp.t)} · ${m.t}</small></span></button>`}).join('')}
+    </div>
+    <p class="hint">${n===items.length?'Всё сделано! 很棒！':`Сделано ${n} из ${items.length}`}</p></div>`;
+  box.querySelectorAll('.ftask').forEach(b=>b.onclick=()=>{
+    const t=f.tasks[+b.dataset.i];openTopic(t.topic);start(t.mode)});
+}
+function markFocus(){
+  const f=DB.focus;if(!f||!f.tasks||!S.topic)return;
+  const key=S.topic.id+'|'+S.mode;
+  if(!f.tasks.some(t=>t.topic+'|'+t.mode===key))return;
+  const st=focusDone();st.d[key]=true;store.set(K('focus'),st);
+}
+
+/* фразы темы: привязанные через "topic" или по номеру урока */
+function sentsFor(t){
+  if(!DB.sentences||t.isTraps)return[];
+  return DB.sentences.filter(s=>s.topic?s.topic===t.id:(t.lesson?s.lesson===t.lesson:s.lesson===0));
+}
+const toneWords=t=>t.w.filter(w=>tonesOf(w[1]).length);
+const soundWords=t=>t.w.filter(w=>soundVariants(w[1]).length);
+
+function modeList(t){
+  let list=MODES.filter(m=>!m.only||(m.only==='traps'&&t.isTraps));
+  if(DB.modes){const ord=id=>{const i=DB.modes.indexOf(id);return i<0?99:i};
+    list=list.slice().sort((a,b)=>ord(a.id)-ord(b.id))}
+  if(t.isTraps)list=[...list.filter(m=>m.id==='trap'),...list.filter(m=>m.id!=='trap')];
+  return list;
+}
+function offReason(m,t,ns){
+  if(m.needsSent&&ns===0)return 'Для этой темы фраз пока нет';
+  if(m.id==='hearsent'&&DB.sentences.length<4)return 'Нужно хотя бы 4 фразы';
+  if(m.needs==='tones'&&!toneWords(t).length)return 'Для этой темы нет подходящих слов';
+  if(m.needs==='sounds'&&!soundWords(t).length)return 'Для этой темы нет подходящих слов';
+  return '';
+}
+
+function openTopic(id){
+  S.topic=findTopic(id);
+  const t=S.topic, ns=sentsFor(t).length;
+  $('#modeTitle').innerHTML=`${t.em} ${esc(t.t)} <span class="zh cnbig">${t.cn}</span>`;
+  $('#modeSub').textContent=tagOf(t)+' · '+
+    (t.isTraps?`${DB.traps.length} ловушек · `:'')+`${t.w.length} слов`+(ns?` · ${ns} фраз`:'');
+  const blitzBest=store.get(K('blitz'),0), memBest=store.get(K('mem_'+t.id),0);
+  $('#modeList').innerHTML=modeList(t).map(m=>{
+    const why=offReason(m,t,ns);
+    const extra=m.id==='blitz'&&blitzBest?`<u>рекорд ${blitzBest}</u>`:
+                m.id==='memory'&&memBest?`<u>лучший ход ${memBest}</u>`:'';
+    return `<button class="mode${why?' off':''}${m.only?' trapmode':''}" data-mode="${m.id}"${why?' disabled':''}>
+      <b><span class="zh">${m.cn}</span> · ${m.t}</b>
+      <span>${why||m.d}</span>${extra}</button>`}).join('');
+  $('#modeList').querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>start(b.dataset.mode));
+  show('modes');
+}
+
+/* ================= запуск ================= */
+$('#again').onclick=()=>start(S.mode);
+function start(mode){
+  stopTimers();S.mode=mode;S.i=0;S.ok=0;S.wrong=[];S.locked=false;
+  $('#stage').classList.remove('flat');
+  $('#pbar').style.background='';$('#pbar').style.width='0%';
+  show('play');
+  if(mode==='blitz')return blitzStart();
+  if(mode==='memory')return memoryStart();
+  S.queue=shuffle(
+    ['sent','fill','hearsent'].includes(mode)?sentsFor(S.topic).slice():
+    mode==='trap'?DB.traps.flatMap(g=>g.w.map(w=>({g,w}))):
+    mode==='tones'?toneWords(S.topic):
+    mode==='sounds'?soundWords(S.topic):
+    S.topic.w.slice());
+  next();
+}
+
+function next(){
+  if(S.i>=S.queue.length)return finish();
+  S.locked=false;
+  $('#count').textContent=`${S.i+1} / ${S.queue.length}`;
+  $('#pbar').style.width=(S.i/S.queue.length*100)+'%';
+  ({cards:qCards,choice:qChoice,listen:qListen,pinyin:qPinyin,sent:qSent,truefalse:qTrueFalse,
+    tones:qTones,sounds:qSounds,speak:qSpeak,fill:qFill,hearsent:qHearSent,trap:qTrap})[S.mode]();
+}
+
+function stamp(good){
+  const el=document.createElement('div');
+  el.className='seal show'+(good?'':' wrong');
+  el.innerHTML=`<div class="seal-box zh">${good?'对':'错'}</div>`;
+  $('#stage').appendChild(el);setTimeout(()=>el.remove(),1100);
+}
+function judge(good,item,say,wait){
+  if(S.locked)return;S.locked=true;
+  if(good)S.ok++;else S.wrong.push(item);
+  stamp(good);if(say)speak(say);
+  later(()=>{S.i++;next()},wait||(good?900:1800));
+}
+/* общий обработчик для кнопок-вариантов */
+function bindOpts(isRight,onPick){
+  const bs=[...$('#actions').querySelectorAll('.opt')];
+  bs.forEach((b,n)=>b.onclick=()=>{
+    if(S.locked)return;
+    const good=isRight(n);
+    bs.forEach((x,k)=>{x.disabled=true;if(isRight(k))x.classList.add('ok')});
+    if(!good)b.classList.add('no');
+    onPick(good,n);
+  });
+}
+
+/* ---------- 1. карточки ---------- */
+function qCards(){
+  const w=S.queue[S.i];
+  $('#stage').innerHTML=`<button class="sound" title="Озвучить">🔊</button>
+    <div class="hanzi zh">${w[0]}</div>${pyLine(w)}
+    <div class="hint">${PY()?'Вспомни перевод':'Вспомни чтение и перевод'}</div>`;
+  $('#stage .sound').onclick=()=>speak(w[0]);
+  autoSay(w[0]);
+  $('#actions').innerHTML=`<button class="btn" id="flip">Показать ответ</button>`;
+  $('#flip').onclick=()=>{
+    speak(w[0]);
+    $('#stage').innerHTML=`<button class="sound">🔊</button><div class="hanzi zh">${w[0]}</div>
+      <div class="pinyin">${w[1]}</div><div class="ru">${esc(w[2])}</div>`;
+    $('#stage .sound').onclick=()=>speak(w[0]);
+    $('#actions').innerHTML=`<button class="btn ghost" id="bad">Ещё не помню</button>
+      <button class="btn" id="good">Знаю</button>`;
+    $('#good').onclick=()=>{S.ok++;S.i++;next()};
+    $('#bad').onclick=()=>{S.wrong.push(w);S.i++;next()};
+  };
+}
+
+/* ---------- 2. выбери перевод ---------- */
+function qChoice(){
+  const w=S.queue[S.i];
+  const pool=S.topic.w.filter(x=>x[2]!==w[2]);
+  const opts=shuffle([w,...shuffle(pool).slice(0,3)]);
+  $('#stage').innerHTML=`<button class="sound">🔊</button><div class="hanzi zh">${w[0]}</div>${pyLine(w)}
+    <div class="hint">Что это значит?</div>`;
+  $('#stage .sound').onclick=()=>speak(w[0]);
+  autoSay(w[0]);
+  $('#actions').innerHTML=`<div class="opts">${opts.map((o,n)=>
+    `<button class="opt" data-n="${n}">${esc(o[2])}</button>`).join('')}</div>`;
+  bindOpts(n=>opts[n][2]===w[2],good=>judge(good,w,w[0]));
+}
+
+/* ---------- 3. на слух ---------- */
+function qListen(){
+  const w=S.queue[S.i];
+  /* омофоны (他/她) на слух не различить — не даём их вместе */
+  const pool=S.topic.w.filter(x=>x[0]!==w[0]&&pykey(x[1])!==pykey(w[1]));
+  const opts=shuffle([w,...shuffle(pool).slice(0,3)]);
+  $('#stage').innerHTML=`<div class="bigemoji">🎧</div>
+    <div class="hint">Послушай и выбери слово</div>`;
+  $('#actions').innerHTML=`<button class="btn" id="pl">🔊 Послушать ещё раз</button>
+    <div class="opts">${opts.map((o,n)=>`<button class="opt" data-n="${n}">${hz(o)}</button>`).join('')}</div>`;
+  $('#pl').onclick=()=>speak(w[0]);
+  setTimeout(()=>speak(w[0]),350);
+  bindOpts(n=>opts[n][0]===w[0],good=>{
+    $('#stage').innerHTML=`<div class="hanzi zh">${w[0]}</div>
+      <div class="pinyin">${w[1]}</div><div class="ru">${esc(w[2])}</div>`;
+    judge(good,w,null);
+  });
+}
+
+/* ---------- 4. верно или нет ---------- */
+function qTrueFalse(){
+  const w=S.queue[S.i];
+  const pool=S.topic.w.filter(x=>x[0]!==w[0]&&x[2]!==w[2]&&pykey(x[1])!==pykey(w[1]));
+  const said=(Math.random()<.5||!pool.length)?w:pool[Math.floor(Math.random()*pool.length)];
+  const match=said===w;
+  $('#stage').innerHTML=`<div class="bigemoji">🎧</div><div class="ru big-ru">${esc(w[2])}</div>
+    <div class="hint">Прозвучало именно это слово?</div>`;
+  $('#actions').innerHTML=`<button class="btn ghost" id="pl">🔊 Ещё раз</button>
+    <div class="opts"><button class="opt tf"><span class="zh">对</span>Верно</button>
+    <button class="opt tf"><span class="zh">不对</span>Неверно</button></div>`;
+  $('#pl').onclick=()=>speak(said[0]);
+  autoSay(said[0],350);
+  bindOpts(n=>(n===0)===match,good=>{
+    $('#stage').innerHTML=`<div class="hanzi zh">${w[0]}</div>
+      <div class="pinyin">${w[1]}</div><div class="ru">${esc(w[2])}</div>
+      ${match?'':`<div class="hint note">А прозвучало: <b class="zh">${said[0]}</b> ${said[1]} — ${esc(said[2])}</div>`}`;
+    judge(good,w,null,good?1000:2600);
+  });
+}
+
+/* ---------- 5. тоны ---------- */
+function qTones(){
+  const w=S.queue[S.i];
+  const opts=toneOptions(w[1]);
+  $('#stage').innerHTML=`<button class="sound">🔊</button>
+    <div class="hanzi zh">${w[0]}</div><div class="ru">${esc(w[2])}</div>
+    <div class="hint">Послушай: с какими тонами звучит слово?<br>
+      <span class="tonekey">1 — ровно · 2 ↗ вверх · 3 ∨ ямка · 4 ↘ вниз</span></div>`;
+  $('#stage .sound').onclick=()=>speak(w[0]);
+  autoSay(w[0]);
+  $('#actions').innerHTML=`<div class="opts">${opts.map(o=>
+    `<button class="opt"><span class="pyopt">${o}</span><small class="tn">${toneLabel(o)}</small></button>`).join('')}</div>`;
+  bindOpts(n=>opts[n]===w[1],good=>judge(good,w,w[0]));
+}
+
+/* ---------- 6. звуки ---------- */
+function qSounds(){
+  const w=S.queue[S.i];
+  const opts=shuffle([w[1],...shuffle(soundVariants(w[1])).slice(0,3)]);
+  $('#stage').innerHTML=`<button class="sound">🔊</button>
+    <div class="hanzi zh">${w[0]}</div><div class="ru">${esc(w[2])}</div>
+    <div class="hint">Послушай внимательно начало слова. Как оно пишется?</div>`;
+  $('#stage .sound').onclick=()=>speak(w[0]);
+  autoSay(w[0]);
+  $('#actions').innerHTML=`<div class="opts">${opts.map(o=>
+    `<button class="opt"><span class="pyopt">${o}</span></button>`).join('')}</div>`;
+  bindOpts(n=>opts[n]===w[1],good=>judge(good,w,w[0],good?900:2000));
+}
+
+/* ---------- 7. скажи сам ---------- */
+function heardOk(a,w){
+  const n=a.replace(/[\s，。！？、,.!?…·'"“”]/g,'');
+  if(!n)return false;
+  const targets=[w[0],...(HOMO[pykey(w[1])]||[])];
+  if(targets.some(h=>n.includes(h)))return true;
+  const num=cnNum(w[0]);
+  return num!==null&&n.includes(String(num));
+}
+function qSpeak(){
+  const w=S.queue[S.i];let tries=0;
+  $('#stage').innerHTML=`<button class="sound">🔊</button>
+    <div class="hanzi zh">${w[0]}</div><div class="pinyin">${w[1]}</div><div class="ru">${esc(w[2])}</div>
+    <div class="hint heard" id="heard">${SR_OK?'Послушай, потом нажми 🎤 и скажи слово':'Послушай и повтори вслух'}</div>`;
+  $('#stage .sound').onclick=()=>speak(w[0]);
+  autoSay(w[0]);
+  const heard=$('#heard');
+  const selfCheck=msg=>{
+    heard.innerHTML=msg||'Повтори вслух два раза. Получилось похоже?';
+    $('#actions').innerHTML=`<button class="btn ghost" id="bad">Пока не получается</button>
+      <button class="btn" id="good">Получилось</button>`;
+    $('#good').onclick=()=>judge(true,w,null);
+    $('#bad').onclick=()=>judge(false,w,w[0]);
+  };
+  if(!SR_OK)return selfCheck();
+  $('#actions').innerHTML=`<button class="btn ghost" id="skip">Пропустить</button>
+    <button class="btn mic" id="mic">🎤 Сказать</button>`;
+  $('#skip').onclick=()=>judge(false,w,w[0]);
+  const mic=$('#mic');
+  mic.onclick=()=>{
+    if(S.locked)return;
+    if('speechSynthesis' in window)speechSynthesis.cancel();
+    const r=new SR();
+    r.lang='zh-CN';r.interimResults=false;r.maxAlternatives=5;
+    mic.disabled=true;mic.textContent='🎙️ Слушаю…';mic.classList.add('rec');
+    r.onresult=e=>{
+      if(S.locked)return;
+      const alts=[...e.results[0]].map(a=>a.transcript);
+      heard.innerHTML='Панда услышала: <b class="zh">'+esc(alts[0]||'…')+'</b>';
+      if(alts.some(a=>heardOk(a,w)))return judge(true,w,null,1100);
+      if(++tries>=3)return judge(false,w,w[0],2200);
+      heard.innerHTML+='<br>Почти! Послушай ещё раз и повтори.';
+      speak(w[0]);
+    };
+    r.onerror=e=>{
+      if(S.locked)return;
+      if(e.error==='not-allowed'||e.error==='service-not-allowed'){
+        SR_OK=false;return selfCheck('Нет доступа к микрофону — проверь себя сам: повтори вслух два раза.');}
+      heard.textContent=e.error==='no-speech'?'Ничего не слышно — скажи погромче.':'Микрофон не сработал — попробуй ещё раз.';
+    };
+    r.onend=()=>{if(!S.locked){mic.disabled=false;mic.textContent='🎤 Сказать';mic.classList.remove('rec')}};
+    try{r.start()}catch(err){SR_OK=false;selfCheck()}
+  };
+}
+
+/* ---------- 8. впиши пиньинь ---------- */
+function qPinyin(){
+  const w=S.queue[S.i];
+  $('#stage').innerHTML=`<button class="sound">🔊</button><div class="hanzi zh">${w[0]}</div>
+    <div class="ru">${esc(w[2])}</div>
+    <div class="type-row"><input type="text" id="inp" placeholder="ni hao"
+      autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+    <div class="hint">Тоны ставить не обязательно</div>`;
+  $('#stage .sound').onclick=()=>speak(w[0]);
+  autoSay(w[0]);
+  $('#actions').innerHTML=`<button class="btn" id="chk">Проверить</button>`;
+  const inp=$('#inp');inp.focus();
+  const check=()=>{
+    if(S.locked)return;
+    const good=strip(inp.value)===strip(w[1]);
+    inp.classList.add(good?'ok':'no');inp.disabled=true;
+    $('#stage').insertAdjacentHTML('beforeend',`<div class="pinyin">${w[1]}</div>`);
+    judge(good,w,w[0]);
+  };
+  $('#chk').onclick=check;
+  inp.onkeydown=e=>{if(e.key==='Enter')check()};
+}
+
+/* ---------- 9. собери фразу ---------- */
+function qSent(){
+  const s=S.queue[S.i];
+  const chips=shuffle(s.tk.map((x,n)=>({x,n})));
+  let built=[];
+  $('#stage').innerHTML=`<div class="ru sent-ru">${esc(s.ru)}</div>
+    <div class="built" id="built"><span class="hint">Нажимай слова по порядку</span></div>
+    <div class="chips" id="chips"></div>`;
+  $('#actions').innerHTML=`<button class="btn ghost" id="say">🔊 Послушать фразу</button>
+    <button class="btn ghost" id="clr">Сбросить</button>
+    <button class="btn" id="chk">Проверить</button>`;
+  $('#say').onclick=()=>speak(s.tk.join(''));
+  autoSay(s.tk.join(''),450);
+  const chip=(x,attr,cls)=>`<button class="chip zh${cls||''}" ${attr}>${x}${
+    PY()&&PYMAP[x]?`<small class="py">${PYMAP[x]}</small>`:''}</button>`;
+  const paint=()=>{
+    $('#built').innerHTML=built.length
+      ? built.map((b,i)=>chip(b.x,`data-i="${i}"`,' built-chip')).join('')
+      : '<span class="hint">Нажимай слова по порядку</span>';
+    $('#chips').innerHTML=chips.map(c=>
+      chip(c.x,`data-n="${c.n}"${built.some(b=>b.n===c.n)?' disabled':''}`)).join('');
+    $('#chips').querySelectorAll('.chip:not([disabled])').forEach(b=>b.onclick=()=>{
+      const c=chips.find(c=>c.n==b.dataset.n);
+      if(hasZh(c.x))speak(c.x);
+      built.push(c);paint()});
+    $('#built').querySelectorAll('.built-chip').forEach(b=>b.onclick=()=>{
+      built.splice(+b.dataset.i,1);paint()});
+  };
+  paint();
+  $('#clr').onclick=()=>{built=[];paint()};
+  $('#chk').onclick=()=>{
+    if(S.locked)return;
+    if(built.length!==s.tk.length)return;
+    const line=built.map(b=>b.x).join('');
+    const good=line===s.tk.join('');
+    $('#stage').innerHTML=`<div class="ru sent-ru">${esc(s.ru)}</div>
+      <div class="answer zh">${s.tk.join('')}。</div>
+      ${good?'':`<div class="hint">Ты собрал: ${line}</div>`}`;
+    $('#actions').innerHTML='';
+    judge(good,{0:s.tk.join(''),1:'',2:s.ru},s.tk.join(''));
+  };
+}
+
+/* ---------- 10. вставь слово ---------- */
+function qFill(){
+  const s=S.queue[S.i], line=s.tk.join('');
+  const idxs=s.tk.map((x,i)=>i).filter(i=>hasZh(s.tk[i]));
+  /* лучше пропускать слово из словаря, а не служебную частицу */
+  const known=idxs.filter(i=>PYMAP[s.tk[i]]&&s.tk[i].length>1);
+  const pick=(known.length?known:idxs)[Math.floor(Math.random()*(known.length||idxs.length))];
+  const right=s.tk[pick];
+  const pool=[...new Set([...S.topic.w.map(w=>w[0]),...sentsFor(S.topic).flatMap(x=>x.tk),...ALL.map(w=>w[0])])]
+    .filter(x=>hasZh(x)&&x!==right&&!s.tk.includes(x));
+  const near=pool.filter(x=>x.length===right.length);
+  const opts=shuffle([right,...shuffle(near.length>=3?near:pool).slice(0,3)]);
+  const shown=s.tk.map((x,i)=>i===pick?'<span class="gap">？</span>':x).join('');
+  $('#stage').innerHTML=`<div class="ru sent-ru">${esc(s.ru)}</div>
+    <div class="fill-line zh">${shown}</div><div class="hint">Какого слова не хватает?</div>`;
+  $('#actions').innerHTML=`<div class="opts">${opts.map(o=>
+    `<button class="opt">${hz([o,PYMAP[o]||''])}</button>`).join('')}</div>`;
+  bindOpts(n=>opts[n]===right,good=>{
+    $('#stage').innerHTML=`<div class="ru sent-ru">${esc(s.ru)}</div><div class="answer zh">${line}。</div>`;
+    judge(good,{0:line,1:'',2:s.ru},line,good?1300:2200);
+  });
+}
+
+/* ---------- 11. фраза на слух ---------- */
+function qHearSent(){
+  const s=S.queue[S.i], line=s.tk.join('');
+  const own=shuffle(sentsFor(S.topic).filter(x=>x.ru!==s.ru));
+  const rest=shuffle(DB.sentences.filter(x=>x.ru!==s.ru&&!own.includes(x)));
+  const opts=shuffle([s,...[...own,...rest].filter((x,i,a)=>a.findIndex(y=>y.ru===x.ru)===i).slice(0,3)]);
+  $('#stage').innerHTML=`<div class="bigemoji">👂</div><div class="hint">Послушай фразу и выбери перевод</div>`;
+  $('#actions').innerHTML=`<button class="btn" id="pl">🔊 Послушать ещё раз</button>
+    <button class="btn ghost" id="slow">🐢 Медленно</button>
+    <div class="opts">${opts.map(o=>`<button class="opt">${esc(o.ru)}</button>`).join('')}</div>`;
+  $('#pl').onclick=()=>speak(line);
+  $('#slow').onclick=()=>{
+    if(!SOUND||!('speechSynthesis' in window))return;
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(s.tk.join(' '));u.lang='zh-CN';u.rate=.55;if(zhVoice)u.voice=zhVoice;
+    speechSynthesis.speak(u);
+  };
+  autoSay(line,400);
+  bindOpts(n=>opts[n].ru===s.ru,good=>{
+    $('#stage').innerHTML=`<div class="answer zh">${line}。</div><div class="ru sent-ru">${esc(s.ru)}</div>`;
+    judge(good,{0:line,1:'',2:s.ru},null,good?1200:2400);
+  });
+}
+
+/* ---------- 12. ловушки ---------- */
+function qTrap(){
+  const {g,w}=S.queue[S.i];
+  const opts=shuffle(g.w.slice());
+  $('#stage').innerHTML=`<div class="bigemoji">🎯</div><div class="ru">${esc(g.t)}</div>
+    <div class="hint">Послушай и выбери, какое слово прозвучало</div>`;
+  $('#actions').innerHTML=`<button class="btn" id="pl">🔊 Послушать ещё раз</button>
+    <div class="opts">${opts.map(o=>`<button class="opt"><span class="zh">${o[0]}</span>
+      <small class="py">${o[1]}</small><small class="tr">${esc(o[2])}</small></button>`).join('')}</div>`;
+  $('#pl').onclick=()=>speak(w[0]);
+  autoSay(w[0],350);
+  bindOpts(n=>opts[n][0]===w[0],good=>{
+    $('#stage').innerHTML=`<div class="hanzi zh">${w[0]}</div><div class="pinyin">${w[1]}</div>
+      <div class="ru">${esc(w[2])}</div>${g.note?`<div class="hint note">💡 ${esc(g.note)}</div>`:''}`;
+    judge(good,w,good?null:w[0],good?1500:3400);
+  });
+}
+
+/* ---------- 13. молния (60 сек) ---------- */
+function blitzStart(){
+  let left=60,score=0,tries=0;
+  const deck=()=>shuffle(S.topic.w.slice());
+  let pool=deck();
+  const ask=()=>{
+    if(!pool.length)pool=deck();
+    const w=pool.pop();
+    const others=shuffle(ALL.filter(x=>x[2]!==w[2])).slice(0,3);
+    const opts=shuffle([w,...others]);
+    $('#stage').innerHTML=`<div class="hanzi zh">${w[0]}</div>${pyLine(w)}`;
+    speak(w[0]);
+    $('#actions').innerHTML=`<div class="opts">${opts.map((o,n)=>
+      `<button class="opt" data-n="${n}">${esc(o[2])}</button>`).join('')}</div>`;
+    $('#actions').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+      tries++;
+      const good=opts[b.dataset.n][2]===w[2];
+      if(good)score++;else S.wrong.push(w);
+      b.classList.add(good?'ok':'no');
+      $('#count').textContent=score+' ✔';
+      later(ask,good?120:520);
+    });
+  };
+  $('#count').textContent='0 ✔';
+  ask();
+  const tick=()=>{
+    left--;
+    $('#pbar').style.width=(left/60*100)+'%';
+    $('#pbar').style.background=left<=10?'var(--cinnabar)':'';
+    if(left<=0){
+      stopTimers();
+      const best=store.get(K('blitz'),0);
+      if(score>best)store.set(K('blitz'),score);
+      S.ok=score;S.queue={length:tries||1};
+      finishCustom(`${score} ✔`,
+        `За минуту · точность ${tries?Math.round(score/tries*100):0}%` +
+        (score>best?`<br><b>Новый рекорд!</b> Было ${best}`:`<br>Рекорд: ${Math.max(best,score)}`));
+    }
+  };
+  $('#pbar').style.width='100%';
+  S.timer=setInterval(tick,1000);
+}
+
+/* ---------- 14. пары ---------- */
+function memoryStart(){
+  const picks=shuffle(S.topic.w.slice()).slice(0,Math.min(6,S.topic.w.length));
+  const cards=shuffle(picks.flatMap((w,i)=>[
+    {p:i,face:w[0],zh:true,w},{p:i,face:w[2],zh:false,w}]));
+  let open=[],done=0,moves=0;
+  $('#count').textContent='0 ходов';
+  $('#pbar').style.width='0%';
+  $('#stage').classList.add('flat');
+  $('#actions').innerHTML='';
+  const paint=()=>{
+    $('#stage').innerHTML=`<div class="mem">${cards.map((c,i)=>{
+      const st=c.matched?'matched':(open.includes(i)?'open':'');
+      return `<button class="mcard ${st}" data-i="${i}">
+        <span class="${c.zh?'zh mzh':'mru'}">${st?esc(c.face):''}${
+          st&&c.zh&&PY()?`<small class="py">${c.w[1]}</small>`:''}</span></button>`}).join('')}</div>`;
+    $('#stage').querySelectorAll('.mcard:not(.matched):not(.open)').forEach(b=>b.onclick=()=>flip(+b.dataset.i));
+  };
+  const flip=i=>{
+    if(open.length>=2||open.includes(i))return;
+    open.push(i);
+    if(cards[i].zh)speak(cards[i].face);
+    paint();
+    if(open.length===2){
+      moves++;$('#count').textContent=moves+' ходов';
+      const [a,b]=open;
+      if(cards[a].p===cards[b].p){
+        cards[a].matched=cards[b].matched=true;done++;
+        $('#pbar').style.width=(done/picks.length*100)+'%';
+        open=[];paint();
+        if(done===picks.length){
+          const best=store.get(K('mem_'+S.topic.id),0);
+          if(!best||moves<best)store.set(K('mem_'+S.topic.id),moves);
+          S.ok=picks.length;S.queue={length:picks.length};
+          later(()=>{$('#stage').classList.remove('flat');
+            finishCustom(`${moves} ходов`,
+              `Все ${picks.length} пар найдены.`+
+              (!best||moves<best?`<br><b>Лучший результат!</b>`:`<br>Твой рекорд: ${best}`))},600);
+        }
+      }else later(()=>{open=[];paint()},900);
+    }
+  };
+  paint();
+}
+
+/* ================= итоги ================= */
+function finishCustom(big,sub){
+  stopTimers();touchStreak();paintStreak();markFocus();
+  $('#scoreLine').textContent=big;
+  $('#scoreSub').innerHTML=sub;
+  const m=$('#mistakes');
+  if(S.wrong.length){m.classList.remove('hide');
+    m.querySelector('ul').innerHTML=S.wrong.map(w=>
+      `<li><span class="zh">${w[0]}</span><em>${w[1]||''}</em><s>${esc(w[2])}</s></li>`).join('')}
+  else m.classList.add('hide');
+  show('results');
+}
+
+function finish(){
+  $('#pbar').style.width='100%';
+  const total=S.queue.length;
+  if(!total)return finishCustom('0 / 0','Для этого режима здесь пока нет заданий.');
+  const pct=Math.round(S.ok/total*100);
+  const best=store.get(K('best'),{});
+  if(pct>(best[S.topic.id]||0)){best[S.topic.id]=pct;store.set(K('best'),best)}
+  const n=pct>=90?3:pct>=70?2:pct>=40?1:0;
+  const stars=`<span class="stars">${'★'.repeat(n)}${'☆'.repeat(3-n)}</span>`;
+  finishCustom(`${S.ok} / ${total}`, stars+'<br>'+
+    (pct>=90?'很厉害！Почти всё без ошибок.':
+     pct>=70?'Хорошо. Осталось добить несколько слов.':
+     pct>=40?'Половина есть. Прогони тему ещё раз.':'Тема ещё сырая — начни с карточек.'));
+}
+</script>
+</body>
+</html>
