@@ -227,8 +227,9 @@ body {
 
 .hero-badge-val {
   font-family: var(--font-head);
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   font-weight: 800;
+  white-space: nowrap;
 }
 
 .hero-badge-lbl {
@@ -413,41 +414,52 @@ body {
   background: #ffffff;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 18px;
+  padding: 16px 18px;
   box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 6px;
 }
 
 .progress-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  gap: 10px;
+  margin-bottom: 4px;
 }
 
 .progress-title {
-  font-size: 0.88rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.03em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.3;
 }
 
 .progress-val {
   font-family: var(--font-head);
-  font-size: 1.45rem;
-  font-weight: 800;
+  font-size: 1.05rem;
+  font-weight: 700;
   color: var(--text-main);
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
 }
 
 .progress-bar-bg {
   background: #f1f5f9;
-  height: 10px;
+  height: 8px;
   border-radius: 9999px;
   overflow: hidden;
-  margin: 10px 0 6px;
+  margin: 6px 0 6px;
 }
 
 .progress-bar-fill {
@@ -815,7 +827,7 @@ details.accordion-item summary:hover {
     <div class="hero-tag">🎯 Главная цель 2026</div>
     <h2 class="hero-title">Сдача экзамена HSK 2 до Нового года</h2>
     <p class="hero-desc">
-      Привет, Лера и Екатерина! Мы успешно перешли от базового уровня к живому диалогу. Лера набрала <strong>160 баллов</strong> на HSK 1 (+25 баллов прироста!) и уверенно осваивает 600 слов второго уровня.
+      Привет, Лера и Екатерина! Мы успешно перешли от базового уровня к живому диалогу. Лера набрала <strong>160 баллов</strong> на HSK 1 (+25 баллов прироста!) и знает уже <strong>540 слов</strong> (официальный норматив HSK 2 в 500 слов уже превзойдён, движемся к полному номиналу 988 слов).
     </p>
     
     <div class="hero-badges">
@@ -828,12 +840,12 @@ details.accordion-item summary:hover {
         <span class="hero-badge-lbl">Баллов за месяц<br>рекордный рост 🚀</span>
       </div>
       <div class="hero-badge-item">
-        <span class="hero-badge-val">6 / 10</span>
-        <span class="hero-badge-lbl">Уроков пройдено<br>Абонемент №5</span>
+        <span class="hero-badge-val">540 / 988</span>
+        <span class="hero-badge-lbl">Слов номинала<br>(база 500 пройдена!)</span>
       </div>
       <div class="hero-badge-item">
-        <span class="hero-badge-val">4</span>
-        <span class="hero-badge-lbl">Урока осталось<br>до продления</span>
+        <span class="hero-badge-val">6 / 10</span>
+        <span class="hero-badge-lbl">Уроков пройдено<br>(4 на балансе)</span>
       </div>
     </div>
   </section>
@@ -842,7 +854,7 @@ details.accordion-item summary:hover {
   <section class="progress-grid">
     <div class="progress-card">
       <div class="progress-head">
-        <span class="progress-title">📘 Учебник Easy Steps 1</span>
+        <span class="progress-title">📘 Easy Steps 1</span>
         <span class="progress-val">100%</span>
       </div>
       <div class="progress-bar-bg">
@@ -859,18 +871,18 @@ details.accordion-item summary:hover {
       <div class="progress-bar-bg">
         <div class="progress-bar-fill bar-purple" style="width: 80%;"></div>
       </div>
-      <div class="progress-sub">160 из 200 баллов · сдан уверенно</div>
+      <div class="progress-sub">160 из 200 баллов · сдан уверенно (+25 рост)</div>
     </div>
 
     <div class="progress-card">
       <div class="progress-head">
         <span class="progress-title">🚀 Словарь HSK 2</span>
-        <span class="progress-val">90%</span>
+        <span class="progress-val">55%</span>
       </div>
       <div class="progress-bar-bg">
-        <div class="progress-bar-fill bar-pink" style="width: 90%;"></div>
+        <div class="progress-bar-fill bar-pink" style="width: 55%;"></div>
       </div>
-      <div class="progress-sub">~540 из 600 слов освоено в речи</div>
+      <div class="progress-sub"><strong>540 из 988 слов</strong> (норматив HSK 2 в 500 слов уже превзойдён ✨)</div>
     </div>
 
     <div class="progress-card">
