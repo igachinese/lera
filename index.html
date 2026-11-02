@@ -907,6 +907,26 @@ details.accordion-item summary:hover {
   opacity: 1;
   color: var(--primary);
 }
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.55);
+    transform: translateY(0);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+    transform: translateY(-2px);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+    transform: translateY(0);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2.2s infinite !important;
+}
+
 </style>
 </head>
 <body>
@@ -1019,6 +1039,28 @@ details.accordion-item summary:hover {
         </div>
       </div>
 
+            <!-- Interactive Daily Mission Widget -->
+      <div style="background: #fdf2f8; border: 1.5px solid #fbcfe8; border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <span style="font-family: var(--font-head); font-size: 0.85rem; font-weight: 800; color: #9d174d;">🎯 План на сегодня · Лера (莉拉)</span>
+          <span style="font-size: 0.75rem; color: #be185d; font-weight: 700;">每天进步一点点 ✨</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; font-weight: 600; color: #475569;">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="m1" onchange="localStorage.setItem('m1', this.checked)" style="accent-color: #ec4899; width: 16px; height: 16px;">
+            <span>🎧 Пройти 2 раунда в Говорилке 2.0 (тема «Одежда»)</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="m2" onchange="localStorage.setItem('m2', this.checked)" style="accent-color: #ec4899; width: 16px; height: 16px;">
+            <span>📝 Повторить 10 слов в тетради-тренажёре</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="m3" onchange="localStorage.setItem('m3', this.checked)" style="accent-color: #ec4899; width: 16px; height: 16px;">
+            <span>📹 Подключиться к уроку во вторник в 19:00</span>
+          </label>
+        </div>
+      </div>
+
       <div class="next-lesson-box">
         <div class="lesson-datetime">
           <span class="date-pill">Вторник · 04 ноября</span>
@@ -1042,7 +1084,7 @@ details.accordion-item summary:hover {
           <div style="width: 100%;">
             <div class="hw-title">1. Разговорный тренажёр «Говорилка 2.0»</div>
             <div class="hw-desc">Пройти 2 раунда по теме «Одежда»: повторить слова <em>chuān, hǎokàn, tài guì le</em>.</div>
-            <a class="hw-action-link" href="govorilka-2.html">
+            <a class="hw-action-link pulse-glow" href="govorilka-2.html">
               👉 НАЖМИ СЮДА: Открыть «Говорилку 2.0» к уроку 🎧
             </a>
           </div>
@@ -1130,7 +1172,7 @@ details.accordion-item summary:hover {
       <p class="current-hw-desc">
         Твоё главное практическое задание! Потренируйся говорить фразы из видео: <em>chuān yíxià</em> (примерь), <em>hǎokàn</em> (красиво смотрится) и <em>tài guì le</em> (слишком дорого!). Включай аудио и повторяй вслух.
       </p>
-      <a class="btn-big-action" href="govorilka-2.html">
+      <a class="btn-big-action pulse-glow" href="govorilka-2.html">
         👉 НАЖМИ СЮДА, ЧТОБЫ ОТКРЫТЬ ГОВОРИЛКУ 2.0 🎧
       </a>
     </div>
@@ -1150,7 +1192,7 @@ details.accordion-item summary:hover {
         </p>
       </div>
       <div>
-        <a href="trainer.html" style="display: inline-flex; align-items: center; gap: 8px; background: #0f172a; color: #ffffff; font-family: var(--font-head); font-size: 0.92rem; font-weight: 800; padding: 13px 26px; border-radius: var(--radius-md); text-decoration: none; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2); transition: all 0.2s ease;">
+        <a href="trainer.html" class="pulse-glow" style="display: inline-flex; align-items: center; gap: 8px; background: #0f172a; color: #ffffff; font-family: var(--font-head); font-size: 0.92rem; font-weight: 800; padding: 13px 26px; border-radius: var(--radius-md); text-decoration: none; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2); transition: all 0.2s ease;">
           👉 Начать тренировку слов 📝
         </a>
       </div>
@@ -1378,5 +1420,11 @@ details.accordion-item summary:hover {
   </p>
 </footer>
 
+<script>
+['m1','m2','m3'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el && localStorage.getItem(id) === 'true') el.checked = true;
+});
+</script>
 </body>
 </html>
