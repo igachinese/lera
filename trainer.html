@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Тренажёр слов · Лера (莉拉)</title>
-<meta name="description" content="Интерактивный тренажёр китайских слов по темам и к экзамену HSK для Леры.">
+<title>Тетрадь китайских слов · Лера (莉拉)</title>
+<meta name="description" content="Интерактивная тетрадь китайских слов по темам и к экзамену HSK для Леры.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Nunito:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -15,12 +15,12 @@
   --font-zh: 'Noto Sans SC', system-ui, sans-serif;
   
   --bg: #fcfbfa;
-  --paper-line: rgba(226, 232, 240, 0.7);
-  --cell-line: rgba(239, 68, 68, 0.25);
-  --cell-guide: rgba(239, 68, 68, 0.12);
+  --paper-line: rgba(203, 213, 225, 0.45);
+  --cell-line: rgba(239, 68, 68, 0.3);
+  --cell-guide: rgba(239, 68, 68, 0.15);
   
   --card-bg: #ffffff;
-  --text-main: #1e293b;
+  --text-main: #0f172a;
   --text-muted: #64748b;
   --border: #e2e8f0;
   
@@ -34,11 +34,11 @@
   --error: #ef4444;
   --error-light: #fef2f2;
   
-  --radius-lg: 18px;
-  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
   --radius-sm: 8px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 14px rgba(0,0,0,0.06);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-md: 0 6px 18px rgba(0,0,0,0.06);
 }
 
 * {
@@ -50,7 +50,7 @@
 body {
   font-family: var(--font-body);
   background-color: var(--bg);
-  /* Китайская тетрадь в клеточку (田字格 pattern) */
+  /* Китайская тетрадь в клеточку (田字格 notebook background) */
   background-image: 
     linear-gradient(var(--paper-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
@@ -71,15 +71,15 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(10px);
   border-bottom: 2px solid var(--border);
-  padding: 10px 20px;
+  padding: 12px 20px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.03);
 }
 
 .top-nav-in {
-  max-width: 1000px;
+  max-width: 1040px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -95,12 +95,12 @@ body {
   background: var(--primary);
   color: #ffffff;
   text-decoration: none;
-  padding: 8px 18px;
+  padding: 9px 20px;
   border-radius: 9999px;
-  font-weight: 700;
-  font-size: 0.9rem;
+  font-weight: 800;
+  font-size: 0.95rem;
   transition: all 0.2s ease;
-  box-shadow: 0 3px 10px rgba(79, 70, 229, 0.25);
+  box-shadow: 0 3px 12px rgba(79, 70, 229, 0.3);
 }
 
 .btn-back-menu:hover {
@@ -111,20 +111,28 @@ body {
 .nav-status {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.student-tag {
+.voice-badge {
+  font-size: 0.78rem;
   font-weight: 700;
-  font-size: 0.85rem;
-  color: var(--text-muted);
+  color: #047857;
+  background: var(--accent-light);
+  border: 1px solid #a7f3d0;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .btn-audio-toggle {
-  background: #f1f5f9;
-  border: 1px solid var(--border);
-  padding: 6px 12px;
-  border-radius: var(--radius-sm);
+  background: #ffffff;
+  border: 1.5px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 9999px;
   font-size: 0.82rem;
   font-weight: 700;
   color: var(--text-main);
@@ -132,26 +140,31 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-audio-toggle:hover {
+  border-color: var(--primary);
 }
 
 .btn-audio-toggle.muted {
   color: var(--text-muted);
-  background: #ffffff;
+  background: #f8fafc;
 }
 
 /* Container */
 .container {
-  max-width: 1000px;
+  max-width: 1040px;
   margin: 24px auto 0;
   padding: 0 20px;
 }
 
-/* Minimalist Header */
+/* Header Box */
 .header-box {
   background: #ffffff;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 24px 28px;
+  padding: 26px 32px;
   margin-bottom: 24px;
   box-shadow: var(--shadow-sm);
   display: flex;
@@ -164,37 +177,37 @@ body {
 }
 
 .header-box::after {
-  content: '字';
+  content: '莉拉';
   position: absolute;
   right: 15px;
-  bottom: -25px;
+  bottom: -30px;
   font-family: var(--font-zh);
-  font-size: 140px;
+  font-size: 130px;
   font-weight: 900;
-  color: rgba(79, 70, 229, 0.04);
+  color: rgba(79, 70, 229, 0.035);
   pointer-events: none;
   line-height: 1;
 }
 
 .header-title {
   font-family: var(--font-head);
-  font-size: 1.45rem;
+  font-size: 1.55rem;
   font-weight: 800;
   color: var(--text-main);
   margin-bottom: 4px;
 }
 
 .header-desc {
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   color: var(--text-muted);
 }
 
 .stats-pill {
   background: #f8fafc;
-  border: 1px solid var(--border);
-  padding: 8px 16px;
+  border: 1.5px solid var(--border);
+  padding: 10px 18px;
   border-radius: var(--radius-md);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: #334155;
   white-space: nowrap;
@@ -205,37 +218,37 @@ body {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
   padding-bottom: 8px;
-  border-bottom: 1.5px solid rgba(226, 232, 240, 0.8);
+  border-bottom: 2px solid rgba(203, 213, 225, 0.5);
 }
 
 .section-title {
   font-family: var(--font-head);
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--text-main);
   letter-spacing: -0.01em;
 }
 
 .section-hint {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
 }
 
 /* General HSK Drills Grid */
 .general-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 14px;
-  margin-bottom: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+  margin-bottom: 34px;
 }
 
 .gen-card {
   background: #ffffff;
   border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 18px 20px;
+  padding: 20px 22px;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -246,7 +259,7 @@ body {
 }
 
 .gen-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   border-color: var(--primary);
   box-shadow: var(--shadow-md);
 }
@@ -254,12 +267,12 @@ body {
 .gen-card-badge {
   display: inline-block;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  padding: 3px 8px;
-  border-radius: 4px;
-  margin-bottom: 10px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-bottom: 12px;
   width: fit-content;
 }
 
@@ -267,24 +280,25 @@ body {
 .badge-green { background: #dcfce7; color: #166534; }
 .badge-amber { background: #fef3c7; color: #92400e; }
 .badge-rose { background: #ffe4e6; color: #9f1239; }
+.badge-blue { background: #dbeafe; color: #1e40af; }
 
 .gen-card h4 {
   font-family: var(--font-head);
-  font-size: 0.98rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--text-main);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .gen-card p {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
-  line-height: 1.4;
-  margin-bottom: 12px;
+  line-height: 1.45;
+  margin-bottom: 14px;
 }
 
 .gen-card-cta {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--primary);
   display: inline-flex;
@@ -295,16 +309,16 @@ body {
 /* Topics Grid (15 Notion Topics) */
 .topics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
   gap: 14px;
-  margin-bottom: 32px;
+  margin-bottom: 34px;
 }
 
 .topic-item {
   background: #ffffff;
   border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 16px 18px;
+  padding: 16px 20px;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -315,50 +329,50 @@ body {
 .topic-item:hover {
   border-color: var(--primary);
   background: #fafafa;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }
 
 .topic-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .topic-num {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: #f1f5f9;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-head);
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.8rem;
+  font-weight: 800;
   color: var(--text-muted);
   flex-shrink: 0;
 }
 
 .topic-title {
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--text-main);
   margin-bottom: 2px;
 }
 
 .topic-cn {
   font-family: var(--font-zh);
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
 }
 
 .topic-count {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: var(--primary);
   background: var(--primary-light);
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: 9999px;
   white-space: nowrap;
 }
@@ -395,14 +409,15 @@ body {
   background: #f1f5f9;
   border: 1px solid var(--border);
   color: var(--text-main);
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: var(--radius-sm);
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  transition: all 0.15s ease;
 }
 
 .btn-back-topics:hover {
@@ -411,11 +426,11 @@ body {
 
 .player-mode-badge {
   font-family: var(--font-head);
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   font-weight: 700;
   color: var(--primary);
   background: var(--primary-light);
-  padding: 4px 12px;
+  padding: 6px 14px;
   border-radius: 9999px;
 }
 
@@ -434,18 +449,26 @@ body {
   transition: width 0.3s ease;
 }
 
-/* Tianzige Practice Cell (Китайская тетрадная клетка) */
+/* Tianzige Practice Cell (Аутентичная китайская тетрадная клетка) */
 .tianzige-box {
-  width: 190px;
-  height: 190px;
-  margin: 0 auto 24px;
-  border: 2px solid var(--cell-line);
+  width: 220px;
+  height: 220px;
+  margin: 0 auto 20px;
+  border: 2.5px solid var(--cell-line);
   position: relative;
   background-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.15s ease;
+}
+
+.tianzige-box:hover {
+  transform: scale(1.02);
 }
 
 /* Dotted cross lines inside the cell */
@@ -456,7 +479,7 @@ body {
   bottom: 0;
   left: 50%;
   width: 0;
-  border-left: 1px dashed var(--cell-guide);
+  border-left: 1.5px dashed var(--cell-guide);
 }
 
 .tianzige-box::after {
@@ -466,12 +489,12 @@ body {
   right: 0;
   top: 50%;
   height: 0;
-  border-top: 1px dashed var(--cell-guide);
+  border-top: 1.5px dashed var(--cell-guide);
 }
 
 .cell-char {
   font-family: var(--font-zh);
-  font-size: 68px;
+  font-size: 86px;
   font-weight: 700;
   color: #0f172a;
   z-index: 2;
@@ -479,21 +502,68 @@ body {
 }
 
 .cell-char.small {
-  font-size: 44px;
+  font-size: 52px;
+}
+
+.cell-hint {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  z-index: 2;
+}
+
+/* Audio Controls Bar */
+.audio-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.btn-speak {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1.5px solid var(--border);
+  padding: 7px 16px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-speak:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+}
+
+.btn-speak.slow {
+  color: #059669;
+}
+
+.btn-speak.slow:hover {
+  background: var(--accent-light);
+  border-color: #059669;
 }
 
 /* Question and Pinyin */
 .question-pinyin {
   text-align: center;
-  font-size: 1.15rem;
-  font-weight: 700;
+  font-size: 1.3rem;
+  font-weight: 800;
   color: var(--primary);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .question-prompt {
   text-align: center;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--text-muted);
   margin-bottom: 24px;
 }
@@ -502,8 +572,8 @@ body {
 .options-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  max-width: 650px;
+  gap: 14px;
+  max-width: 680px;
   margin: 0 auto 20px;
 }
 
@@ -517,9 +587,9 @@ body {
   background: #ffffff;
   border: 2px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 14px 18px;
+  padding: 16px 20px;
   font-family: var(--font-body);
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   font-weight: 600;
   color: var(--text-main);
   cursor: pointer;
@@ -539,6 +609,7 @@ body {
   background: var(--accent-light);
   border-color: var(--accent);
   color: var(--accent);
+  font-weight: 800;
 }
 
 .opt-btn.wrong {
@@ -547,16 +618,17 @@ body {
   color: var(--error);
 }
 
-/* Flashcard Specific */
+/* Flashcard Specific Controls */
 .flashcard-actions {
   display: flex;
   justify-content: center;
   gap: 16px;
   margin-top: 20px;
+  flex-wrap: wrap;
 }
 
 .btn-card-ctrl {
-  padding: 12px 28px;
+  padding: 12px 26px;
   border-radius: var(--radius-md);
   font-weight: 700;
   font-size: 0.95rem;
@@ -584,27 +656,56 @@ body {
   background: #e2e8f0;
 }
 
-/* Audio prompt button */
-.btn-speak-char {
-  display: inline-flex;
+/* Memory Match Grid */
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  max-width: 680px;
+  margin: 0 auto 20px;
+}
+
+@media (max-width: 600px) {
+  .memory-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.mem-card {
+  background: #ffffff;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 12px;
+  min-height: 80px;
+  display: flex;
   align-items: center;
-  gap: 6px;
-  background: #f8fafc;
-  border: 1px solid var(--border);
-  padding: 6px 14px;
-  border-radius: 9999px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--primary);
+  justify-content: center;
+  text-align: center;
   cursor: pointer;
-  margin: 0 auto 16px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  transition: all 0.2s ease;
+  user-select: none;
 }
 
-.btn-speak-char:hover {
+.mem-card:hover {
+  border-color: var(--primary);
+}
+
+.mem-card.selected {
   background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
-/* Mode selection modal / buttons */
+.mem-card.matched {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+  visibility: hidden;
+}
+
+/* Mode selection tabs */
 .topic-modes-box {
   display: flex;
   gap: 10px;
@@ -621,6 +722,7 @@ body {
   font-weight: 700;
   color: var(--text-main);
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .mode-tab.active {
@@ -637,42 +739,42 @@ body {
 
 .results-score {
   font-family: var(--font-head);
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   font-weight: 800;
   color: var(--text-main);
   margin-bottom: 8px;
 }
 
 .results-msg {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   color: var(--text-muted);
   margin-bottom: 24px;
 }
 
 .mistakes-list {
-  max-width: 500px;
+  max-width: 520px;
   margin: 0 auto 24px;
   text-align: left;
   background: #f8fafc;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 16px 20px;
+  padding: 18px 22px;
 }
 
 .mistakes-list h4 {
   font-size: 0.85rem;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .mistake-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 0;
+  padding: 8px 0;
   border-bottom: 1px dashed var(--border);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
 .mistake-item:last-child {
@@ -689,7 +791,7 @@ body {
       ⬅️ Вернуться назад в Главное меню
     </a>
     <div class="nav-status">
-      <span class="student-tag">Тетрадь ученицы: Лера · 莉拉</span>
+      <span class="voice-badge" id="voiceStatusBadge">🎙️ Голос: Edge Детский (0.7x)</span>
       <button class="btn-audio-toggle" id="audioToggle">🔊 Звук</button>
     </div>
   </div>
@@ -699,23 +801,23 @@ body {
 
   <!-- Main Selection Screen -->
   <div id="selectionView" class="view-panel active">
-    <!-- Clean Minimalist Header -->
+    <!-- Header Box -->
     <div class="header-box">
       <div>
-        <h1 class="header-title">Тренажёр китайских слов</h1>
+        <h1 class="header-title">Тетрадь китайских слов</h1>
         <p class="header-desc">
-          Отработка лексики по темам и подготовка к экзамену HSK. Стиль китайской тетради.
+          Отработка лексики по темам и подготовка к HSK в стиле китайской тетради (田字格).
         </p>
       </div>
       <div class="stats-pill">
-        📖 <span id="totalWordsCount">563</span> уникальных слова · 15 тем
+        📖 <span id="totalWordsCount">563</span> слова · 15 тем
       </div>
     </div>
 
     <!-- Section 1: General HSK Drills -->
     <div class="section-head">
       <h2 class="section-title">🌟 Главные тренажёры к HSK</h2>
-      <span class="section-hint">Комплексная отработка всей базы слов</span>
+      <span class="section-hint">Комплексная тренировка всей базы слов</span>
     </div>
 
     <div class="general-grid">
@@ -732,7 +834,7 @@ body {
         <div>
           <span class="gen-card-badge badge-green">Экзамен</span>
           <h4>🎧 Аудирование HSK</h4>
-          <p>Слушай произношение и выбирай верный перевод из вариантов без пиньиня.</p>
+          <p>Слушай произношение и выбирай верный перевод из вариантов без подсказок.</p>
         </div>
         <span class="gen-card-cta">Слушать слова →</span>
       </div>
@@ -741,9 +843,18 @@ body {
         <div>
           <span class="gen-card-badge badge-amber">Вся база</span>
           <h4>📝 Карточки всех слов</h4>
-          <p>Случайные слова из всех 15 тем: смотри иероглиф, проверяй себя и слушай тон.</p>
+          <p>Случайные слова из всех тем: смотри иероглиф в тетради, проверяй себя и тоны.</p>
         </div>
         <span class="gen-card-cta">Листать карточки →</span>
+      </div>
+
+      <div class="gen-card" onclick="startGeneralMode('memory')">
+        <div>
+          <span class="gen-card-badge badge-blue">Игра</span>
+          <h4>🧩 Пары (Memory)</h4>
+          <p>Найди и соедини пару: китайский иероглиф и его точный русский перевод.</p>
+        </div>
+        <span class="gen-card-cta">Соединить пары →</span>
       </div>
 
       <div class="gen-card" onclick="startGeneralMode('traps')">
@@ -775,7 +886,7 @@ body {
           ← К списку тем
         </button>
         <span class="player-mode-badge" id="playerTitle">Отработка</span>
-        <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);" id="progressText">1 / 10</div>
+        <div style="font-size: 0.9rem; font-weight: 800; color: var(--text-muted);" id="progressText">1 / 10</div>
       </div>
 
       <div class="player-progress-bar">
@@ -787,30 +898,38 @@ body {
         <button class="mode-tab active" onclick="switchTopicMode('choice')">Выбор перевода</button>
         <button class="mode-tab" onclick="switchTopicMode('cards')">Карточки</button>
         <button class="mode-tab" onclick="switchTopicMode('listen')">На слух</button>
+        <button class="mode-tab" onclick="switchTopicMode('memory')">Пары (Memory)</button>
       </div>
 
       <!-- Question Content -->
       <div id="playArea">
-        <!-- Audio button -->
-        <div style="text-align: center;">
-          <button class="btn-speak-char" id="speakBtn" onclick="speakCurrent()">
-            🔊 Прослушать произношение
+        <!-- Dual Audio Controls (Normal 0.7x + Slow 0.5x) -->
+        <div class="audio-controls-row">
+          <button class="btn-speak" onclick="speakCurrent(0.7)">
+            🔊 Озвучить (0.7x)
+          </button>
+          <button class="btn-speak slow" onclick="speakCurrent(0.5)">
+            🐢 Медленно (0.5x)
           </button>
         </div>
 
         <!-- Tianzige character practice cell -->
-        <div class="tianzige-box" id="charBox">
+        <div class="tianzige-box" id="charBox" onclick="speakCurrent(0.7)" title="Нажми, чтобы прослушать">
           <span class="cell-char" id="charText">字</span>
+          <span class="cell-hint">田字格</span>
         </div>
 
         <!-- Pinyin and prompt -->
         <div class="question-pinyin" id="pinyinText">zì</div>
         <div class="question-prompt" id="promptText">Выбери правильный перевод:</div>
 
-        <!-- Choices -->
+        <!-- Choices for quiz -->
         <div class="options-grid" id="optionsGrid"></div>
 
-        <!-- Flashcard controls (hidden in choice mode) -->
+        <!-- Memory Pairs Grid -->
+        <div class="memory-grid" id="memoryGrid" style="display: none;"></div>
+
+        <!-- Flashcard controls -->
         <div class="flashcard-actions" id="flashcardActions" style="display: none;">
           <button class="btn-card-ctrl btn-card-secondary" onclick="prevCard()">← Назад</button>
           <button class="btn-card-ctrl btn-card-primary" onclick="flipCard()">Показать перевод</button>
@@ -844,7 +963,7 @@ const DB = {"student": "Лера", "total_unique_words": 563, "topics": [{"id": 
 
 let soundEnabled = true;
 let currentTopic = null;
-let currentMode = 'choice'; // 'choice', 'cards', 'listen', 'blitz', 'traps'
+let currentMode = 'choice'; // 'choice', 'cards', 'listen', 'blitz', 'traps', 'memory'
 let sessionWords = [];
 let currentIndex = 0;
 let correctCount = 0;
@@ -853,20 +972,75 @@ let blitzTimer = null;
 let blitzSecondsLeft = 60;
 let isFlipped = false;
 
-// Audio
-function speakText(text) {
-  if (!soundEnabled || !('speechSynthesis' in window)) return;
+// Audio System: Microsoft Edge Child Voice Priority + 0.7 Speed + Graceful Fallback
+let selectedVoice = null;
+const DEFAULT_SPEED = 0.7; // Exactly 0.7x as requested
+
+const VOICE_PREFERENCES = [
+  v => /yunxia|云夏/i.test(v.name),                        // Edge Child (Female)
+  v => /yunxi|云希/i.test(v.name),                          // Edge Teen/Child (Male)
+  v => /xiaoxiao|晓晓/i.test(v.name),                      // Edge Natural (Female)
+  v => /xiaoyi|晓伊/i.test(v.name),                        // Edge Natural
+  v => /natural.*chinese|chinese.*natural/i.test(v.name),  // Any Edge Natural Chinese
+  v => v.lang === 'zh-CN' && /online/i.test(v.name),       // Online Neural
+  v => v.lang === 'zh-CN',                                 // Standard Mandarin
+  v => v.lang && v.lang.toLowerCase().startsWith('zh')    // Any Chinese fallback
+];
+
+function pickBestVoice() {
+  if (!('speechSynthesis' in window)) return null;
+  const voices = window.speechSynthesis.getVoices();
+  if (!voices || !voices.length) return null;
+
+  for (const test of VOICE_PREFERENCES) {
+    const hit = voices.find(test);
+    if (hit) {
+      selectedVoice = hit;
+      return hit;
+    }
+  }
+  selectedVoice = voices.find(v => v.lang && v.lang.startsWith('zh')) || null;
+  return selectedVoice;
+}
+
+function updateVoiceBadge() {
+  const badge = document.getElementById('voiceStatusBadge');
+  if (!badge) return;
+  const voice = selectedVoice || pickBestVoice();
+  if (voice) {
+    const shortName = voice.name.replace(/Microsoft | Online \(Natural\) - Chinese \(Mainland\)| - Chinese/g, '');
+    badge.textContent = `🎙️ Голос: ${shortName} (0.7x)`;
+  } else {
+    badge.textContent = '🎙️ Голос: Браузер (0.7x)';
+  }
+}
+
+if ('speechSynthesis' in window) {
+  pickBestVoice();
+  window.speechSynthesis.onvoiceschanged = () => {
+    pickBestVoice();
+    updateVoiceBadge();
+  };
+}
+
+function speakWord(text, rate) {
+  if (!soundEnabled || !('speechSynthesis' in window) || !text) return;
   window.speechSynthesis.cancel();
+
   const u = new SpeechSynthesisUtterance(text);
   u.lang = 'zh-CN';
-  u.rate = 0.8;
+  u.rate = rate || DEFAULT_SPEED;
+
+  const v = selectedVoice || pickBestVoice();
+  if (v) u.voice = v;
+
   window.speechSynthesis.speak(u);
 }
 
-function speakCurrent() {
-  if (!sessionWords.length) return;
+function speakCurrent(rate) {
+  if (!sessionWords.length || currentIndex >= sessionWords.length) return;
   const w = sessionWords[currentIndex];
-  speakText(w[0]);
+  speakWord(w[0], rate || DEFAULT_SPEED);
 }
 
 // Initialize Selection View
@@ -891,11 +1065,13 @@ function init() {
     const btn = document.getElementById('audioToggle');
     btn.textContent = soundEnabled ? '🔊 Звук' : '🔇 Тихо';
     btn.classList.toggle('muted', !soundEnabled);
-    if (!soundEnabled) window.speechSynthesis.cancel();
+    if (!soundEnabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
   };
+
+  updateVoiceBadge();
 }
 
-// General modes (Blitz, Listening, Cards, Traps)
+// General modes (Blitz, Listening, Cards, Memory, Traps)
 function startGeneralMode(mode) {
   currentTopic = null;
   currentMode = mode;
@@ -905,16 +1081,16 @@ function startGeneralMode(mode) {
   if (mode === 'traps') {
     DB.traps.forEach(g => g.words.forEach(w => words.push([w[0], w[1], w[2], ''])));
   } else {
-    // Aggregate all words across topics
     DB.topics.forEach(t => t.words.forEach(w => words.push(w)));
   }
 
-  // Shuffle
   words = words.sort(() => Math.random() - 0.5);
 
   if (mode === 'blitz') {
-    sessionWords = words; // unlimited until 60s
+    sessionWords = words;
     blitzSecondsLeft = 60;
+  } else if (mode === 'memory') {
+    sessionWords = words.slice(0, 8); // 8 pairs for memory
   } else {
     sessionWords = words.slice(0, 20); // 20 words for session
   }
@@ -926,7 +1102,8 @@ function startGeneralMode(mode) {
   document.getElementById('playerTitle').textContent = 
     mode === 'blitz' ? '⚡ Молния (60 сек)' :
     mode === 'listen' ? '🎧 Аудирование HSK' :
-    mode === 'cards' ? '📝 Карточки всех слов' : '🎯 Похожие слова';
+    mode === 'cards' ? '📝 Карточки всех слов' :
+    mode === 'memory' ? '🧩 Пары (Memory)' : '🎯 Похожие слова';
 
   showPlayer();
 
@@ -934,7 +1111,11 @@ function startGeneralMode(mode) {
     startBlitzTimer();
   }
 
-  renderStep();
+  if (mode === 'memory') {
+    renderMemoryMode();
+  } else {
+    renderStep();
+  }
 }
 
 // Topic selection
@@ -951,14 +1132,24 @@ function switchTopicMode(mode) {
     t.classList.toggle('active', t.getAttribute('onclick').includes(mode));
   });
 
-  sessionWords = [...currentTopic.words].sort(() => Math.random() - 0.5);
+  if (mode === 'memory') {
+    sessionWords = [...currentTopic.words].sort(() => Math.random() - 0.5).slice(0, 8);
+  } else {
+    sessionWords = [...currentTopic.words].sort(() => Math.random() - 0.5);
+  }
+
   currentIndex = 0;
   correctCount = 0;
   mistakes = [];
 
   document.getElementById('playerTitle').textContent = `${currentTopic.title} (${currentTopic.title_cn})`;
   showPlayer();
-  renderStep();
+
+  if (mode === 'memory') {
+    renderMemoryMode();
+  } else {
+    renderStep();
+  }
 }
 
 function showPlayer() {
@@ -989,6 +1180,10 @@ function startBlitzTimer() {
 }
 
 function renderStep() {
+  document.getElementById('memoryGrid').style.display = 'none';
+  document.getElementById('charBox').style.display = 'flex';
+  document.querySelector('.audio-controls-row').style.display = 'flex';
+
   if (currentIndex >= sessionWords.length) {
     finishSession();
     return;
@@ -1014,16 +1209,16 @@ function renderStep() {
 
   if (currentMode === 'listen') {
     charEl.textContent = '🎧';
-    pyEl.textContent = 'Слушай слово';
+    pyEl.textContent = 'Слушай внимательно';
     promptEl.textContent = 'Выбери правильный перевод:';
-    speakText(w[0]);
+    speakWord(w[0], DEFAULT_SPEED);
   } else if (currentMode === 'cards') {
     pyEl.textContent = w[1];
     promptEl.textContent = 'Вспомни значение слова';
   } else {
     pyEl.textContent = w[1];
     promptEl.textContent = 'Выбери правильный перевод:';
-    if (soundEnabled) speakText(w[0]);
+    if (soundEnabled) speakWord(w[0], DEFAULT_SPEED);
   }
 
   if (currentMode === 'cards') {
@@ -1040,7 +1235,6 @@ function renderChoices(currentWord) {
   const optGrid = document.getElementById('optionsGrid');
   optGrid.innerHTML = '';
 
-  // 1 correct + 3 random wrong options
   const correctTrans = currentWord[2];
   let allOtherWords = [];
   DB.topics.forEach(t => t.words.forEach(w => {
@@ -1081,13 +1275,84 @@ function checkChoice(btn, isCorrect, word) {
   }, isCorrect ? 450 : 1200);
 }
 
-// Flashcards functions
+// Memory Mode (Pairs Game)
+let memSelected = null;
+let memMatchedCount = 0;
+
+function renderMemoryMode() {
+  document.getElementById('charBox').style.display = 'none';
+  document.querySelector('.audio-controls-row').style.display = 'none';
+  document.getElementById('pinyinText').textContent = 'Соедини пары';
+  document.getElementById('promptText').textContent = 'Нажми на иероглиф, затем на его перевод:';
+  document.getElementById('optionsGrid').style.display = 'none';
+  document.getElementById('flashcardActions').style.display = 'none';
+  
+  const memGrid = document.getElementById('memoryGrid');
+  memGrid.style.display = 'grid';
+  memGrid.innerHTML = '';
+
+  memSelected = null;
+  memMatchedCount = 0;
+
+  const items = [];
+  sessionWords.forEach((w, i) => {
+    items.push({ id: i, type: 'zh', text: w[0], py: w[1] });
+    items.push({ id: i, type: 'ru', text: w[2] });
+  });
+
+  items.sort(() => Math.random() - 0.5);
+
+  items.forEach(it => {
+    const card = document.createElement('div');
+    card.className = 'mem-card' + (it.type === 'zh' ? ' zh' : '');
+    card.textContent = it.text;
+    card.onclick = () => handleMemoryClick(card, it);
+    memGrid.appendChild(card);
+  });
+}
+
+function handleMemoryClick(cardEl, item) {
+  if (cardEl.classList.contains('matched') || cardEl.classList.contains('selected')) return;
+
+  if (item.type === 'zh') {
+    speakWord(item.text, DEFAULT_SPEED);
+  }
+
+  if (!memSelected) {
+    memSelected = { el: cardEl, item };
+    cardEl.classList.add('selected');
+  } else {
+    if (memSelected.item.id === item.id && memSelected.item.type !== item.type) {
+      // Match!
+      cardEl.classList.add('matched');
+      memSelected.el.classList.add('matched');
+      memMatchedCount++;
+      correctCount++;
+      memSelected = null;
+      if (memMatchedCount === sessionWords.length) {
+        setTimeout(finishSession, 500);
+      }
+    } else {
+      // Wrong match
+      cardEl.classList.add('wrong');
+      const prevEl = memSelected.el;
+      prevEl.classList.add('wrong');
+      setTimeout(() => {
+        cardEl.classList.remove('selected', 'wrong');
+        prevEl.classList.remove('selected', 'wrong');
+      }, 700);
+      memSelected = null;
+    }
+  }
+}
+
+// Flashcards
 function flipCard() {
   const w = sessionWords[currentIndex];
   const promptEl = document.getElementById('promptText');
   if (!isFlipped) {
     promptEl.innerHTML = `<strong>Перевод:</strong> ${w[2]}` + (w[3] ? `<br><small style="color:var(--text-muted)">${w[3]}</small>` : '');
-    speakText(w[0]);
+    speakWord(w[0], DEFAULT_SPEED);
     isFlipped = true;
   } else {
     promptEl.textContent = 'Вспомни значение слова';
@@ -1112,16 +1377,17 @@ function finishSession() {
   document.getElementById('playArea').style.display = 'none';
   document.getElementById('resultsArea').style.display = 'block';
 
-  const total = currentMode === 'blitz' ? (correctCount + mistakes.length) : sessionWords.length;
+  const total = currentMode === 'blitz' ? (correctCount + mistakes.length) : 
+                currentMode === 'memory' ? sessionWords.length : sessionWords.length;
   document.getElementById('resScore').textContent = `${correctCount} / ${total}`;
 
   let msg = 'Отличная работа!';
   if (currentMode === 'blitz') {
     msg = `За 60 секунд переведено верно: ${correctCount} слов!`;
   } else if (correctCount === total) {
-    msg = 'Превосходно! Ни одной ошибки.';
+    msg = 'Превосходно! Все слова пройдены без единой ошибки 🎉';
   } else if (correctCount >= total * 0.8) {
-    msg = 'Хороший результат, почти без ошибок!';
+    msg = 'Отличный результат, материал усвоен очень уверенно!';
   } else {
     msg = 'Повтори слова с ошибками и попробуй ещё раз.';
   }
@@ -1133,7 +1399,7 @@ function finishSession() {
     mistakesBox.style.display = 'block';
     mistakesList.innerHTML = mistakes.map(w => `
       <div class="mistake-item">
-        <span><strong class="zh" style="font-size:1.1rem">${w[0]}</strong> (${w[1]})</span>
+        <span><strong class="zh" style="font-size:1.15rem">${w[0]}</strong> (${w[1]})</span>
         <span style="color:var(--primary); font-weight:700">${w[2]}</span>
       </div>
     `).join('');
