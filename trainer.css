@@ -1,0 +1,216 @@
+:root{
+  --paper:#FBF6EC; --paper-2:#F3EADA; --ink:#23201F; --ink-soft:#6B625B;
+  --bamboo:#3E7B5E; --bamboo-dk:#2C5A45; --bamboo-lt:#8FBFA1;
+  --cinnabar:#D6402C; --sand:#E8C97A; --line:#E0D5C0; --r:20px;
+  --shadow:0 2px 0 var(--line), 0 10px 24px -14px rgba(35,32,31,.45);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',system-ui,sans-serif;color:var(--ink);background:var(--paper);
+  background-image:radial-gradient(circle at 1px 1px, rgba(35,32,31,.055) 1px, transparent 0);
+  background-size:22px 22px;-webkit-font-smoothing:antialiased;min-height:100vh}
+.zh{font-family:'Noto Sans SC','Nunito',sans-serif}
+h1,h2,h3,.brand,.score{font-family:'ZCOOL KuaiLe','Nunito',cursive;font-weight:400}
+.wrap{max-width:940px;margin:0 auto;padding:20px 18px 60px}
+.hide{display:none!important}
+
+header{display:flex;align-items:center;gap:14px;padding:6px 0 22px}
+.mascot{width:52px;height:52px;display:block}
+.mascot-link{flex:none;border-radius:50%;display:block}
+.brand{font-size:26px;letter-spacing:.5px;line-height:1}
+.brand small{display:block;font-family:'Nunito';font-size:12px;font-weight:600;
+  color:var(--ink-soft);letter-spacing:.12em;text-transform:uppercase;margin-top:3px}
+.hdr-right{margin-left:auto}
+.streak{background:var(--paper-2);border:1.5px solid var(--line);border-radius:999px;
+  padding:7px 14px;font-weight:800;font-size:14px;white-space:nowrap}
+
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.btn{background:var(--bamboo);color:#fff;border-radius:14px;padding:13px 22px;font-weight:800;
+  font-size:16px;box-shadow:0 3px 0 var(--bamboo-dk);transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 0 0 var(--bamboo-dk)}
+.btn.ghost{background:transparent;color:var(--ink-soft);box-shadow:none;border:1.5px solid var(--line)}
+.btn.ghost:active{transform:none}
+.btn:focus-visible,.topic:focus-visible,.mode:focus-visible,.opt:focus-visible,
+.chip:focus-visible,.mcard:focus-visible{outline:3px solid var(--cinnabar);outline-offset:3px}
+.back{font-weight:800;color:var(--ink-soft);font-size:14px;margin-bottom:14px;display:inline-block}
+h2{font-size:28px;margin-bottom:4px}
+.cnbig{color:var(--bamboo)}
+.section-label{font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-soft);margin:0 0 12px}
+.hint{font-size:13.5px;color:var(--ink-soft);font-weight:600;line-height:1.5}
+#modeSub{margin-bottom:18px}
+
+/* ---- темы ---- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:14px}
+.topic{background:#fff;border:2px solid var(--line);border-radius:var(--r);padding:15px 16px;
+  text-align:left;display:flex;flex-direction:column;gap:5px;box-shadow:var(--shadow);
+  transition:transform .12s,border-color .12s}
+.topic:hover{transform:translateY(-3px);border-color:var(--bamboo-lt)}
+.topic .row1{display:flex;align-items:center;justify-content:space-between}
+.topic .em{font-size:24px}
+.topic .lesson{font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--bamboo);background:#EAF2ED;border-radius:99px;padding:4px 9px}
+.topic .t{font-family:'ZCOOL KuaiLe';font-size:19px;line-height:1.2}
+.topic .cn{font-size:14px;color:var(--ink-soft);font-weight:600}
+.topic .meta{margin-top:8px;display:flex;align-items:center;gap:8px;font-size:12.5px;
+  color:var(--ink-soft);font-weight:700}
+.bar{flex:1;height:6px;background:var(--paper-2);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--bamboo-lt);border-radius:99px;transition:width .5s}
+
+/* ---- режимы ---- */
+.modes{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px}
+.mode{background:#fff;border:2px solid var(--line);border-radius:var(--r);padding:16px;
+  text-align:left;box-shadow:var(--shadow);transition:border-color .12s,transform .12s}
+.mode:hover:not(.off){border-color:var(--sand);transform:translateY(-3px)}
+.mode.off{opacity:.45;cursor:not-allowed}
+.mode b{font-family:'ZCOOL KuaiLe';font-weight:400;font-size:18px;display:block}
+.mode b .zh{color:var(--bamboo)}
+.mode span{font-size:13px;color:var(--ink-soft);line-height:1.45;display:block;margin-top:4px}
+.mode u{display:inline-block;margin-top:8px;text-decoration:none;font-size:11.5px;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--cinnabar)}
+
+/* ---- игра ---- */
+.progress-row{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.pbar{flex:1;height:10px;background:var(--paper-2);border-radius:99px;
+  border:1.5px solid var(--line);overflow:hidden}
+.pbar i{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--bamboo-lt),var(--bamboo));transition:width .35s}
+.count{font-weight:800;font-size:14px;color:var(--ink-soft);white-space:nowrap;min-width:64px;text-align:right}
+
+.stage{background:#fff;border:2px solid var(--line);border-radius:26px;box-shadow:var(--shadow);
+  padding:32px 24px;position:relative;overflow:hidden;min-height:250px;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
+.stage.flat{padding:20px 16px}
+.results-stage{display:block}
+.hanzi{font-family:'Noto Sans SC';font-weight:500;font-size:clamp(50px,14vw,88px);
+  line-height:1.15;letter-spacing:.04em}
+.pinyin{font-size:22px;font-weight:600;color:var(--bamboo)}
+.ru{font-size:19px;font-weight:600}
+.sent-ru{font-size:21px;max-width:520px}
+.answer{font-family:'Noto Sans SC';font-size:clamp(26px,6vw,38px);font-weight:500;color:var(--bamboo)}
+.bigemoji{font-size:60px}
+.sound{position:absolute;top:14px;right:14px;width:42px;height:42px;border-radius:50%;
+  background:var(--paper-2);border:1.5px solid var(--line);font-size:18px;display:grid;place-items:center}
+.sound:hover{background:var(--sand)}
+
+.actions{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.opt{background:#fff;border:2px solid var(--line);border-radius:16px;padding:15px 14px;
+  font-weight:700;font-size:16px;box-shadow:0 2px 0 var(--line);transition:.12s}
+.opt:hover:not(:disabled){border-color:var(--bamboo-lt)}
+.opt:disabled{cursor:default}
+.opt.ok{background:#E8F3EC;border-color:var(--bamboo);color:var(--bamboo)}
+.opt.no{background:#FBE9E6;border-color:var(--cinnabar);color:var(--cinnabar)}
+.opt .zh{font-size:26px;display:block}
+
+.type-row{display:flex;width:100%;max-width:420px}
+input[type=text]{flex:1;font-family:'Nunito';font-size:19px;font-weight:600;padding:13px 16px;
+  border:2px solid var(--line);border-radius:14px;background:var(--paper);color:var(--ink)}
+input[type=text]:focus{outline:none;border-color:var(--bamboo)}
+input.ok{border-color:var(--bamboo)} input.no{border-color:var(--cinnabar)}
+
+/* ---- собери фразу ---- */
+.built{min-height:56px;width:100%;max-width:560px;display:flex;flex-wrap:wrap;gap:7px;
+  justify-content:center;align-items:center;padding:10px;background:var(--paper);
+  border:2px dashed var(--line);border-radius:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:560px}
+.chip{font-family:'Noto Sans SC';font-size:24px;font-weight:500;padding:8px 14px;background:#fff;
+  border:2px solid var(--line);border-radius:12px;box-shadow:0 2px 0 var(--line);transition:.1s}
+.chip:hover:not([disabled]){border-color:var(--bamboo-lt)}
+.chip[disabled]{opacity:.25;cursor:default}
+.built-chip{background:#EAF2ED;border-color:var(--bamboo-lt);box-shadow:none}
+
+/* ---- пары ---- */
+.mem{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;width:100%;max-width:520px}
+.mcard{aspect-ratio:1;border-radius:14px;border:2px solid var(--bamboo);background:var(--bamboo);
+  display:grid;place-items:center;padding:6px;transition:.18s;position:relative}
+.mcard::after{content:'熊';font-family:'Noto Sans SC';font-size:26px;color:rgba(255,255,255,.35);
+  position:absolute}
+.mcard.open,.mcard.matched{background:#fff;border-color:var(--line)}
+.mcard.open::after,.mcard.matched::after{content:none}
+.mcard.matched{background:#EAF2ED;border-color:var(--bamboo-lt);opacity:.65}
+.mzh{font-size:clamp(22px,5vw,32px);font-weight:500;line-height:1.1}
+.mru{font-size:clamp(11px,2.6vw,13.5px);font-weight:700;line-height:1.25;word-break:break-word}
+
+/* ---- 印章 ---- */
+.seal{position:absolute;top:50%;left:50%;width:118px;height:118px;pointer-events:none;
+  transform:translate(-50%,-50%) rotate(-24deg) scale(2.4);opacity:0}
+.seal.show{animation:stamp .55s cubic-bezier(.2,1.5,.4,1) forwards}
+@keyframes stamp{
+  0%{opacity:0;transform:translate(-50%,-50%) rotate(-24deg) scale(2.4)}
+  55%{opacity:.95;transform:translate(-50%,-50%) rotate(-11deg) scale(.94)}
+  70%{transform:translate(-50%,-50%) rotate(-13deg) scale(1.03)}
+  100%{opacity:.92;transform:translate(-50%,-50%) rotate(-12deg) scale(1)}}
+.seal-box{width:100%;height:100%;border:6px solid var(--bamboo);border-radius:14px;
+  display:grid;place-items:center;color:var(--bamboo);font-family:'Noto Sans SC';
+  font-weight:700;font-size:58px;background:rgba(62,123,94,.07)}
+.seal.wrong .seal-box{border-color:var(--cinnabar);color:var(--cinnabar);background:rgba(214,64,44,.06)}
+
+/* ---- итоги ---- */
+.score{font-size:60px;line-height:1;color:var(--bamboo)}
+#scoreSub{margin-top:10px;font-size:15px}
+.stars{font-size:26px;color:var(--sand);letter-spacing:4px}
+.mistakes{margin-top:20px;text-align:left}
+.mistakes ul{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.mistakes li{display:flex;align-items:baseline;gap:12px;background:var(--paper);
+  border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;font-weight:600;font-size:15px}
+.mistakes li .zh{font-size:22px;font-weight:500}
+.mistakes li em{color:var(--bamboo);font-style:normal;font-weight:700}
+.mistakes li s{margin-left:auto;color:var(--ink-soft);text-decoration:none;font-weight:400;font-size:14px}
+
+/* ---- выбор ученика ---- */
+.students{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:8px}
+.student{background:#fff;border:2px solid var(--line);border-radius:var(--r);padding:24px 20px;
+  box-shadow:var(--shadow);text-align:center;text-decoration:none;color:inherit;display:block;
+  transition:transform .12s,border-color .12s}
+.student:hover{transform:translateY(-4px);border-color:var(--bamboo-lt)}
+.student .av{font-size:44px}
+.student .nm{font-family:'ZCOOL KuaiLe';font-size:26px;margin-top:6px}
+.student .sub{font-size:13px;color:var(--ink-soft);font-weight:700;margin-top:4px}
+
+@media(max-width:520px){.opts{grid-template-columns:1fr}
+  .mem{grid-template-columns:repeat(3,1fr)}}
+@media(prefers-reduced-motion:reduce){
+  .seal.show{animation:none;opacity:.9;transform:translate(-50%,-50%) rotate(-12deg) scale(1)}
+  .topic,.mode,.btn,.student{transition:none}}
+
+/* ---- задания от учителя ---- */
+.focus{background:#fff;border:2px solid var(--sand);border-radius:var(--r);padding:16px 18px;
+  box-shadow:var(--shadow);margin-bottom:24px}
+.focus-hd{display:flex;flex-direction:column;gap:3px;margin-bottom:6px}
+.focus-tag{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--cinnabar)}
+.focus-hd b{font-family:'ZCOOL KuaiLe';font-weight:400;font-size:22px;line-height:1.2}
+.focus-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;margin:12px 0 10px}
+.ftask{display:flex;align-items:center;gap:11px;text-align:left;background:var(--paper);
+  border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;transition:border-color .12s,transform .12s}
+.ftask:hover{border-color:var(--bamboo-lt);transform:translateY(-2px)}
+.ftask:focus-visible{outline:3px solid var(--cinnabar);outline-offset:3px}
+.fcheck{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#fff;
+  border:2px solid var(--line);font-weight:800;font-size:13px;color:var(--ink-soft)}
+.ftask.done .fcheck{background:var(--bamboo);border-color:var(--bamboo);color:#fff}
+.ftask.done{opacity:.72}
+.ftxt b{display:block;font-size:14.5px;font-weight:800;line-height:1.3}
+.ftxt small{display:block;font-size:12px;color:var(--ink-soft);font-weight:600;margin-top:2px}
+.topic.trap{border-color:var(--sand)}
+.topic.trap .lesson{color:var(--cinnabar);background:#FBEDE4}
+.mode.trapmode{border-color:var(--sand)}
+
+/* ---- новые режимы ---- */
+.py{display:block;font-family:'Nunito';font-size:13px;font-weight:700;color:var(--bamboo);
+  margin-top:2px;letter-spacing:0}
+.opt .py{font-size:16px;margin-top:3px}
+.chip .py{font-size:11px;margin-top:0}
+.mcard .py{font-size:11px}
+.opt .tr{display:block;font-size:12.5px;color:var(--ink-soft);font-weight:600;margin-top:2px}
+.opt .pyopt{font-size:22px;font-weight:700;letter-spacing:.02em}
+.opt .tn{display:block;font-size:13px;color:var(--ink-soft);font-weight:700;margin-top:3px}
+.opt.tf{font-size:15px}
+.opt.tf .zh{font-size:28px}
+.tonekey{display:inline-block;margin-top:4px;font-size:12.5px;color:var(--bamboo)}
+.big-ru{font-size:24px}
+.fill-line{font-size:clamp(26px,6vw,38px);font-weight:500;letter-spacing:.03em}
+.gap{display:inline-block;min-width:1.6em;border-bottom:4px solid var(--sand);color:var(--sand);margin:0 3px}
+.note{background:var(--paper);border:1.5px dashed var(--line);border-radius:12px;padding:9px 13px;max-width:470px}
+.heard{min-height:22px}
+.btn.rec{background:var(--cinnabar);box-shadow:0 3px 0 #9C2E1F;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.7}}
+@media(prefers-reduced-motion:reduce){.btn.rec{animation:none}.ftask{transition:none}}
