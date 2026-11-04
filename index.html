@@ -1,1902 +1,3804 @@
 <!doctype html>
 
+
+
 <html lang="ru">
+
+
 
 <head>
 
+
+
 <meta charset="utf-8">
+
+
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
+
+
 <title>Личный кабинет Леры · Изучение китайского языка</title>
+
+
 
 <meta name="description" content="Отчётный кабинет ученицы: расписание, прогресс HSK 2, домашние задания и тренажёры.">
 
+
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
+
+
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+
+
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Nunito:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+
+
 
 <style>
 
+
+
 :root {
+
+
 
   --font-head: 'Unbounded', system-ui, sans-serif;
 
+
+
   --font-body: 'Nunito', system-ui, -apple-system, sans-serif;
+
+
 
   --font-zh: 'Noto Sans SC', system-ui, sans-serif;
 
+
+
   
+
+
 
   --bg: #f8fafc;
 
+
+
   --card-bg: #ffffff;
+
+
 
   --text-main: #0f172a;
 
+
+
   --text-muted: #64748b;
+
+
 
   --border: #e2e8f0;
 
+
+
   
+
+
 
   --primary: #4f46e5;
 
+
+
   --primary-light: #eef2ff;
+
+
 
   --primary-hover: #4338ca;
 
+
+
   
+
+
 
   --accent: #ec4899;
 
+
+
   --accent-light: #fdf2f8;
 
+
+
   
+
+
 
   --success: #10b981;
 
+
+
   --success-light: #ecfdf5;
 
+
+
   
+
+
 
   --warning: #f59e0b;
 
+
+
   --warning-light: #fffbeb;
+
+
 
   
 
+
+
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+
+
 
   --shadow-md: 0 4px 12px -1px rgba(15, 23, 42, 0.08);
 
+
+
   --shadow-lg: 0 12px 28px -4px rgba(15, 23, 42, 0.1);
+
+
 
   --radius-lg: 20px;
 
+
+
   --radius-md: 14px;
+
+
 
   --radius-sm: 8px;
 
+
+
 }
+
+
+
+
 
 
 
 * {
 
+
+
   box-sizing: border-box;
+
+
 
   margin: 0;
 
+
+
   padding: 0;
 
+
+
 }
+
+
+
+
 
 
 
 body {
 
+
+
   font-family: var(--font-body);
+
+
 
   background: var(--bg);
 
+
+
   color: var(--text-main);
+
+
 
   line-height: 1.6;
 
+
+
   -webkit-font-smoothing: antialiased;
+
+
 
   padding-bottom: 60px;
 
+
+
 }
+
+
+
+
 
 
 
 .zh {
 
+
+
   font-family: var(--font-zh);
+
+
 
   font-weight: 500;
 
+
+
 }
+
+
+
+
 
 
 
 /* Header */
 
+
+
 .header {
+
+
 
   background: #ffffff;
 
+
+
   border-bottom: 1px solid var(--border);
+
+
 
   position: sticky;
 
+
+
   top: 0;
+
+
 
   z-index: 100;
 
+
+
   box-shadow: var(--shadow-sm);
 
+
+
 }
+
+
+
+
 
 
 
 .header-inner {
 
+
+
   max-width: 1120px;
+
+
 
   margin: 0 auto;
 
+
+
   padding: 14px 20px;
+
+
 
   display: flex;
 
+
+
   align-items: center;
+
+
 
   justify-content: space-between;
 
+
+
   gap: 16px;
+
+
 
   flex-wrap: wrap;
 
+
+
 }
+
+
+
+
 
 
 
 .brand {
 
+
+
   display: flex;
+
+
 
   align-items: center;
 
+
+
   gap: 12px;
 
+
+
 }
+
+
+
+
 
 
 
 .brand-logo {
 
+
+
   font-size: 32px;
+
+
 
   line-height: 1;
 
+
+
 }
+
+
+
+
 
 
 
 .brand-text h1 {
 
+
+
   font-family: var(--font-head);
+
+
 
   font-size: 1.15rem;
 
+
+
   font-weight: 700;
+
+
 
   color: var(--text-main);
 
+
+
   letter-spacing: -0.02em;
 
+
+
 }
+
+
+
+
 
 
 
 .brand-text p {
 
+
+
   font-size: 0.85rem;
+
+
 
   color: var(--text-muted);
 
+
+
 }
+
+
+
+
 
 
 
 .header-actions {
 
+
+
   display: flex;
+
+
 
   align-items: center;
 
+
+
   gap: 10px;
+
+
 
   flex-wrap: wrap;
 
+
+
 }
+
+
+
+
 
 
 
 .btn-pill {
 
+
+
   display: inline-flex;
+
+
 
   align-items: center;
 
+
+
   gap: 6px;
+
+
 
   padding: 8px 14px;
 
+
+
   border-radius: 9999px;
+
+
 
   font-size: 0.85rem;
 
+
+
   font-weight: 700;
+
+
 
   text-decoration: none;
 
+
+
   background: var(--primary-light);
+
+
 
   color: var(--primary);
 
+
+
   border: 1px solid rgba(79, 70, 229, 0.15);
+
+
 
   transition: all 0.2s ease;
 
+
+
 }
+
+
+
+
 
 
 
 .btn-pill:hover {
 
+
+
   background: var(--primary);
+
+
 
   color: #ffffff;
 
+
+
   transform: translateY(-1px);
 
+
+
 }
+
+
+
+
 
 
 
 .btn-pill.accent {
 
+
+
   background: var(--accent-light);
+
+
 
   color: var(--accent);
 
+
+
   border-color: rgba(236, 72, 153, 0.2);
 
+
+
 }
+
+
+
+
 
 
 
 .btn-pill.accent:hover {
 
+
+
   background: var(--accent);
+
+
 
   color: #ffffff;
 
+
+
 }
+
+
+
+
 
 
 
 /* Container */
 
+
+
 .container {
+
+
 
   max-width: 1120px;
 
+
+
   margin: 28px auto 0;
+
+
 
   padding: 0 20px;
 
+
+
 }
+
+
+
+
 
 
 
 /* Hero Section */
 
+
+
 .hero-card {
+
+
 
   background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
 
+
+
   color: #ffffff;
+
+
 
   border-radius: var(--radius-lg);
 
+
+
   padding: 32px;
+
+
 
   box-shadow: var(--shadow-lg);
 
+
+
   position: relative;
+
+
 
   overflow: hidden;
 
+
+
   margin-bottom: 24px;
 
+
+
 }
+
+
+
+
 
 
 
 .hero-card::after {
 
+
+
   content: '莉拉';
+
+
 
   position: absolute;
 
+
+
   right: -10px;
+
+
 
   bottom: -30px;
 
+
+
   font-family: var(--font-zh);
+
+
 
   font-size: 160px;
 
+
+
   font-weight: 700;
+
+
 
   color: rgba(255, 255, 255, 0.07);
 
+
+
   pointer-events: none;
+
+
 
   line-height: 1;
 
+
+
 }
+
+
+
+
 
 
 
 .hero-tag {
 
+
+
   display: inline-flex;
+
+
 
   align-items: center;
 
+
+
   gap: 6px;
+
+
 
   background: rgba(255, 255, 255, 0.2);
 
+
+
   backdrop-filter: blur(8px);
+
+
 
   padding: 4px 12px;
 
+
+
   border-radius: 9999px;
+
+
 
   font-size: 0.8rem;
 
+
+
   font-weight: 700;
+
+
 
   text-transform: uppercase;
 
+
+
   letter-spacing: 0.05em;
+
+
 
   margin-bottom: 12px;
 
+
+
 }
+
+
+
+
 
 
 
 .hero-title {
 
+
+
   font-family: var(--font-head);
+
+
 
   font-size: 1.85rem;
 
+
+
   font-weight: 800;
+
+
 
   line-height: 1.25;
 
+
+
   margin-bottom: 10px;
 
+
+
 }
+
+
+
+
 
 
 
 .hero-desc {
 
+
+
   font-size: 1.05rem;
+
+
 
   opacity: 0.92;
 
+
+
   max-width: 650px;
+
+
 
   line-height: 1.5;
 
+
+
 }
+
+
+
+
 
 
 
 .hero-badges {
 
+
+
   display: flex;
+
+
 
   gap: 12px;
 
+
+
   margin-top: 20px;
+
+
 
   flex-wrap: wrap;
 
+
+
 }
+
+
+
+
 
 
 
 .hero-badge-item {
 
+
+
   background: rgba(255, 255, 255, 0.15);
+
+
 
   backdrop-filter: blur(6px);
 
+
+
   border: 1px solid rgba(255, 255, 255, 0.25);
+
+
 
   border-radius: var(--radius-md);
 
+
+
   padding: 10px 16px;
+
+
 
   display: flex;
 
+
+
   align-items: center;
+
+
 
   gap: 10px;
 
+
+
 }
+
+
+
+
 
 
 
 .hero-badge-val {
 
+
+
   font-family: var(--font-head);
+
+
 
   font-size: 1.15rem;
 
+
+
   font-weight: 800;
+
+
 
   white-space: nowrap;
 
+
+
 }
+
+
+
+
 
 
 
 .hero-badge-lbl {
 
+
+
   font-size: 0.8rem;
+
+
 
   line-height: 1.2;
 
+
+
   opacity: 0.9;
 
+
+
 }
+
+
+
+
 
 
 
 /* Grid Layout */
 
+
+
 .grid-2 {
+
+
 
   display: grid;
 
+
+
   grid-template-columns: 1.2fr 0.8fr;
+
+
 
   gap: 24px;
 
+
+
   margin-bottom: 24px;
 
+
+
 }
+
+
+
+
 
 
 
 @media (max-width: 860px) {
 
+
+
   .grid-2 {
+
+
 
     grid-template-columns: 1fr;
 
+
+
   }
 
+
+
 }
+
+
+
+
 
 
 
 /* Card General */
 
+
+
 .card {
+
+
 
   background: var(--card-bg);
 
+
+
   border: 1px solid var(--border);
+
+
 
   border-radius: var(--radius-lg);
 
+
+
   padding: 24px;
+
+
 
   box-shadow: var(--shadow-sm);
 
+
+
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
+
+
 }
+
+
+
+
 
 
 
 .card:hover {
 
+
+
   box-shadow: var(--shadow-md);
 
+
+
 }
+
+
+
+
 
 
 
 .card-header {
 
+
+
   display: flex;
+
+
 
   align-items: center;
 
+
+
   justify-content: space-between;
+
+
 
   margin-bottom: 18px;
 
+
+
   padding-bottom: 12px;
+
+
 
   border-bottom: 1px solid var(--border);
 
+
+
 }
+
+
+
+
 
 
 
 .card-title {
 
+
+
   font-family: var(--font-head);
+
+
 
   font-size: 1.15rem;
 
+
+
   font-weight: 700;
+
+
 
   display: flex;
 
+
+
   align-items: center;
+
+
 
   gap: 8px;
 
+
+
   color: var(--text-main);
 
+
+
 }
+
+
+
+
 
 
 
 .card-subtitle {
 
+
+
   font-size: 0.82rem;
+
+
 
   color: var(--text-muted);
 
+
+
 }
+
+
+
+
 
 
 
 /* Next Lesson Spotlight */
 
+
+
 .next-lesson-box {
+
+
 
   background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
 
+
+
   border: 1.5px solid #a7f3d0;
+
+
 
   border-radius: var(--radius-md);
 
+
+
   padding: 20px;
+
+
 
   position: relative;
 
+
+
   margin-bottom: 18px;
 
+
+
 }
+
+
+
+
 
 
 
 .lesson-datetime {
 
+
+
   display: flex;
+
+
 
   align-items: center;
 
+
+
   gap: 10px;
+
+
 
   margin-bottom: 8px;
 
+
+
 }
+
+
+
+
 
 
 
 .date-pill {
 
+
+
   background: var(--success);
+
+
 
   color: #ffffff;
 
+
+
   font-family: var(--font-head);
+
+
 
   font-size: 0.85rem;
 
+
+
   font-weight: 700;
+
+
 
   padding: 4px 10px;
 
+
+
   border-radius: 6px;
 
+
+
 }
+
+
+
+
 
 
 
 .time-text {
 
+
+
   font-weight: 700;
+
+
 
   font-size: 1rem;
 
+
+
   color: #065f46;
 
+
+
 }
+
+
+
+
 
 
 
 .lesson-topic {
 
+
+
   font-size: 1.05rem;
+
+
 
   font-weight: 700;
 
+
+
   color: #064e3b;
+
+
 
   margin-bottom: 6px;
 
+
+
 }
+
+
+
+
 
 
 
 .lesson-subtopic {
 
+
+
   font-size: 0.9rem;
+
+
 
   color: #047857;
 
+
+
   line-height: 1.4;
+
+
 
   margin-bottom: 14px;
 
+
+
 }
+
+
+
+
 
 
 
 .btn-zoom {
 
+
+
   display: inline-flex;
+
+
 
   align-items: center;
 
+
+
   gap: 8px;
+
+
 
   background: #2563eb;
 
+
+
   color: #ffffff;
+
+
 
   padding: 10px 20px;
 
+
+
   border-radius: var(--radius-md);
+
+
 
   font-family: var(--font-head);
 
+
+
   font-size: 0.9rem;
+
+
 
   font-weight: 700;
 
+
+
   text-decoration: none;
+
+
 
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 
+
+
   transition: all 0.2s ease;
 
+
+
 }
+
+
+
+
 
 
 
 .btn-zoom:hover {
 
+
+
   background: #1d4ed8;
+
+
 
   transform: translateY(-2px);
 
+
+
   box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
 
+
+
 }
+
+
+
+
 
 
 
 /* Homework Checklist */
 
+
+
 .hw-item {
+
+
 
   display: flex;
 
+
+
   align-items: flex-start;
+
+
 
   gap: 12px;
 
+
+
   padding: 10px 0;
+
+
 
   border-bottom: 1px dashed var(--border);
 
+
+
 }
+
+
+
+
 
 
 
 .hw-item:last-child {
 
+
+
   border-bottom: none;
 
+
+
 }
+
+
+
+
 
 
 
 .hw-check {
 
+
+
   margin-top: 3px;
+
+
 
   width: 20px;
 
+
+
   height: 20px;
+
+
 
   border-radius: 6px;
 
+
+
   border: 2px solid #cbd5e1;
+
+
 
   display: flex;
 
+
+
   align-items: center;
+
+
 
   justify-content: center;
 
+
+
   color: #ffffff;
+
+
 
   flex-shrink: 0;
 
+
+
   cursor: pointer;
 
+
+
 }
+
+
+
+
 
 
 
 .hw-check.checked {
 
+
+
   background: var(--success);
+
+
 
   border-color: var(--success);
 
+
+
 }
+
+
+
+
 
 
 
 .hw-title {
 
+
+
   font-weight: 600;
+
+
 
   font-size: 0.92rem;
 
+
+
   color: var(--text-main);
 
+
+
 }
+
+
+
+
 
 
 
 .hw-desc {
 
+
+
   font-size: 0.82rem;
+
+
 
   color: var(--text-muted);
 
+
+
 }
+
+
+
+
 
 
 
 /* Progress Section */
 
+
+
 .progress-grid {
+
+
 
   display: grid;
 
+
+
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+
 
   gap: 16px;
 
+
+
   margin-bottom: 24px;
 
+
+
 }
+
+
+
+
 
 
 
 .progress-card {
 
+
+
   background: #ffffff;
+
+
 
   border: 1px solid var(--border);
 
+
+
   border-radius: var(--radius-md);
+
+
 
   padding: 16px 18px;
 
+
+
   box-shadow: var(--shadow-sm);
+
+
 
   display: flex;
 
+
+
   flex-direction: column;
+
+
 
   justify-content: space-between;
 
+
+
   gap: 6px;
 
+
+
 }
+
+
+
+
 
 
 
 .progress-head {
 
+
+
   display: flex;
+
+
 
   align-items: center;
 
+
+
   justify-content: space-between;
+
+
 
   gap: 10px;
 
+
+
   margin-bottom: 4px;
 
+
+
 }
+
+
+
+
 
 
 
 .progress-title {
 
+
+
   font-size: 0.78rem;
+
+
 
   font-weight: 700;
 
+
+
   color: var(--text-muted);
+
+
 
   text-transform: uppercase;
 
+
+
   letter-spacing: 0.03em;
+
+
 
   display: inline-flex;
 
+
+
   align-items: center;
+
+
 
   gap: 6px;
 
+
+
   line-height: 1.3;
 
+
+
 }
+
+
+
+
 
 
 
 .progress-val {
 
+
+
   font-family: var(--font-head);
+
+
 
   font-size: 1.05rem;
 
+
+
   font-weight: 700;
+
+
 
   color: var(--text-main);
 
+
+
   background: #f8fafc;
+
+
 
   border: 1px solid var(--border);
 
+
+
   padding: 2px 8px;
+
+
 
   border-radius: 6px;
 
+
+
   white-space: nowrap;
 
+
+
 }
+
+
+
+
 
 
 
 .progress-bar-bg {
 
+
+
   background: #f1f5f9;
+
+
 
   height: 8px;
 
+
+
   border-radius: 9999px;
+
+
 
   overflow: hidden;
 
+
+
   margin: 6px 0 6px;
 
+
+
 }
+
+
+
+
 
 
 
 .progress-bar-fill {
 
+
+
   height: 100%;
+
+
 
   border-radius: 9999px;
 
+
+
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
+
+
 }
+
+
+
+
 
 
 
 .bar-purple { background: linear-gradient(90deg, #6366f1, #8b5cf6); }
 
+
+
 .bar-green { background: linear-gradient(90deg, #10b981, #059669); }
 
+
+
 .bar-pink { background: linear-gradient(90deg, #ec4899, #f43f5e); }
+
+
 
 .bar-amber { background: linear-gradient(90deg, #f59e0b, #d97706); }
 
 
 
+
+
+
+
 .progress-sub {
+
+
 
   font-size: 0.78rem;
 
+
+
   color: var(--text-muted);
 
+
+
 }
+
+
+
+
 
 
 
 /* Achievements */
 
+
+
 .badge-grid {
+
+
 
   display: grid;
 
+
+
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+
 
   gap: 14px;
 
+
+
   margin-top: 14px;
 
+
+
 }
+
+
+
+
 
 
 
 .achievement-badge {
 
+
+
   background: #f8fafc;
+
+
 
   border: 1.5px solid var(--border);
 
+
+
   border-radius: var(--radius-md);
+
+
 
   padding: 14px;
 
+
+
   display: flex;
+
+
 
   align-items: flex-start;
 
+
+
   gap: 12px;
+
+
 
   transition: all 0.2s ease;
 
+
+
 }
+
+
+
+
 
 
 
 .achievement-badge:hover {
 
+
+
   transform: translateY(-2px);
+
+
 
   border-color: #cbd5e1;
 
+
+
   background: #ffffff;
+
+
 
   box-shadow: var(--shadow-sm);
 
+
+
 }
+
+
+
+
 
 
 
 .badge-icon {
 
+
+
   font-size: 26px;
+
+
 
   line-height: 1;
 
+
+
 }
+
+
+
+
 
 
 
 .badge-info h4 {
 
+
+
   font-family: var(--font-head);
+
+
 
   font-size: 0.88rem;
 
+
+
   font-weight: 700;
+
+
 
   color: var(--text-main);
 
+
+
   margin-bottom: 2px;
 
+
+
 }
+
+
+
+
 
 
 
 .badge-info p {
 
+
+
   font-size: 0.78rem;
+
+
 
   color: var(--text-muted);
 
+
+
   line-height: 1.35;
 
+
+
 }
+
+
+
+
 
 
 
 /* Teacher Comment Card */
 
+
+
 .feedback-box {
+
+
 
   background: #fbfbfe;
 
+
+
   border-left: 4px solid var(--primary);
+
+
 
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
 
+
+
   padding: 18px 22px;
+
+
 
   margin-bottom: 16px;
 
+
+
 }
+
+
+
+
 
 
 
 .feedback-meta {
 
+
+
   display: flex;
+
+
 
   align-items: center;
 
+
+
   justify-content: space-between;
+
+
 
   margin-bottom: 10px;
 
+
+
   flex-wrap: wrap;
+
+
 
   gap: 8px;
 
+
+
 }
+
+
+
+
 
 
 
 .teacher-tag {
 
+
+
   display: inline-flex;
+
+
 
   align-items: center;
 
+
+
   gap: 6px;
+
+
 
   font-weight: 700;
 
+
+
   font-size: 0.9rem;
+
+
 
   color: var(--primary);
 
+
+
 }
+
+
+
+
 
 
 
 .feedback-date {
 
+
+
   font-size: 0.8rem;
+
+
 
   color: var(--text-muted);
 
+
+
 }
+
+
+
+
 
 
 
 .feedback-body {
 
+
+
   font-size: 0.95rem;
+
+
 
   color: #334155;
 
+
+
   line-height: 1.6;
 
+
+
 }
+
+
+
+
 
 
 
 .feedback-highlights {
 
+
+
   margin-top: 12px;
+
+
 
   display: flex;
 
+
+
   gap: 8px;
+
+
 
   flex-wrap: wrap;
 
+
+
 }
+
+
+
+
 
 
 
 .hl-pill {
 
+
+
   font-size: 0.78rem;
+
+
 
   font-weight: 700;
 
+
+
   padding: 3px 10px;
+
+
 
   border-radius: 9999px;
 
+
+
   background: #e0e7ff;
+
+
 
   color: #3730a3;
 
+
+
 }
+
+
+
+
 
 
 
 /* Featured Current Homework Card */
 
+
+
 .current-hw-banner {
+
+
 
   background: linear-gradient(135deg, #fdf4ff 0%, #ede9fe 50%, #e0e7ff 100%);
 
+
+
   border: 2.5px solid #818cf8;
+
+
 
   border-radius: var(--radius-lg);
 
+
+
   padding: 24px 28px;
+
+
 
   box-shadow: 0 8px 24px -4px rgba(99, 102, 241, 0.2);
 
+
+
   margin-bottom: 22px;
+
+
 
   position: relative;
 
+
+
   overflow: hidden;
+
+
 
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
+
+
 }
+
+
+
+
 
 
 
 .current-hw-banner:hover {
 
+
+
   transform: translateY(-2px);
+
+
 
   box-shadow: 0 12px 28px -4px rgba(99, 102, 241, 0.3);
 
+
+
 }
+
+
+
+
 
 
 
 .current-hw-top {
 
+
+
   display: flex;
+
+
 
   align-items: center;
 
+
+
   justify-content: space-between;
+
+
 
   gap: 12px;
 
+
+
   margin-bottom: 12px;
+
+
 
   flex-wrap: wrap;
 
+
+
 }
+
+
+
+
 
 
 
 .hw-tag-fire {
 
+
+
   background: #ef4444;
+
+
 
   color: #ffffff;
 
+
+
   font-family: var(--font-head);
+
+
 
   font-size: 0.8rem;
 
+
+
   font-weight: 800;
+
+
 
   padding: 6px 14px;
 
+
+
   border-radius: 9999px;
+
+
 
   letter-spacing: 0.04em;
 
+
+
   display: inline-flex;
+
+
 
   align-items: center;
 
+
+
   gap: 6px;
+
+
 
   box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
 
+
+
   animation: pulse-fire 2s infinite;
 
+
+
 }
+
+
+
+
 
 
 
 @keyframes pulse-fire {
 
+
+
   0% { transform: scale(1); }
+
+
 
   50% { transform: scale(1.03); }
 
+
+
   100% { transform: scale(1); }
 
+
+
 }
+
+
+
+
 
 
 
 .current-hw-title {
 
+
+
   font-family: var(--font-head);
+
+
 
   font-size: 1.35rem;
 
+
+
   font-weight: 800;
+
+
 
   color: #1e1b4b;
 
+
+
   margin-bottom: 8px;
 
+
+
 }
+
+
+
+
 
 
 
 .current-hw-desc {
 
+
+
   font-size: 0.98rem;
+
+
 
   color: #3730a3;
 
+
+
   line-height: 1.5;
+
+
 
   margin-bottom: 18px;
 
+
+
   max-width: 720px;
 
+
+
 }
+
+
+
+
 
 
 
 .btn-big-action {
 
+
+
   display: inline-flex;
+
+
 
   align-items: center;
 
+
+
   gap: 10px;
+
+
 
   background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
 
+
+
   color: #ffffff;
+
+
 
   font-family: var(--font-head);
 
+
+
   font-size: 1.05rem;
+
+
 
   font-weight: 800;
 
+
+
   padding: 14px 28px;
+
+
 
   border-radius: var(--radius-md);
 
+
+
   text-decoration: none;
+
+
 
   box-shadow: 0 6px 20px rgba(79, 70, 229, 0.35);
 
+
+
   transition: all 0.2s ease;
 
+
+
 }
+
+
+
+
 
 
 
 .btn-big-action:hover {
 
+
+
   background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+
+
 
   transform: translateY(-2px);
 
+
+
   box-shadow: 0 8px 25px rgba(79, 70, 229, 0.45);
 
+
+
 }
+
+
+
+
 
 
 
 .hw-action-link {
 
+
+
   display: inline-flex;
+
+
 
   align-items: center;
 
+
+
   gap: 8px;
+
+
 
   margin-top: 8px;
 
+
+
   padding: 8px 16px;
+
+
 
   background: #e0e7ff;
 
+
+
   color: #3730a3;
+
+
 
   border-radius: var(--radius-sm);
 
+
+
   font-weight: 800;
+
+
 
   font-size: 0.88rem;
 
+
+
   text-decoration: none;
+
+
 
   border: 1px solid #c7d2fe;
 
+
+
   transition: all 0.2s ease;
 
+
+
 }
+
+
+
+
 
 
 
 .hw-action-link:hover {
 
+
+
   background: #4f46e5;
+
+
 
   color: #ffffff;
 
+
+
   border-color: #4f46e5;
+
+
 
   transform: translateY(-1px);
 
+
+
 }
+
+
+
+
 
 
 
 /* Tools Cards */
 
+
+
 .tools-grid {
+
+
 
   display: grid;
 
+
+
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+
+
 
   gap: 16px;
 
+
+
 }
+
+
+
+
 
 
 
 .tool-card {
 
+
+
   background: #ffffff;
+
+
 
   border: 1.5px solid var(--border);
 
+
+
   border-radius: var(--radius-md);
+
+
 
   padding: 20px;
 
+
+
   text-decoration: none;
+
+
 
   color: inherit;
 
+
+
   display: flex;
+
+
 
   flex-direction: column;
 
+
+
   justify-content: space-between;
+
+
 
   transition: all 0.25s ease;
 
+
+
 }
+
+
+
+
 
 
 
 .tool-card:hover {
 
+
+
   transform: translateY(-4px);
+
+
 
   border-color: var(--primary);
 
+
+
   box-shadow: var(--shadow-md);
 
+
+
 }
+
+
+
+
 
 
 
 .tool-top {
 
+
+
   display: flex;
+
+
 
   align-items: center;
 
+
+
   justify-content: space-between;
+
+
 
   margin-bottom: 14px;
 
+
+
 }
+
+
+
+
 
 
 
 .tool-icon {
 
+
+
   font-size: 32px;
 
+
+
 }
+
+
+
+
 
 
 
 .tool-card h4 {
 
+
+
   font-family: var(--font-head);
+
+
 
   font-size: 1rem;
 
+
+
   font-weight: 700;
+
+
 
   color: var(--text-main);
 
+
+
   margin-bottom: 6px;
 
+
+
 }
+
+
+
+
 
 
 
 .tool-card p {
 
+
+
   font-size: 0.85rem;
+
+
 
   color: var(--text-muted);
 
+
+
   line-height: 1.45;
+
+
 
   margin-bottom: 14px;
 
+
+
 }
+
+
+
+
 
 
 
 .tool-link-text {
 
+
+
   font-weight: 700;
+
+
 
   font-size: 0.85rem;
 
+
+
   color: var(--primary);
+
+
 
   display: inline-flex;
 
+
+
   align-items: center;
+
+
 
   gap: 4px;
 
+
+
 }
+
+
+
+
 
 
 
 /* Subscription & Lessons Table */
 
+
+
 .sub-meter-box {
+
+
 
   background: #fffbeb;
 
+
+
   border: 1.5px solid #fde68a;
+
+
 
   border-radius: var(--radius-md);
 
+
+
   padding: 16px 20px;
+
+
 
   display: flex;
 
+
+
   align-items: center;
+
+
 
   justify-content: space-between;
 
+
+
   margin-bottom: 18px;
+
+
 
   flex-wrap: wrap;
 
+
+
   gap: 12px;
 
+
+
 }
+
+
+
+
 
 
 
 .sub-meter-text h4 {
 
+
+
   font-family: var(--font-head);
+
+
 
   font-size: 1rem;
 
+
+
   font-weight: 700;
+
+
 
   color: #92400e;
 
+
+
 }
+
+
+
+
 
 
 
 .sub-meter-text p {
 
+
+
   font-size: 0.85rem;
+
+
 
   color: #b45309;
 
+
+
 }
+
+
+
+
 
 
 
 .lessons-table {
 
+
+
   width: 100%;
+
+
 
   border-collapse: collapse;
 
+
+
   margin-top: 10px;
+
+
 
   font-size: 0.88rem;
 
+
+
 }
+
+
+
+
 
 
 
 .lessons-table th {
 
+
+
   text-align: left;
+
+
 
   padding: 10px 12px;
 
+
+
   background: #f8fafc;
+
+
 
   color: var(--text-muted);
 
+
+
   font-weight: 700;
+
+
 
   font-size: 0.78rem;
 
+
+
   text-transform: uppercase;
+
+
 
   letter-spacing: 0.05em;
 
+
+
   border-bottom: 1.5px solid var(--border);
 
+
+
 }
+
+
+
+
 
 
 
 .lessons-table td {
 
+
+
   padding: 12px;
+
+
 
   border-bottom: 1px solid var(--border);
 
+
+
   color: var(--text-main);
 
+
+
 }
+
+
+
+
 
 
 
 .lessons-table tr:hover td {
 
+
+
   background: #f8fafc;
 
+
+
 }
+
+
+
+
 
 
 
 .status-tag {
 
+
+
   display: inline-flex;
+
+
 
   align-items: center;
 
+
+
   gap: 4px;
+
+
 
   padding: 3px 9px;
 
+
+
   border-radius: 9999px;
+
+
 
   font-size: 0.75rem;
 
+
+
   font-weight: 700;
 
+
+
 }
+
+
+
+
 
 
 
 .status-done {
 
+
+
   background: #dcfce7;
+
+
 
   color: #166534;
 
+
+
 }
+
+
+
+
 
 
 
 .status-next {
 
+
+
   background: #dbeafe;
+
+
 
   color: #1e40af;
 
+
+
   animation: pulse-border 2s infinite;
 
+
+
 }
+
+
+
+
 
 
 
 .status-plan {
 
+
+
   background: #f1f5f9;
+
+
 
   color: #64748b;
 
+
+
 }
+
+
+
+
 
 
 
 @keyframes pulse-border {
 
+
+
   0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+
+
 
   70% { box-shadow: 0 0 0 6px rgba(37, 99, 235, 0); }
 
+
+
   100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
 
+
+
 }
+
+
+
+
 
 
 
 /* Accordion */
 
+
+
 details.accordion-item {
+
+
 
   border: 1px solid var(--border);
 
+
+
   border-radius: var(--radius-md);
+
+
 
   margin-top: 10px;
 
+
+
   overflow: hidden;
+
+
 
   background: #ffffff;
 
+
+
 }
+
+
+
+
 
 
 
 details.accordion-item summary {
 
+
+
   padding: 14px 18px;
+
+
 
   font-weight: 700;
 
+
+
   font-size: 0.9rem;
+
+
 
   cursor: pointer;
 
+
+
   background: #f8fafc;
+
+
 
   display: flex;
 
+
+
   align-items: center;
+
+
 
   justify-content: space-between;
 
+
+
   user-select: none;
 
+
+
 }
+
+
+
+
 
 
 
 details.accordion-item summary:hover {
 
+
+
   background: #f1f5f9;
 
+
+
 }
+
+
+
+
 
 
 
 .accordion-content {
 
+
+
   padding: 16px 18px;
+
+
 
   border-top: 1px solid var(--border);
 
+
+
   font-size: 0.88rem;
+
+
 
   color: #475569;
 
+
+
 }
+
+
+
+
 
 
 
 /* Footer */
 
+
+
 .footer {
+
+
 
   margin-top: 48px;
 
+
+
   padding-top: 24px;
+
+
 
   border-top: 1px solid var(--border);
 
+
+
   text-align: center;
+
+
 
   color: var(--text-muted);
 
+
+
   font-size: 0.82rem;
 
+
+
 }
+
+
+
+
 
 
 
 .footer-links {
 
+
+
   display: flex;
+
+
 
   justify-content: center;
 
+
+
   gap: 20px;
+
+
 
   margin-bottom: 12px;
 
+
+
   flex-wrap: wrap;
 
+
+
 }
+
+
+
+
 
 
 
 .footer-link {
 
+
+
   color: var(--text-muted);
+
+
 
   text-decoration: none;
 
+
+
 }
+
+
+
+
 
 
 
 .footer-link:hover {
 
+
+
   color: var(--primary);
+
+
 
   text-decoration: underline;
 
+
+
 }
+
+
+
+
 
 
 
 .teacher-console-link {
 
+
+
   font-size: 0.75rem;
+
+
 
   color: #94a3b8;
 
+
+
   text-decoration: none;
+
+
 
   opacity: 0.6;
 
+
+
   transition: opacity 0.2s ease;
 
+
+
 }
+
+
+
+
 
 
 
 .teacher-console-link:hover {
 
+
+
   opacity: 1;
+
+
 
   color: var(--primary);
 
+
+
 }
+
+
+
+
 
 
 
 @keyframes pulse-glow {
 
+
+
   0% {
+
+
 
     box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.55);
 
+
+
     transform: translateY(0);
 
+
+
   }
+
+
 
   50% {
 
+
+
     box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+
+
 
     transform: translateY(-2px);
 
+
+
   }
+
+
 
   100% {
 
+
+
     box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+
+
 
     transform: translateY(0);
 
+
+
   }
 
+
+
 }
+
+
+
+
 
 
 
 .pulse-glow {
 
+
+
   animation: pulse-glow 2.2s infinite !important;
+
+
 
 }
 
 
 
+
+
+
+
 </style>
 
+
+
 </head>
+
+
 
 <body>
 
 
 
+
+
+
+
 <!-- Header -->
+
+
 
 <header class="header">
 
+
+
   <div class="header-inner">
+
+
 
     <div class="brand">
 
+
+
       <span class="brand-logo" aria-hidden="true">🐼</span>
+
+
 
       <div class="brand-text">
 
+
+
         <h1>Лера · <span class="zh">莉拉</span></h1>
+
+
 
         <p>Персональный кабинет ученицы и отчёт для мамы</p>
 
+
+
       </div>
 
+
+
     </div>
+
+
 
     
 
+
+
     <div class="header-actions">
+
       <a class="btn-pill accent pulse-glow" style="background:#fdf2f8; color:#db2777; border-color:#fbcfe8;" href="hsk2_3.html" title="Свежий тренажёр: Урок 3 (说吧！)">⚡ Говорилка 3.0</a>
+
       <a class="btn-pill" href="govorilka-2.html" title="Урок 2: одежда и видеоролик">🗣️ Говорилка 2.0</a>
+
       <a class="btn-pill" style="background:#e0e7ff; color:#3730a3; border-color:#c7d2fe;" href="trainer.html" title="Интерактивный тренажёр слов">📝 Тренажёр слов</a>
+
       <a class="btn-pill" href="govorilka.html" title="Базовые фразы">🗣️ Говорилка 1</a>
+
       <a class="btn-pill" href="hsk1-blank.html" title="Бланк экзамена HSK 1">📝 HSK 1</a>
+
     </div>
+
+
 
   </div>
 
+
+
 </header>
+
+
+
+
 
 
 
@@ -1904,890 +3806,1538 @@ details.accordion-item summary:hover {
 
 
 
+
+
+
+
   <!-- Hero Card -->
+
+
 
   <section class="hero-card">
 
+
+
     <div class="hero-tag">🎯 Главная цель 2026</div>
+
+
 
     <h2 class="hero-title">Сдача экзамена HSK 2 до Нового года</h2>
 
+
+
     <p class="hero-desc">
+
+
 
       Успешный переход от базового уровня к живому диалогу: набрано <strong>160 баллов</strong> на HSK 1 (+25 баллов прироста!) и освоено уже <strong>540 слов</strong> (официальный норматив HSK 2 в 500 слов уже превзойдён, движемся к полному номиналу 988 слов).
 
+
+
     </p>
+
+
 
     
 
+
+
     <div class="hero-badges">
 
+
+
       <div class="hero-badge-item">
+
+
 
         <span class="hero-badge-val">80%</span>
 
+
+
         <span class="hero-badge-lbl">HSK 1 экзамен<br>(160/200 б.)</span>
+
+
 
       </div>
 
+
+
       <div class="hero-badge-item">
+
+
 
         <span class="hero-badge-val">+25</span>
 
+
+
         <span class="hero-badge-lbl">Баллов за месяц<br>рекордный рост 🚀</span>
+
+
 
       </div>
 
+
+
       <div class="hero-badge-item">
+
+
 
         <span class="hero-badge-val">540 / 988</span>
 
+
+
         <span class="hero-badge-lbl">Слов номинала<br>(база 500 пройдена!)</span>
 
+
+
       </div>
+
+
 
       <div class="hero-badge-item">
 
+
+
         <span class="hero-badge-val">7 / 10</span>
+
         <span class="hero-badge-lbl">Уроков пройдено<br>(3 на балансе)</span>
+
+
 
       </div>
 
+
+
     </div>
 
+
+
   </section>
+
+
+
+
 
 
 
   <!-- Progress Indicators -->
 
+
+
   <section class="progress-grid">
+
+
 
     <div class="progress-card">
 
+
+
       <div class="progress-head">
+
+
 
         <span class="progress-title">📘 Easy Steps 1</span>
 
+
+
         <span class="progress-val">100%</span>
+
+
 
       </div>
 
+
+
       <div class="progress-bar-bg">
+
+
 
         <div class="progress-bar-fill bar-green" style="width: 100%;"></div>
 
+
+
       </div>
+
+
 
       <div class="progress-sub">Пройден полностью · база заложена отлично</div>
 
+
+
     </div>
+
+
+
+
 
 
 
     <div class="progress-card">
 
+
+
       <div class="progress-head">
+
+
 
         <span class="progress-title">📝 Экзамен HSK 1</span>
 
+
+
         <span class="progress-val">80%</span>
+
+
 
       </div>
 
+
+
       <div class="progress-bar-bg">
+
+
 
         <div class="progress-bar-fill bar-purple" style="width: 80%;"></div>
 
+
+
       </div>
+
+
 
       <div class="progress-sub">160 из 200 баллов · сдан уверенно (+25 рост)</div>
 
+
+
     </div>
+
+
+
+
 
 
 
     <div class="progress-card">
 
+
+
       <div class="progress-head">
+
+
 
         <span class="progress-title">🚀 Словарь HSK 2</span>
 
+
+
         <span class="progress-val">55%</span>
 
+
+
       </div>
+
+
 
       <div class="progress-bar-bg">
 
+
+
         <div class="progress-bar-fill bar-pink" style="width: 55%;"></div>
+
+
 
       </div>
 
+
+
       <div class="progress-sub"><strong>540 из 988 слов</strong> (норматив HSK 2 в 500 слов уже превзойдён ✨)</div>
 
+
+
     </div>
+
+
+
+
 
 
 
     <div class="progress-card">
 
+
+
       <div class="progress-head">
 
+
+
         <span class="progress-title">🎟 Абонемент №5</span>
+
         <span class="progress-val">70%</span>
 
+
+
       </div>
+
+
 
       <div class="progress-bar-bg">
 
+
+
         <div class="progress-bar-fill bar-amber" style="width: 70%;"></div>
+
       </div>
+
       <div class="progress-sub">7 завершено · 3 урока на балансе</div>
+
+
 
     </div>
 
+
+
   </section>
+
+
+
+
 
 
 
   <!-- Next Lesson & Homework -->
 
+
+
   <section class="grid-2">
+
+
 
     <!-- Next Lesson & Homework -->
 
+
+
     <div class="card">
+
+
 
       <div class="card-header">
 
+
+
         <div>
+
+
 
           <h3 class="card-title">📅 Ближайший урок</h3>
 
+
+
           <span class="card-subtitle">Расписание: Вт & Чт в 19:00 (МСК)</span>
+
+
 
         </div>
 
+
+
       </div>
+
+
+
+
 
 
 
             <!-- Interactive Daily Mission Widget -->
 
+
+
       <div style="background: #fdf2f8; border: 1.5px solid #fbcfe8; border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 16px;">
+
+
 
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
 
+
+
           <span style="font-family: var(--font-head); font-size: 0.85rem; font-weight: 800; color: #9d174d;">🎯 План на сегодня · Лера (莉拉)</span>
+
+
 
           <span style="font-size: 0.75rem; color: #be185d; font-weight: 700;">每天进步一点点 ✨</span>
 
+
+
         </div>
+
+
 
         <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; font-weight: 600; color: #475569;">
 
-          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
 
+
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
             <input type="checkbox" id="m1" onchange="localStorage.setItem('m1', this.checked)" style="accent-color: #ec4899; width: 16px; height: 16px;">
-
-            <span>🎧 Пройти 2 раунда в Говорилке 2.0 (тема «Одежда»)</span>
-
+            <span>🎧 Доизучить первые 4 слова в Говорилке 3.0 (打算, 希望, 正在, 快要…了)</span>
           </label>
-
           <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-
             <input type="checkbox" id="m2" onchange="localStorage.setItem('m2', this.checked)" style="accent-color: #ec4899; width: 16px; height: 16px;">
-
-            <span>📝 Повторить 10 слов в тетради-тренажёре</span>
-
+            <span>🔄 Повторить 16 прошлых связок в карточках тренажёра</span>
           </label>
-
           <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-
             <input type="checkbox" id="m3" onchange="localStorage.setItem('m3', this.checked)" style="accent-color: #ec4899; width: 16px; height: 16px;">
-
-            <span>📹 Подключиться к уроку во вторник в 19:00</span>
-
+            <span>📹 Подключиться к уроку в пятницу в 19:00</span>
           </label>
+
+
 
         </div>
 
+
+
       </div>
+
+
+
+
 
 
 
       <div class="next-lesson-box">
-
         <div class="lesson-datetime">
-
-          <span class="date-pill">Вторник · 04 ноября</span>
-
+          <span class="date-pill">Пятница · 06 ноября</span>
           <span class="time-text">19:00 МСК (60 мин)</span>
-
         </div>
-
-        <div class="lesson-topic">Урок №7: Закрепление темы «Одежда и покупки»</div>
-
+        <div class="lesson-topic">Урок №8: Планы, процессы и опыт действий (打算, 希望, 正在, 过)</div>
         <div class="lesson-subtopic">
-
-          Практика конструкций <em>«虽然...但是...»</em> (хотя... но...) и <em>«太...了»</em> (слишком...). Разговор по видеоролику про хитрую лису 🦊 и счётным словам (件 jiàn, 条 tiáo).
-
+          Закрепляем 4 новых глагола и связки Говорилки 3.0, разбираем вторую часть мультика и строим живые рассказы. <br><em>⚡ Примечание: в пятницу возможна корректировка времени в связи с поездкой преподавателя в Крым (согласуем заранее с мамой в Telegram).</em>
         </div>
-
-        <a class="btn-zoom" href="https://zoom.us" target="_blank" rel="noopener">
-
+        <a class="btn-zoom" href="https://us05web.zoom.us/j/88669646666?pwd=g87qHdVP327JNggjW7Xb5o3mwyq18v.1" target="_blank" rel="noopener">
           📹 Войти в конференцию Zoom
-
         </a>
-
       </div>
+
+
+
+
 
 
 
       <h4 style="font-family: var(--font-head); font-size: 0.95rem; margin-bottom: 10px; color: var(--text-main);">
-
-        ✏️ Домашнее задание к 04 ноября:
-
+        ✏️ Домашнее задание к 06 ноября (пятница):
       </h4>
-
       <div class="hw-list">
-
         <div class="hw-item">
-
           <div class="hw-check" onclick="this.classList.toggle('checked'); this.textContent = this.classList.contains('checked') ? '✓' : '';"></div>
-
           <div style="width: 100%;">
-
-            <div class="hw-title">1. Разговорный тренажёр «Говорилка 2.0»</div>
-
-            <div class="hw-desc">Пройти 2 раунда по теме «Одежда»: повторить слова <em>chuān, hǎokàn, tài guì le</em>.</div>
-
-            <a class="hw-action-link pulse-glow" href="govorilka-2.html">
-
-              👉 НАЖМИ СЮДА: Открыть «Говорилку 2.0» к уроку 🎧
-
+            <div class="hw-title">1. Интерактивная «Говорилка 3.0» — доизучить 4 слова и связки</div>
+            <div class="hw-desc">Доизучить первые 4 слова на новой страничке (<em>打算 dǎsuàn, 希望 xīwàng, 正在 zhèngzài, 快要…了 kuàiyào…le</em>) и закрепить прошлые 16 связок.</div>
+            <a class="hw-action-link pulse-glow" href="hsk2_3.html">
+              👉 НАЖМИ СЮДА: Открыть «Говорилку 3.0» к уроку 🎧
             </a>
-
           </div>
-
         </div>
-
-
 
         <div class="hw-item">
-
           <div class="hw-check" onclick="this.classList.toggle('checked'); this.textContent = this.classList.contains('checked') ? '✓' : '';"></div>
-
           <div>
-
-            <div class="hw-title">2. Конструкция «хотя..., но...» (虽然...但是...)</div>
-
-            <div class="hw-desc">Придумать и записать 3 предложения о своих любимых вещах или учёбе.</div>
-
+            <div class="hw-title">2. Видеоповторение — мультик про Лису у врача 🦊🩺</div>
+            <div class="hw-desc">Пересмотреть ролик и повторить фразы: <em>tóuténg</em> (болит голова), <em>kàn bìng</em> (идти к врачу), <em>bù shūfu</em> (не по себе), <em>wǒ bù néng dòng le</em> и <em>bié shuō le</em>.</div>
           </div>
-
         </div>
-
-
 
         <div class="hw-item">
-
           <div class="hw-check" onclick="this.classList.toggle('checked'); this.textContent = this.classList.contains('checked') ? '✓' : '';"></div>
-
           <div>
-
-            <div class="hw-title">3. Аудио-повторение (видео с Лисой)</div>
-
-            <div class="hw-desc">Прослушать фрагмент диалога 2 раза и повторить интонацию удивления «Tài guì le!».</div>
-
+            <div class="hw-title">3. Новые слова в тетрадь и 2 предложения</div>
+            <div class="hw-desc">Записать 4 глагола в тетрадь и составить 2 своих примера (как на уроке: про отдых и про кошек).</div>
           </div>
-
         </div>
-
       </div>
 
+
+
     </div>
+
+
+
+
 
 
 
     <!-- Achievements & Strengths -->
 
+
+
     <div class="card">
+
+
 
       <div class="card-header">
 
+
+
         <div>
+
+
 
           <h3 class="card-title">🏆 Достижения Леры</h3>
 
+
+
           <span class="card-subtitle">Успехи и сильные стороны</span>
+
+
 
         </div>
 
+
+
       </div>
+
+
+
+
 
 
 
       <div class="badge-grid" style="grid-template-columns: 1fr;">
 
+
+
         <div class="achievement-badge">
+
+
 
           <span class="badge-icon">🎖️</span>
 
+
+
           <div class="badge-info">
+
+
 
             <h4>Покоритель HSK 1</h4>
 
+
+
             <p>160 баллов на пробном тестировании — официальный порог сдачи превзойдён!</p>
 
+
+
           </div>
+
+
 
         </div>
 
 
 
+
+
+
+
         <div class="achievement-badge">
+
+
 
           <span class="badge-icon">📈</span>
 
+
+
           <div class="badge-info">
+
+
 
             <h4>Прорыв месяца: +25 баллов</h4>
 
+
+
             <p>Самый быстрый темп прироста качества речи и грамматической точности.</p>
 
+
+
           </div>
+
+
 
         </div>
 
 
 
+
+
+
+
         <div class="achievement-badge">
+
+
 
           <span class="badge-icon">🦊</span>
 
+
+
           <div class="badge-info">
+
+
 
             <h4>Живая речь носителей</h4>
 
+
+
             <p>С первого прослушивания распознала неадаптированный диалог про покупки и лису.</p>
+
+
 
           </div>
 
+
+
         </div>
+
+
+
+
 
 
 
         <div class="achievement-badge">
 
+
+
           <span class="badge-icon">🌟</span>
+
+
 
           <div class="badge-info">
 
+
+
             <h4>100% Easy Steps to Chinese 1</h4>
+
+
 
             <p>Первый фундаментальный учебник закрыт от корки до корки.</p>
 
+
+
           </div>
+
+
 
         </div>
 
+
+
       </div>
+
+
 
     </div>
 
+
+
   </section>
+
+
+
+
 
 
 
   <!-- Interactive Tools & Assignments -->
 
+
+
   <section style="margin-bottom: 28px;">
+
+
 
     <div class="card-header" style="border: none; margin-bottom: 14px; padding-bottom: 0;">
 
+
+
       <div>
+
+
 
         <h3 class="card-title">🎯 Твои задания и тренажёры</h3>
 
+
+
         <span class="card-subtitle">Главное текущее задание и архив прошлых уроков</span>
 
+
+
       </div>
+
+
 
     </div>
 
 
 
-    <!-- Featured: Current Homework (Говорилка 2.0) -->
 
+
+
+
+    <!-- Featured: Current Homework (Говорилка 3.0) -->
     <div class="current-hw-banner">
-
       <div class="current-hw-top">
-
-        <span class="hw-tag-fire">🔥 СДЕЛАЙ СЕЙЧАС · К УРОКУ 04 НОЯБРЯ</span>
-
+        <span class="hw-tag-fire">🔥 СДЕЛАЙ СЕЙЧАС · К УРОКУ 06 НОЯБРЯ</span>
         <span style="font-size: 0.82rem; font-weight: 700; color: #4338ca; background: #ffffff; padding: 4px 12px; border-radius: 9999px; border: 1.5px solid #c7d2fe;">Текущее ДЗ</span>
-
       </div>
-
-      <h3 class="current-hw-title">⚡ Говорилка 2.0: Одежда и видеоролик про Лису 🦊</h3>
-
+      <h3 class="current-hw-title">⚡ Говорилка 3.0: Первые 4 слова (打算, 希望, 正在, 快要…了) + повтор связок 🎧</h3>
       <p class="current-hw-desc">
-
-        Твоё главное практическое задание! Потренируйся говорить фразы из видео: <em>chuān yíxià</em> (примерь), <em>hǎokàn</em> (красиво смотрится) и <em>tài guì le</em> (слишком дорого!). Включай аудио и повторяй вслух.
-
+        Твоё главное задание! Открой новую страницу Говорилки 3.0, доучи 4 новых глагола планов и действий, а также повтори 16 прошлых связок на карточках. Слушай правильное произношение и проговаривай вслух!
       </p>
-
-      <a class="btn-big-action pulse-glow" href="govorilka-2.html">
-
-        👉 НАЖМИ СЮДА, ЧТОБЫ ОТКРЫТЬ ГОВОРИЛКУ 2.0 🎧
-
-      </a>
-
+      <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 14px;">
+        <a class="hw-action-link pulse-glow" style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; padding: 12px 22px;" href="hsk2_3.html">
+          👉 НАЖМИ СЮДА: Открыть «Говорилку 3.0» 🎧
+        </a>
+      </div>
     </div>
+
+
+
+
 
 
 
         <!-- Permanent Word Trainer Card (Minimalist Chinese Notebook Style) -->
 
+
+
     <div style="background: #ffffff; border: 2px solid #cbd5e1; border-radius: var(--radius-lg); padding: 22px 26px; margin-bottom: 24px; box-shadow: var(--shadow-sm); display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; position: relative; overflow: hidden;">
+
+
 
       <div style="max-width: 650px;">
 
+
+
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+
+
 
           <span style="background: #4f46e5; color: #ffffff; font-family: var(--font-head); font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 9999px; letter-spacing: 0.03em;">ИНТЕРАКТИВНАЯ ТЕТРАДЬ</span>
 
+
+
           <span style="font-size: 0.82rem; font-weight: 700; color: #64748b;">Темы и экзамен HSK</span>
+
+
 
         </div>
 
+
+
         <h3 style="font-family: var(--font-head); font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">
+
+
 
           Тренажёр китайских слов
 
+
+
         </h3>
+
+
 
         <p style="font-size: 0.92rem; color: #475569; line-height: 1.5;">
 
+
+
           Интерактивная практика в прописи: карточки, выбор перевода, аудирование, разбор ловушек и экзаменационный блиц.
+
+
 
         </p>
 
+
+
       </div>
+
+
 
       <div>
 
+
+
         <a href="trainer.html" class="pulse-glow" style="display: inline-flex; align-items: center; gap: 8px; background: #0f172a; color: #ffffff; font-family: var(--font-head); font-size: 0.92rem; font-weight: 800; padding: 13px 26px; border-radius: var(--radius-md); text-decoration: none; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2); transition: all 0.2s ease;">
+
+
 
           👉 Начать тренировку слов 📝
 
+
+
         </a>
+
+
 
       </div>
 
+
+
     </div>
+
+
+
+
 
 
 
     <!-- Archive & Previous Assignments -->
 
+
+
     <h4 style="font-family: var(--font-head); font-size: 0.92rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 12px;">
 
+
+
       📚 Прошлые задания и полезные материалы:
+
+
 
     </h4>
 
 
 
+
+
+
+
     <div class="tools-grid">
+
+
 
       <a class="tool-card" href="govorilka.html">
 
+
+
         <div>
+
+
 
           <div class="tool-top">
 
+
+
             <span class="tool-icon">🗣️</span>
+
+
 
             <span class="status-tag status-plan">Прошлое задание (Архив)</span>
 
+
+
           </div>
+
+
 
           <h4>Говорилка 1 (Урок 1)</h4>
 
+
+
           <p>Базовые фразы, приветствия и отработка звуков. Открой, если нужно вспомнить пройденное.</p>
+
+
 
         </div>
 
+
+
         <span class="tool-link-text">Повторить прошлое задание →</span>
 
+
+
       </a>
+
+
+
+
 
 
 
       <a class="tool-card" href="hsk1-blank.html">
 
+
+
         <div>
+
+
 
           <div class="tool-top">
 
+
+
             <span class="tool-icon">📝</span>
+
+
 
             <span class="status-tag status-done">Сдан на 160 б.</span>
 
+
+
           </div>
+
+
 
           <h4>Бланк экзамена HSK 1</h4>
 
+
+
           <p>Посмотреть свои ответы на тесте, разобрать ошибки и вспомнить структуру вопросов.</p>
+
+
 
         </div>
 
+
+
         <span class="tool-link-text">Открыть свой бланк теста →</span>
 
+
+
       </a>
+
+
+
+
 
 
 
       <a class="tool-card" href="https://notion.so" target="_blank" rel="noopener">
 
+
+
         <div>
+
+
 
           <div class="tool-top">
 
+
+
             <span class="tool-icon">📖</span>
+
+
 
             <span class="status-tag status-next">Notion</span>
 
+
+
           </div>
+
+
 
           <h4>Словарик Леры</h4>
 
+
+
           <p>Все слова с иероглифами, пиньинем и аудио. Полезно открыть для повторения слов.</p>
+
+
 
         </div>
 
+
+
         <span class="tool-link-text">Открыть словарик в Notion ↗</span>
+
+
 
       </a>
 
+
+
     </div>
 
+
+
   </section>
+
+
+
+
 
 
 
   <!-- Teacher Feedback Section -->
 
+
+
   <section class="card" style="margin-bottom: 24px;">
+
+
 
     <div class="card-header">
 
+
+
       <div>
+
+
 
         <h3 class="card-title">💬 Комментарий преподавателя для мамы</h3>
 
+
+
         <span class="card-subtitle">Подробный отчёт по динамике и пониманию материала</span>
+
+
 
       </div>
 
+
+
     </div>
+
+
+
+
 
 
 
     <div class="feedback-box">
-
       <div class="feedback-meta">
-
-        <span class="teacher-tag">👨‍🏫 Игорь (Преподаватель) · Урок №6</span>
-
-        <span class="feedback-date">30 октября 2026 г.</span>
-
+        <span class="teacher-tag">👨‍🏫 Игорь (Преподаватель) · Урок №7</span>
+        <span class="feedback-date">04 ноября 2026 г.</span>
       </div>
-
       <div class="feedback-body">
-
-        «Лера на уроке показала великолепную слуховую память и быструю реакцию! Мы взяли аутентичный видеоролик с живой речью нормальной скорости носителей. Лера моментально разобрала структуру фразы: <strong>chuān yíxià</strong> (примерь), визуальное восприятие <strong>hǎokàn</strong> (красиво смотрится) и эмоциональную реплику <strong>tài guì le</strong> (слишком дорого!). Чувствуется, что пропал языковой барьер — она пробует строить фразы сразу на китайском, не зависая на русском переводе.
-
+        «Лера на уроке проявила блестящую контекстную догадку и тонкое слуховое чутьё! Мы смотрели аутентичный мультфильм о хитрой Лисе, симулирующей болезнь перед экзаменом. Лера моментально считала сюжетные фразы: <strong>kàn bìng</strong> (идти к врачу), <strong>tóuténg</strong> (болит голова), <strong>bù shūfu</strong> (не по себе) и ироничную реплику <strong>bié shuō le</strong> (хватит болтать!). Ученица с ходу разгадала сложную конструкцию <em>wǒ bù néng dòng le</em> («не могу пошевелиться / двигаться») и прекрасно помнит отрицание прошедшего <em>méi bìng</em> (не болел).
         <br><br>
-
-        На следующий урок наш фокус — автоматизировать союз <strong>хотя... но... (虽然...但是...)</strong>, чтобы связать простые реплики в развернутый связный рассказ. Динамика отличная, цель сдать HSK 2 к Новому году абсолютно реальна!»
-
+        Во второй половине урока мы успешно стартовали «Говорилку 3.0» и взяли 4 ключевых глагола HSK2 для выражения планов и процессов: <strong>打算 (dǎsuàn — планировать)</strong>, <strong>希望 (xīwàng — надеяться)</strong>, <strong>正在 (zhèngzài — действие прямо сейчас)</strong> и <strong>快要…了 (kuàiyào…le — вот-вот скоро)</strong>. Лера сразу же сама составила с ними отличные предложения из своей жизни (про отдых и про кошек). Динамика превосходная, к HSK2 двигаемся уверенно!»
       </div>
-
       <div class="feedback-highlights">
-
-        <span class="hl-pill">✨ Свободное аудирование</span>
-
-        <span class="hl-pill">👗 Тема «Одежда и покупки»</span>
-
-        <span class="hl-pill">💡 Разговорная интонация</span>
-
-        <span class="hl-pill">🎯 Курс на HSK 2</span>
-
+        <span class="hl-pill">🩺 Медицинская лексика & Мультик</span>
+        <span class="hl-pill">🚀 Глаголы планов: 打算 и 希望</span>
+        <span class="hl-pill">🧠 Феноменальная контекстная догадка</span>
+        <span class="hl-pill">🎯 HSK 2: 7 из 10 уроков</span>
       </div>
-
     </div>
+
+
+
+
 
 
 
     <!-- Accordion past lessons -->
 
+
+
     <details class="accordion-item">
+
+
 
       <summary>
 
-        <span>Архив комментариев к урокам 1–5 (Абонемент №5)</span>
+
+
+        <span>Архив комментариев к урокам 1–6 (Абонемент №5)</span>
+
+
 
         <span>▼</span>
 
+
+
       </summary>
 
+
+
       <div class="accordion-content">
+        <p><strong>Урок 6 (30.10):</strong> Мультик про Лису и интернет-шоппинг. Отработали <em>chuān yíxià, hǎokàn, tài guì le</em> и народную пословицу <em>一分钱，一分货</em> («скупой платит дважды»).</p>
+
+
 
         <p><strong>Урок 5 (28.10):</strong> Отработка сравнительных конструкций 比 (кто выше, что больше). Лера уверенно оперирует прилагательными размера и возраста.</p>
 
+
+
         <p style="margin-top: 8px;"><strong>Урок 4 (23.10):</strong> Модальные глаголы 会, 能, 可以. Построение фраз о способностях и разрешениях.</p>
+
+
 
         <p style="margin-top: 8px;"><strong>Урок 3 (21.10):</strong> Распорядок дня и время (点, 分). Закрепили построение предложений с временными рамками.</p>
 
+
+
         <p style="margin-top: 8px;"><strong>Урок 2 (16.10):</strong> Процесс действия 在...呢. Описание того, кто чем занят прямо сейчас.</p>
+
+
 
         <p style="margin-top: 8px;"><strong>Урок 1 (14.10):</strong> Старт абонемента №5, закрепление частицы 了 (завершенность действия) и подведение итогов HSK 1.</p>
 
+
+
       </div>
+
+
 
     </details>
 
+
+
   </section>
+
+
+
+
 
 
 
   <!-- Subscription Journal -->
 
+
+
   <section class="card" style="margin-bottom: 24px;">
+
+
 
     <div class="card-header">
 
+
+
       <div>
+
+
 
         <h3 class="card-title">📋 Журнал занятий и баланс уроков</h3>
 
+
+
         <span class="card-subtitle">Текущий абонемент №5 (октябрь — ноябрь 2026)</span>
+
+
 
       </div>
 
+
+
     </div>
+
+
+
+
 
 
 
     <div class="sub-meter-box">
 
+
+
       <div class="sub-meter-text">
 
+
+
         <h4>🎟 Состояние баланса: Осталось 3 урока</h4>
+
         <p>Пройдено 7 из 10 занятий абонемента. Напоминание о продлении появится при 2 оставшихся уроках.</p>
 
+
+
       </div>
+
+
 
       <div>
 
+
+
         <span style="font-family: var(--font-head); font-size: 1.35rem; font-weight: 800; color: #b45309;">7 / 10 уроков</span>
+
+
 
       </div>
 
+
+
     </div>
+
+
+
+
 
 
 
     <div style="overflow-x: auto;">
 
+
+
       <table class="lessons-table">
+
+
 
         <thead>
 
+
+
           <tr>
+
+
 
             <th>№</th>
 
+
+
             <th>Дата</th>
+
+
 
             <th>Тема урока</th>
 
+
+
             <th>Грамматика / Материал</th>
+
+
 
             <th>Статус</th>
 
+
+
           </tr>
+
+
 
         </thead>
 
+
+
         <tbody>
 
+
+
           <tr>
+
+
 
             <td><strong>1</strong></td>
 
+
+
             <td>14.10.2026</td>
+
+
 
             <td>Что я сделала? Закрепление HSK 1</td>
 
+
+
             <td>Частица 了, итоги экзамена</td>
+
+
 
             <td><span class="status-tag status-done">Завершён ✓</span></td>
 
+
+
           </tr>
 
+
+
           <tr>
+
+
 
             <td><strong>2</strong></td>
 
+
+
             <td>16.10.2026</td>
+
+
 
             <td>Что ты сейчас делаешь?</td>
 
+
+
             <td>Конструкция 在 + глагол (+ 呢)</td>
+
+
 
             <td><span class="status-tag status-done">Завершён ✓</span></td>
 
+
+
           </tr>
 
+
+
           <tr>
+
+
 
             <td><strong>3</strong></td>
 
+
+
             <td>21.10.2026</td>
+
+
 
             <td>Время и распорядок дня</td>
 
+
+
             <td>点, 分, 半, распорядок</td>
+
+
 
             <td><span class="status-tag status-done">Завершён ✓</span></td>
 
+
+
           </tr>
 
+
+
           <tr>
+
+
 
             <td><strong>4</strong></td>
 
+
+
             <td>23.10.2026</td>
+
+
 
             <td>Что я умею и могу?</td>
 
+
+
             <td>Модальные глаголы 会, 能, 可以</td>
+
+
 
             <td><span class="status-tag status-done">Завершён ✓</span></td>
 
+
+
           </tr>
 
+
+
           <tr>
+
+
 
             <td><strong>5</strong></td>
 
+
+
             <td>28.10.2026</td>
+
+
 
             <td>Кто выше? Сравнения</td>
 
+
+
             <td>Конструкция 比, прилагательные</td>
+
+
 
             <td><span class="status-tag status-done">Завершён ✓</span></td>
 
+
+
           </tr>
+
+
 
           <tr style="background: #fdf2f8;">
 
+
+
             <td><strong>6</strong></td>
+
+
 
             <td>30.10.2026</td>
 
+
+
             <td>Одежда и покупки · Лиса 🦊</td>
+
+
 
             <td>chuān, hǎokàn, tài guì le, jiàn</td>
 
+
+
             <td><span class="status-tag status-done">Завершён ✓</span></td>
 
+
+
           </tr>
+
+
 
           <tr style="background: #f0fdf4;">
+
             <td><strong>7</strong></td>
+
             <td>04.11.2026 (Вт)</td>
+
             <td>Планы, сравнения и действия · Говорилка 3.0</td>
+
             <td>Урок 3: повтор 16 слов, сравнения 比, новые конструкции</td>
+
             <td><span class="status-tag status-done">Завершён ✓</span></td>
+
           </tr>
+
+
 
           <tr style="background: #eff6ff;">
+
             <td><strong>8</strong></td>
+
             <td>06.11.2026 (Чт)</td>
+
             <td>Где ты была? Опыт действий</td>
+
             <td>Суффикс 过 (guò)</td>
+
             <td><span class="status-tag status-next">Ближайший ⏳</span></td>
+
           </tr>
 
+
+
           <tr>
+
+
 
             <td><strong>9</strong></td>
 
+
+
             <td>11.11.2026 (Вт)</td>
+
+
 
             <td>Поездки и расстояния</td>
 
+
+
             <td>从...到..., 离 (далеко/близко)</td>
+
+
 
             <td><span class="status-tag status-plan">В плане</span></td>
 
+
+
           </tr>
+
+
 
           <tr>
 
+
+
             <td><strong>10</strong></td>
+
+
 
             <td>13.11.2026 (Чт)</td>
 
+
+
             <td>Финальное интервью и итоги блока</td>
+
+
 
             <td>Интервью на китайском языке</td>
 
+
+
             <td><span class="status-tag status-plan">В плане</span></td>
+
+
 
           </tr>
 
+
+
         </tbody>
 
+
+
       </table>
+
+
 
     </div>
 
 
 
+
+
+
+
     <!-- Past subscriptions accordion -->
+
+
 
     <details class="accordion-item" style="margin-top: 16px;">
 
+
+
       <summary>
+
+
 
         <span>📁 Архив завершённых абонементов (№1 — №4: 40 уроков)</span>
 
+
+
         <span>▼</span>
+
+
 
       </summary>
 
+
+
       <div class="accordion-content">
+
+
 
         <p><strong>Абонемент №4 (Сентябрь — Октябрь 2026):</strong> 10 уроков · Подготовка и сдача пробного теста HSK 1 (160/200 б.).</p>
 
+
+
         <p style="margin-top: 6px;"><strong>Абонемент №3 (Июль — Август 2026):</strong> 10 уроков · Easy Steps 1 (главы 11–15), чтение простых текстов.</p>
+
+
 
         <p style="margin-top: 6px;"><strong>Абонемент №2 (Июнь — Июль 2026):</strong> 10 уроков · Easy Steps 1 (главы 6–10), семья, еда, увлечения.</p>
 
+
+
         <p style="margin-top: 6px;"><strong>Абонемент №1 (Май — Июнь 2026):</strong> 10 уроков · Фонетика, тоны, пиньинь, базовые иероглифы и приветствия.</p>
+
+
 
       </div>
 
+
+
     </details>
 
+
+
   </section>
+
+
+
+
 
 
 
@@ -2795,45 +5345,91 @@ details.accordion-item summary:hover {
 
 
 
+
+
+
+
 <!-- Footer -->
+
+
 
 <footer class="footer">
 
+
+
   <div class="footer-links">
+
+
 
     <a class="footer-link" href="govorilka-2.html">⚡ Говорилка 2.0</a>
 
+
+
     <a class="footer-link" href="govorilka.html">🗣️ Говорилка 1</a>
+
+
 
     <a class="footer-link" href="hsk1-blank.html">📝 Бланк HSK 1</a>
 
+
+
   </div>
+
+
 
   <p>© 2026 Персональный кабинет обучения китайскому языку · Лера (莉拉)</p>
 
+
+
   <p style="margin-top: 6px;">
+
+
 
     <a class="teacher-console-link" href="console.html" title="Перейти в панель учителя">🔒 Панель преподавателя</a>
 
+
+
   </p>
+
+
 
 </footer>
 
 
 
+
+
+
+
 <script>
+
+
 
 ['m1','m2','m3'].forEach(id => {
 
+
+
   const el = document.getElementById(id);
+
+
 
   if (el && localStorage.getItem(id) === 'true') el.checked = true;
 
+
+
 });
+
+
 
 </script>
 
+
+
 </body>
 
+
+
 </html>
+
+
 
