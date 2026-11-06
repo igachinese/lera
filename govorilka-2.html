@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ru" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -29,25 +29,7 @@
   --f-body: 'Nunito', system-ui, sans-serif;
   --f-zh: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #141729;
-    --grid: #1D2140;
-    --card: #1C2038;
-    --ink: #ECEEFA;
-    --soft: #A3A8C8;
-    --line: #2D3256;
-    --pop: #FF7499;
-    --pop-soft: #3A2240;
-    --teal: #49C7B9;
-    --teal-soft: #16343A;
-    --sun: #FFC94A;
-    --sun-soft: #383018;
-    --bad: #FF7A6B;
-    --bad-soft: #3D2028;
-    color-scheme: dark;
-  }
-}
+/* dark mode media query removed: always light theme */
 :root[data-theme="dark"] {
   --bg: #141729;
   --grid: #1D2140;
