@@ -242,7 +242,7 @@ function setActive(id){navLinks.forEach(a=>{const active=a.hash==='#'+id;a.class
 navLinks.forEach(a=>a.addEventListener('click',()=>setActive(a.hash.slice(1))));
 if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=>{const visible=entries.filter(x=>x.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio);if(visible[0])setActive(visible[0].target.id)},{rootMargin:'-5% 0px -55% 0px',threshold:[0,.2,.5]});document.querySelectorAll('[data-section]').forEach(s=>obs.observe(s))}
 const speak=text=>window.LearningSpeech.speak(text);
-if($('voice-choice'))window.LearningSpeech.bind({voiceSelect:$('voice-choice'),rateSelect:$('voice-speed'),status:$('voice-status'),testButton:$('voice-test')});
+if($('voice-choice'))window.LearningSpeech.bind({voiceSelect:$('voice-choice'),rateSelect:$('voice-speed'),status:$('voice-status'),testButton:$('voice-test'),testPhrase:'你好，莉拉！加油！'});
 document.querySelectorAll('[data-speak]').forEach(b=>b.addEventListener('click',()=>speak(b.dataset.speak)));
 if(config.student==='askarchinese'){
  const words=JSON.parse($('word-data').textContent);let index=0;
@@ -261,7 +261,7 @@ if(config.student==='askarchinese'){
  document.addEventListener('visibilitychange',()=>{if(document.hidden&&$('kungfu-dialog').open)$('kungfu-dialog').close()});
 }
 if(config.student==='katya'){
- const quotes=[['你好，卡佳！我们一起学中文！','Привет, Катя! Учим китайский вместе.'],['现在几点？两点半！','Который час? Половина третьего!'],['水豚和海豚都是好朋友！','Капибара и дельфин — хорошие друзья!'],['加油，卡佳！你很厉害！','Вперёд, Катя! Ты большая молодец!'],['早上好！吃早饭了吗？','Доброе утро! Ты уже позавтракала?']];let index=0;
+ const quotes=[['你好，莉拉！我们一起学中文！','Привет, Лера! Учим китайский вместе.'],['现在几点？两点半！','Который час? Половина третьего!'],['水豚和海豚都是好朋友！','Капибара и дельфин — хорошие друзья!'],['加油，卡佳！你很厉害！','Вперёд, Катя! Ты большая молодец!'],['早上好！吃早饭了吗？','Доброе утро! Ты уже позавтракала?']];let index=0;
  $('quote-next').addEventListener('click',()=>{index=(index+1)%quotes.length;$('quote-zh').textContent=quotes[index][0];$('quote-ru').textContent=quotes[index][1]});
  $('quote-speak').addEventListener('click',()=>speak(quotes[index][0]));
 }
