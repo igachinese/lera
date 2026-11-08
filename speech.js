@@ -1,4 +1,4 @@
-/* Shared Chinese speech controls for Askar's student pages. */
+/* Shared Chinese speech controls for Lera's student pages. */
 (() => {
   'use strict';
   const KEY='lera.speech.v2';
@@ -62,11 +62,44 @@
       run(selected);
     });
   }
+  function resolveGreeting(control){
+    if(control?.testPhrase) return control.testPhrase;
+    if(control?.testButton?.dataset?.testPhrase) return control.testButton.dataset.testPhrase;
+    if(typeof window !== 'undefined' && window.__STUDENT_GREETING__) return window.__STUDENT_GREETING__;
+
+    if(typeof document !== 'undefined'){
+      try {
+        const el = document.getElementById('dashboard-data');
+        if (el) {
+          const cfg = JSON.parse(el.textContent || '{}');
+          const s = String(cfg.student || '').toLowerCase();
+          if (s.includes('lera') || s.includes('lila') || s.includes('леpa') || s.includes('лила')) return '你好，莉拉！加油！';
+          if (s.includes('katya') || s.includes('катя')) return '你好，卡佳！加油！';
+          if (s.includes('askar') || s.includes('аскар')) return '你好，阿斯凯！加油！';
+        }
+      } catch {}
+
+      const zhNodes = document.querySelectorAll('.profile [lang="zh-CN"], footer [lang="zh-CN"], [data-student-zh]');
+      for (const node of zhNodes) {
+        const text = node.textContent || '';
+        if (text.includes('莉拉') || text.includes('丽拉')) return '你好，莉拉！加油！';
+        if (text.includes('卡佳')) return '你好，卡佳！加油！';
+        if (text.includes('阿斯凯') || text.includes('阿斯')) return '你好，阿斯凯！加油！';
+      }
+
+      const meta = ((document.title || '') + ' ' + (typeof location !== 'undefined' ? location.pathname : '') + ' ' + (document.body?.innerText?.slice(0, 1000) || '')).toLowerCase();
+      if (meta.includes('lera') || meta.includes('lila') || meta.includes('леpa') || meta.includes('лила')) return '你好，莉拉！加油！';
+      if (meta.includes('katya') || meta.includes('катя')) return '你好，卡佳！加油！';
+      if (meta.includes('askar') || meta.includes('аскар')) return '你好，阿斯凯！加油！';
+    }
+
+    return '你好，莉拉！加油！';
+  }
   function bind(control){
     controls.push(control);
     control.voiceSelect?.addEventListener('change',e=>{stop();manual=true;preferredURI=e.target.value;selected=voices.find(v=>v.voiceURI===preferredURI)||selected;status='';save();update()});
     control.rateSelect?.addEventListener('change',e=>{stop();rate=Number(e.target.value)===.7?.7:.65;status='';save();update()});
-    control.testButton?.addEventListener('click',()=>speak('你好，阿斯凯！加油！'));
+    control.testButton?.addEventListener('click',()=>speak(resolveGreeting(control)));
     load();return control;
   }
   engine?.addEventListener('voiceschanged',load);load();
