@@ -29,7 +29,7 @@
   const wordsCount=n=>quantity(n,'слово','слова','слов');
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   document.querySelectorAll('[data-icon]').forEach(el=>el.innerHTML=icon(el.dataset.icon));
-  Speech.bind({voiceSelect:$('voice-choice'),rateSelect:$('voice-speed'),status:$('voice-status'),testButton:$('voice-test')});
+  Speech.bind({voiceSelect:$('voice-choice'),rateSelect:$('voice-speed'),status:$('voice-status'),testButton:$('voice-test'),testPhrase:'你好，莉拉！加油！'});
   const KEY='lera.practice.v2';let persistent=true,progress;
   try{const raw=JSON.parse(localStorage.getItem(KEY)||'null');progress=raw&&typeof raw.words==='object'&&Array.isArray(raw.rounds)?{...freshProgress(),...raw}:freshProgress()}catch{progress=freshProgress();persistent=false}
   function save(){try{localStorage.setItem(KEY,JSON.stringify(progress))}catch{persistent=false}$('device-note').innerHTML=persistent?'Прогресс хранится в этом браузере. Персональные отчёты и баланс уроков — в <a href="index.html#parents">личном кабинете</a>.':'Браузер не разрешает сохранять прогресс. Можно заниматься; результаты будут доступны до закрытия страницы.'}
