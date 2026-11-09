@@ -89,7 +89,7 @@
   function renderTopics(){
     const q=$('topic-search').value.trim().toLocaleLowerCase();
     const filtered=topics.filter(t=>(category==='all'||topicCategory(t.id)===category)&&(!q||[t.title,t.cn,...t.words.flatMap(w=>[w.hz,w.py,w.ru])].join(' ').toLocaleLowerCase().includes(q)));
-    $('topics-grid').innerHTML=filtered.map(t=>`<button class="card topic-card ${t.id==='transport'?'recommended':''}" data-topic="${esc(t.id)}"><div class="topic-top"><span class="topic-icon" aria-hidden="true">${esc(t.em)}</span><small>${t.id==='transport'?'Сейчас изучаем':t.lesson?'Тема '+t.lesson:'Мои открытия'}</small></div><h3>${esc(t.title)}</h3><p class="topic-cn" lang="zh-CN">${esc(t.cn)}</p><div class="topic-footer"><span>${wordsCount(t.words.length)} · выбрать</span>${icon('arrow')}</div></button>`).join('');
+    $('topics-grid').innerHTML=filtered.map(t=>`<button class="card topic-card ${t.id==='transport'?'recommended':''}" data-topic="${esc(t.id)}"><img class="topic-art" src="assets/topics/${esc(t.id)}.webp" alt="" width="480" height="480" loading="lazy" decoding="async"><div class="topic-top"><span class="topic-icon" aria-hidden="true">${esc(t.em)}</span><small>${t.id==='transport'?'Сейчас изучаем':t.lesson?'Тема '+t.lesson:'Мои открытия'}</small></div><h3>${esc(t.title)}</h3><p class="topic-cn" lang="zh-CN">${esc(t.cn)}</p><div class="topic-footer"><span>${wordsCount(t.words.length)} · выбрать</span>${icon('arrow')}</div></button>`).join('');
     $('no-topics').hidden=filtered.length>0;$('search-count').textContent=filtered.length+' из '+topics.length+' тем';
     document.querySelectorAll('[data-topic]').forEach(b=>b.addEventListener('click',()=>location.hash='topic/'+b.dataset.topic));
   }
@@ -100,7 +100,7 @@
   function bindWordAudio(container){container.querySelectorAll('[data-word-audio]').forEach(b=>b.addEventListener('click',()=>Speech.speak(b.dataset.wordAudio)))}
   function renderTopic(id){
     const t=getTopic(id);selectedTopic=t.id;setView('topic-view');$('breadcrumb-current').textContent=t.title;
-    $('topic-title').textContent=t.title;$('topic-meta').textContent=wordsCount(t.words.length)+' · '+t.cn+' · выбери один короткий раунд';$('topic-emoji').textContent=t.em;
+    $('topic-title').textContent=t.title;$('topic-meta').textContent=wordsCount(t.words.length)+' · '+t.cn+' · выбери один короткий раунд';$('topic-emoji').innerHTML=`<img class="topic-detail-art" src="assets/topics/${esc(t.id)}.webp" alt="" width="104" height="104">`;
     buildFilters($('mode-filters'),groups,modeGroup,value=>{modeGroup=value;renderTopic(id)});
     $('mode-grid').innerHTML=MODES.filter(m=>modeGroup==='all'||m.group===modeGroup).map(modeMarkup).join('');connectModes($('mode-grid'),t.id);
     $('dictionary-title').textContent='Словарик темы · '+wordsCount(t.words.length);$('word-list').innerHTML=t.words.map(wordCard).join('');bindWordAudio($('word-list'));

@@ -1830,88 +1830,20 @@ footer { margin-top: 40px; color: var(--soft); font-size: .85rem; text-align: ce
 
 </style>
 
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="speaking.css">
 </head>
 
 <body>
 
 
 
-<!-- Sticky Top Navigation Back to Main Menu -->
-
-<div style="position: sticky; top: 0; z-index: 99999; background: #ffffff; border-bottom: 2px solid #e0e7ff; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 16px rgba(0,0,0,0.06); font-family: 'Nunito', system-ui, -apple-system, sans-serif;">
-
-  <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; background: #4f46e5; color: #ffffff; text-decoration: none; padding: 10px 22px; border-radius: 9999px; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);">
-
-    ⬅️ Вернуться назад в Главное меню
-
-  </a>
-
-  <span style="font-weight: 700; color: #64748b; font-size: 0.95rem;">
-
-    Личный кабинет: Лера · 莉拉 · Урок 3 (Говорилка 3.0)
-
-  </span>
-
-</div>
-
-
-
-
-
+<a class="speaking-skip" href="#lesson-content">Перейти к упражнениям</a><div class="speaking-topbar"><a href="index.html">← Мой кабинет</a><span>Лера · 莉拉</span><a href="trainer.html">Практика и игры →</a></div>
 <div class="wrap">
 
-  <header class="top">
-
-    <div class="brand">
-
-      <span class="eyebrow">Мост к HSK2 · Урок 3 · Планы, сравнения и действия</span>
-
-      <h1>Говорилка 3.0 <span class="zh">说吧！</span></h1>
-
-    </div>
-
-
-
-    <div class="head-right">
-
-      <!-- Выбор детского голоса Microsoft Edge + скорость -->
-
-      <div class="voice-box" title="В браузере Microsoft Edge автоматически выбирается детский голос Xiaoshuang или Xiaoyi">
-
-        <span class="v-dot" id="vDot"></span>
-
-        <span>🔊</span>
-
-        <select class="voice-select" id="voiceSelect" aria-label="Выбор китайского голоса">
-
-          <option value="">Загрузка голосов…</option>
-
-        </select>
-
-        <button class="rate-btn" id="rateBtn" title="Скорость озвучки">0.82x</button>
-
-        <button class="theme-btn" id="themeBtn" title="Светлая / тёмная тетрадка">🌓</button>
-
-      </div>
-
-
-
-      <!-- Счётчик звёзд -->
-
-      <div class="score" aria-live="polite">
-
-        <svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5L2.5 9.3l6.6-.8z" fill="var(--sun)" stroke="var(--ink)" stroke-width="1.5"/></svg>
-
-        <span>Сказано: <b id="total">0</b></span>
-
-      </div>
-
-    </div>
-
-  </header>
-
-
-
+<header class="speaking-hero"><img src="assets/practice-hero.webp" alt="Китайский сад, книга и наушники" width="1200" height="800"><div class="speaking-hero-copy"><span class="speaking-eyebrow">Мост к HSK 2 · Урок 3</span><h1>Слова становятся<br>твоей речью.</h1><p>Говорилка 3.0 · 说吧！<br>Планы, сравнения и действия — по одной уверенной фразе.</p><a class="speaking-primary" href="#talk" id="hero-talk">Начать говорить →</a></div></header>
+<div class="speaking-sound"><div><label for="voiceSelect">Китайский голос</label><select id="voiceSelect" aria-label="Выбор китайского голоса"></select></div><div><label for="speaking-rate">Скорость</label><select id="speaking-rate"><option value="0.65">0,65× · медленно</option><option value="0.7">0,70×</option></select></div><button class="btn ghost" id="speaking-test">Проверить звук</button><span id="speaking-voice-status" role="status"></span></div>
+<div class="speaking-guide"><div><span class="speaking-eyebrow">Как заниматься</span><h2>Выбери один маленький шаг</h2><p>На каждый день: вспомни 5 слов → собери 2 фразы → ответь на один вопрос вслух. Около 10 минут. На уроке можно пройти весь маршрут с преподавателем.</p></div><div class="speaking-score"><span>Твои попытки в упражнениях</span><b id="total">0</b><small>Включая самостоятельные отметки.<br>Сайт не оценивает произношение.</small></div></div>
+<div class="speaking-route-head"><h2>Твой маршрут</h2><p id="speaking-completed">0 из 7 разделов отмечено</p></div>
   <nav class="tabs" aria-label="Станции урока">
 
     <div class="tabrow" role="tablist" id="tabrow"></div>
@@ -1920,6 +1852,7 @@ footer { margin-top: 40px; color: var(--soft); font-size: .85rem; text-align: ce
 
 
 
+  <main id="lesson-content" tabindex="-1">
   <!-- ==================== 1. ПОВТОР ПРОШЛЫХ 16 СЛОВ ==================== -->
 
   <section class="station" id="st-review" role="tabpanel">
@@ -2412,7 +2345,7 @@ footer { margin-top: 40px; color: var(--soft); font-size: .85rem; text-align: ce
 
     <div class="station-head">
 
-      <h2><span class="zh">语感</span>Экзаменационная чуйка HSK2</h2>
+      <h2><span class="zh">语感</span>Почувствуй фразу · HSK 2</h2>
 
     </div>
 
@@ -2721,6 +2654,8 @@ footer { margin-top: 40px; color: var(--soft); font-size: .85rem; text-align: ce
     </div>
 
   </section>
+</main><div class="speaking-bottom"><button class="btn ghost" id="station-prev">← Предыдущий раздел</button><label class="speaking-done"><input type="checkbox" id="station-done"> Этот раздел потренировала</label><button class="btn primary" id="station-next">Следующий раздел →</button></div><p class="speaking-local-note">Отметки и счётчик сохраняются в этом браузере. Можно вернуться к любому разделу в своём ритме.</p>
+
 
 
 
@@ -2730,6 +2665,7 @@ footer { margin-top: 40px; color: var(--soft); font-size: .85rem; text-align: ce
 
 
 
+<script src="speech.js"></script>
 <script>
 
 /* =====================================================================
@@ -2740,216 +2676,9 @@ footer { margin-top: 40px; color: var(--soft); font-size: .85rem; text-align: ce
 
 const SPK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
 
-const canSpeak = ('speechSynthesis' in window);
-
-let zhVoices = [];
-
-let selectedVoice = null;
-
-let speechRate = 0.82;
-
-
-
-const voiceSelect = document.getElementById('voiceSelect');
-
-const rateBtn = document.getElementById('rateBtn');
-
-
-
-function scoreVoice(v) {
-
-  const n = (v.name || '').toLowerCase();
-
-  const l = (v.lang || '').toLowerCase();
-
-  if (!l.includes('zh') && !n.includes('chinese')) return -1;
-
-  if (n.includes('xiaoshuang')) return 100; // Детский голос Microsoft Edge
-
-  if (n.includes('xiaoyi')) return 95;      // Юный звонкий голос Microsoft Edge
-
-  if (n.includes('xiaoxiao')) return 90;
-
-  if (n.includes('yunxia')) return 88;
-
-  if (n.includes('natural') && l.includes('zh-cn')) return 80;
-
-  if (n.includes('microsoft') && l.includes('zh-cn')) return 70;
-
-  if (l === 'zh-cn' || l === 'zh_cn') return 60;
-
-  return 40;
-
-}
-
-
-
-function formatVoiceLabel(v) {
-
-  const n = v.name;
-
-  if (/xiaoshuang/i.test(n)) return '👧 Xiaoshuang (Детский Edge)';
-
-  if (/xiaoyi/i.test(n)) return '🧒 Xiaoyi (Юный Edge)';
-
-  if (/yunxia/i.test(n)) return '👦 Yunxia (Мальчик Edge)';
-
-  if (/xiaoxiao/i.test(n)) return '👩 Xiaoxiao (Natural Edge)';
-
-  return n.replace(/Microsoft |Online \(Natural\) - |Chinese \(Mainland\)/g, '').trim() + ' (' + v.lang + ')';
-
-}
-
-
-
-function loadVoices() {
-
-  if (!canSpeak) {
-
-    voiceSelect.innerHTML = '<option>Озвучка недоступна</option>';
-
-    return;
-
-  }
-
-  const all = speechSynthesis.getVoices() || [];
-
-  zhVoices = all
-
-    .filter(v => scoreVoice(v) > 0)
-
-    .sort((a, b) => scoreVoice(b) - scoreVoice(a));
-
-
-
-  voiceSelect.innerHTML = '';
-
-  if (!zhVoices.length) {
-
-    const opt = document.createElement('option');
-
-    opt.value = '';
-
-    opt.textContent = 'Стандартный zh-CN';
-
-    voiceSelect.appendChild(opt);
-
-    selectedVoice = null;
-
-    return;
-
-  }
-
-
-
-  zhVoices.forEach((v, idx) => {
-
-    const opt = document.createElement('option');
-
-    opt.value = String(idx);
-
-    opt.textContent = formatVoiceLabel(v);
-
-    voiceSelect.appendChild(opt);
-
-  });
-
-
-
-  selectedVoice = zhVoices[0];
-
-  voiceSelect.value = '0';
-
-}
-
-
-
-if (canSpeak) {
-
-  loadVoices();
-
-  speechSynthesis.onvoiceschanged = loadVoices;
-
-}
-
-
-
-voiceSelect.onchange = () => {
-
-  const idx = Number(voiceSelect.value);
-
-  if (zhVoices[idx]) {
-
-    selectedVoice = zhVoices[idx];
-
-    say('你好，莉拉！我已经准备好了！');
-
-  }
-
-};
-
-
-
-rateBtn.onclick = () => {
-
-  speechRate = speechRate < 0.9 ? 1.0 : 0.82;
-
-  rateBtn.textContent = speechRate + 'x';
-
-};
-
-
-
-document.getElementById('themeBtn').onclick = () => {
-
-  const root = document.documentElement;
-
-  const cur = root.getAttribute('data-theme');
-
-  root.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
-
-};
-
-
-
-function say(text) {
-
-  if (!canSpeak || !text) return;
-
-  try {
-
-    speechSynthesis.cancel();
-
-    const u = new SpeechSynthesisUtterance(text);
-
-    u.lang = 'zh-CN';
-
-    u.rate = speechRate;
-
-    if (selectedVoice) {
-
-      u.voice = selectedVoice;
-
-      if (!/xiaoshuang|xiaoyi/i.test(selectedVoice.name)) {
-
-        u.pitch = 1.08;
-
-      }
-
-    } else {
-
-      u.pitch = 1.1;
-
-    }
-
-    speechSynthesis.speak(u);
-
-  } catch (e) {}
-
-}
-
-
-
+const canSpeak = true;
+window.LearningSpeech.bind({voiceSelect:document.getElementById('voiceSelect'),rateSelect:document.getElementById('speaking-rate'),status:document.getElementById('speaking-voice-status'),testButton:document.getElementById('speaking-test'),greeting:'你好，莉拉！我们开始吧！'});
+function say(text) { return window.LearningSpeech.speak(text); }
 function sayBtn(el, text) {
 
   if (!canSpeak) { el.hidden = true; return; }
@@ -2970,15 +2699,15 @@ function sayBtn(el, text) {
 
 /* ---------- СЧЁТЧИК ЗВЁЗД ---------- */
 
-let total = 0;
+let total=0;try{total=Math.max(0,Number(localStorage.getItem('lera.speaking.attempts.v1'))||0)}catch{}
 
-const totalEl = document.getElementById('total');
+const totalEl = document.getElementById('total'); totalEl.textContent=total;
 
 function addStar(d) {
 
   total = Math.max(0, total + d);
 
-  totalEl.textContent = total;
+  totalEl.textContent = total;try{localStorage.setItem('lera.speaking.attempts.v1',String(total))}catch{}
 
 }
 
@@ -3014,7 +2743,7 @@ const STATIONS = [
 
   { id: 'build',  t: 'Собери',      m: '6 мин' },
 
-  { id: 'sense',  t: 'Чуйка HSK2',  m: '6 мин' },
+  { id: 'sense',  t: 'Почувствуй фразу',  m: '6 мин' },
 
   { id: 'talk',   t: 'Говорилка',   m: '9 мин' },
 
@@ -3030,7 +2759,7 @@ STATIONS.forEach((s, i) => {
 
   b.className = 'tab';
 
-  b.role = 'tab';
+  b.role = 'tab';b.setAttribute('aria-controls','st-'+s.id);
 
   b.id = 'tab-' + s.id;
 
@@ -3052,7 +2781,7 @@ function openTab(id) {
 
   });
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.dispatchEvent(new CustomEvent('speaking-station',{detail:id}));
 
 }
 
@@ -3760,7 +3489,7 @@ function nextRadarQuestion() {
 
     document.getElementById('radarReplayBtn').onclick = () => say(radarCurWord.h);
 
-    setTimeout(() => say(radarCurWord.h), 80);
+    setTimeout(() => {if(!document.getElementById('st-drill').hidden)say(radarCurWord.h)}, 80);
 
   } else if (radarDirMode === 'zh2ru') {
 
@@ -5878,6 +5607,7 @@ document.getElementById('starStoryBtn').onclick = e => {
 
 
 
+<script src="speaking.js"></script>
 </body>
 
 </html>

@@ -11,3 +11,8 @@
 @media(max-width:370px){.voice-field{flex-basis:calc(100% - 103px)}.speed-field{flex-basis:95px}.voice-status{flex-basis:140px}}
 
 .fc-banner+.fc-banner{margin-top:18px}.fc-banner+.btn{margin-top:18px}.panda-avatar{background-image:url("assets/practice-hero.webp")}.penalty-field{background:var(--soft);color:var(--ink)}.goal-frame{border-color:var(--gold)}.ball-option::before{content:"✦"}
+
+/* Topic artwork: real illustrations, Russian labels remain the accessible names. */
+.topic-card{padding-top:0;overflow:hidden}.topic-art{display:block;width:calc(100% + 52px);max-width:none;height:165px;object-fit:cover;object-position:center;margin:0 -26px 20px}.topic-detail-art{width:104px;height:104px;object-fit:cover;border-radius:18px;flex-shrink:0}.topic-card .topic-icon{display:none}.topic-card .topic-top{margin-bottom:10px}.topic-card:has(.topic-art){text-align:left}@media(max-width:1000px){.topic-art{height:155px}}@media(max-width:700px){.topic-art{width:calc(100% + 32px);height:120px;margin:0 -16px 14px}.topic-detail-art{width:72px;height:72px}.topic-card{padding-top:0;min-height:250px}}@media(max-width:370px){.topic-art{width:calc(100% + 26px);margin-left:-13px;margin-right:-13px;height:106px}.topic-card{min-height:238px}}
+
+.topic-big-icon:has(.topic-detail-art){width:auto;height:auto;background:none}.topic-art{border-bottom:1px solid var(--line)}
