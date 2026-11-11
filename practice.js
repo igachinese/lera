@@ -79,7 +79,7 @@
     $('dictionary-title').textContent='Словарик темы · '+wordsCount(t.words.length);$('word-list').innerHTML=t.words.map(wordCard).join('');bindWordAudio($('word-list'));
     $('topic-start').onclick=()=>launch(t.id,'cards');
   }
-  function renderGames(){setView('games-view');$('breadcrumb-current').textContent='Игры для повторения';topicOptions($('game-topic'));$('games-grid').innerHTML=MODES.filter(m=>m.group==='games'||m.id==='tones').map(modeMarkup).join('');connectModes($('games-grid'),selectedTopic)}
+  function renderGames(){setView('games-view');$('breadcrumb-current').textContent='Игры для повторения';topicOptions($('game-topic'));$('games-grid').innerHTML=MODES.filter(m=>m.group==='games'||m.id==='tones').map(modeMarkup).join('')+"<a class=\"card mode-card\" href=\"life-stories.html\"><div class=\"mode-top\"><span class=\"mode-icon\">✦</span><small>6 ситуаций</small></div><h3>Китайский в жизни</h3><p>Помоги героям договориться, выбрать и ответить. Случайные истории из твоего словаря.</p><div class=\"mode-footer\"><span>Все темы · с иллюстрациями</span>→</div></a>";connectModes($('games-grid'),selectedTopic)}
   function renderProgress(){
     setView('progress-view');$('breadcrumb-current').textContent='Мои успехи';const weak=weakWords();
     $('progress-stats').innerHTML=[[progress.completedRounds||progress.rounds.length,'Раунды завершены'],[progress.correct,'Верные ответы'],[weak.length,'Слова на повторение'],[Object.keys(progress.writing).length,'Написанные иероглифы']].map(([n,t])=>`<div class="card progress-stat"><strong>${n}</strong><span>${t}</span></div>`).join('');
