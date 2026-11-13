@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f3f5ed">
+  <title>Лера · Тренажёр слов к 18 ноября</title>
+  <link rel="stylesheet" href="homework-nov18-words.css">
+  <script src="speech.js" defer></script>
+  <script src="homework-nov18-words.js" defer></script>
+</head>
+<body>
+<main>
+  <nav aria-label="Навигация"><a href="./#homework">← К домашке</a></nav>
+  <header><p>Домашка к 18 ноября</p><h1>Потренируй слова</h1></header>
+  <section class="panel" id="start-panel" aria-labelledby="start-heading">
+    <h2 id="start-heading">Выбери, что повторить</h2>
+    <div id="groups" class="choices"></div>
+    <p>Начни со слов про поездки или повтори все три темы вместе.</p>
+    <button type="button" id="review-saved" hidden></button>
+  </section>
+  <section class="panel" id="round-panel" aria-label="Упражнение" hidden>
+    <div class="round-top"><span id="group-name"></span><span id="counter"></span></div>
+    <progress id="progress" value="0" max="1" aria-label="Прогресс раунда"></progress>
+    <h2 id="question" tabindex="-1"></h2>
+    <p id="prompt"></p>
+    <div class="word-card">
+      <strong id="word"></strong>
+      <div class="word-actions">
+        <button type="button" id="listen">Послушать</button>
+        <button type="button" id="hint" aria-controls="pinyin" aria-expanded="false">Показать пиньинь</button>
+      </div>
+      <p id="pinyin" hidden></p>
+      <p id="audio-status" role="status" hidden></p>
+    </div>
+    <div id="answers" class="choices"></div>
+    <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+    <div id="example" class="example" hidden>
+      <strong id="example-zh" lang="zh-CN"></strong>
+      <p id="example-help"></p>
+      <button type="button" id="listen-example">Послушать фразу</button>
+    </div>
+    <div class="round-actions">
+      <button type="button" class="secondary" id="back">К выбору темы</button>
+      <button type="button" class="primary" id="next" hidden>Следующее слово</button>
+    </div>
+  </section>
+  <section class="panel" id="end-panel" aria-labelledby="end-title" hidden>
+    <h2 id="end-title" tabindex="-1">Раунд пройден!</h2>
+    <p id="result"></p>
+    <ul id="review-list"></ul>
+    <div class="round-actions">
+      <button type="button" class="secondary" id="change-group">Выбрать тему</button>
+      <button type="button" class="primary" id="review-missed" hidden>Повторить эти слова</button>
+    </div>
+  </section>
+</main>
+<script id="word-data" type="application/json">
+[
+  [
+    "Дорога и поездки",
+    [
+      [
+        "从",
+        "cóng",
+        "от, из",
+        "从我家到学校。",
+        "От моего дома до школы."
+      ],
+      [
+        "离",
+        "lí",
+        "от, когда речь о расстоянии",
+        "学校离我家很近。",
+        "Школа близко от моего дома."
+      ],
+      [
+        "近",
+        "jìn",
+        "близко",
+        "我家离学校很近。",
+        "Мой дом близко от школы."
+      ],
+      [
+        "远",
+        "yuǎn",
+        "далеко",
+        "火车站离我家很远。",
+        "Вокзал далеко от моего дома."
+      ],
+      [
+        "多久",
+        "duōjiǔ",
+        "как долго, сколько времени",
+        "从这儿到学校要多久？",
+        "Сколько времени отсюда до школы?"
+      ],
+      [
+        "多远",
+        "duōyuǎn",
+        "как далеко",
+        "你家离学校有多远？",
+        "Как далеко твой дом от школы?"
+      ],
+      [
+        "地图",
+        "dìtú",
+        "карта",
+        "我们看一下地图吧。",
+        "Давай посмотрим на карту."
+      ],
+      [
+        "旅游",
+        "lǚyóu",
+        "путешествовать",
+        "我打算坐高铁去旅游。",
+        "Я собираюсь отправиться в поездку на скоростном поезде."
+      ],
+      [
+        "火车站",
+        "huǒchēzhàn",
+        "железнодорожный вокзал",
+        "从学校到火车站要二十分钟。",
+        "От школы до вокзала двадцать минут."
+      ],
+      [
+        "高铁",
+        "gāotiě",
+        "скоростной поезд",
+        "我打算坐高铁去旅游。",
+        "Я собираюсь отправиться в поездку на скоростном поезде."
+      ],
+      [
+        "地铁",
+        "dìtiě",
+        "метро",
+        "从学校到火车站，我坐地铁。",
+        "От школы до вокзала я еду на метро."
+      ],
+      [
+        "走路",
+        "zǒulù",
+        "идти пешком",
+        "我走路去学校。",
+        "Я иду в школу пешком."
+      ]
+    ]
+  ],
+  [
+    "Говорилка 2.0",
+    [
+      [
+        "所以",
+        "suǒyǐ",
+        "поэтому, так что",
+        "因为今天很冷，所以我喝热茶。",
+        "Yīnwèi jīntiān hěn lěng, suǒyǐ wǒ hē rè chá."
+      ],
+      [
+        "虽然",
+        "suīrán",
+        "хотя, несмотря на то что",
+        "虽然汉语很难，但是我觉得很有意思。",
+        "Suīrán Hànyǔ hěn nán, dànshì wǒ juéde hěn yǒuyìsi."
+      ],
+      [
+        "还",
+        "hái",
+        "ещё, всё ещё, вдобавок",
+        "我已经吃了一个苹果，还想吃一个。",
+        "Wǒ yǐjīng chīle yí gè píngguǒ, hái xiǎng chī yí gè."
+      ],
+      [
+        "准备",
+        "zhǔnbèi",
+        "готовиться, собираться",
+        "我已经准备好了，我们开始吧！",
+        "Wǒ yǐjīng zhǔnbèi hǎo le, wǒmen kāishǐ ba!"
+      ],
+      [
+        "需要",
+        "xūyào",
+        "нуждаться, нужно",
+        "我需要准备明天的考试。",
+        "Wǒ xūyào zhǔnbèi míngtiān de kǎoshì."
+      ],
+      [
+        "非常",
+        "fēicháng",
+        "очень, чрезвычайно (сильнее 很)",
+        "我非常喜欢和小猫一起玩。",
+        "Wǒ fēicháng xǐhuan hé xiǎo māo yìqǐ wán."
+      ],
+      [
+        "有意思",
+        "yǒuyìsi",
+        "интересный, увлекательный",
+        "我觉得这本书非常有意思。",
+        "Wǒ juéde zhè běn shū fēicháng yǒuyìsi."
+      ],
+      [
+        "可能",
+        "kěnéng",
+        "возможно, может быть",
+        "明天可能下雨，我们不可以去公园。",
+        "Míngtiān kěnéng xià yǔ, wǒmen bù kěyǐ qù gōngyuán."
+      ]
+    ]
+  ],
+  [
+    "Говорилка 3.0",
+    [
+      [
+        "打算",
+        "dǎsuàn",
+        "планировать, собираться",
+        "我打算星期六和朋友一起去看电影。",
+        "Wǒ dǎsuàn xīngqīliù hé péngyou yìqǐ qù kàn diànyǐng."
+      ],
+      [
+        "希望",
+        "xīwàng",
+        "надеяться, желать",
+        "我希望明天天气非常好，我们可以去玩。",
+        "Wǒ xīwàng míngtiān tiānqì fēicháng hǎo, wǒmen kěyǐ qù wán."
+      ],
+      [
+        "正在",
+        "zhèngzài",
+        "прямо сейчас (в процессе)",
+        "我正在学汉语，觉得非常有意思！",
+        "Wǒ zhèngzài xué Hànyǔ, juéde fēicháng yǒuyìsi!"
+      ],
+      [
+        "快要",
+        "kuàiyào",
+        "вот-вот, скоро (快要…了)",
+        "快要下课了，我已经准备好了！",
+        "Kuàiyào xiàkè le, wǒ yǐjīng zhǔnbèi hǎo le!"
+      ],
+      [
+        "比",
+        "bǐ",
+        "по сравнению с, чем",
+        "今天比昨天冷，所以我喝热茶。",
+        "Jīntiān bǐ zuótiān lěng, suǒyǐ wǒ hē rè chá."
+      ],
+      [
+        "更",
+        "gèng",
+        "ещё более (ещё лучше/больше)",
+        "我喜欢猫，但是我更喜欢狗。",
+        "Wǒ xǐhuan māo, dànshì wǒ gèng xǐhuan gǒu."
+      ],
+      [
+        "一定",
+        "yídìng",
+        "обязательно, точно (100%)",
+        "星期六我一定和你一起去！",
+        "Xīngqīliù wǒ yídìng hé nǐ yìqǐ qù!"
+      ],
+      [
+        "帮助",
+        "bāngzhù",
+        "помогать, помощь",
+        "谢谢你帮助我学习汉语！",
+        "Xièxie nǐ bāngzhù wǒ xuéxí Hànyǔ!"
+      ]
+    ]
+  ]
+]
+</script>
+</body>
+</html>
