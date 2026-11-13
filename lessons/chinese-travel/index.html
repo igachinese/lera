@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f3eb">
+  <title>От дома до вокзала · Урок китайского</title>
+  <meta name="description" content="Интерактивный урок китайского: посмотри историю, собери маршрут и расскажи, как добраться.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;600;700&family=Noto+Serif:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="lesson.css?v=2">
+  <script src="speech.js" defer></script>
+  <script src="lesson.js?v=2" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#lesson">К уроку</a>
+  <header class="topbar">
+    <div class="wrap top-inner">
+      <a href="#top" class="brand"><span class="brand-mark" lang="zh-CN" aria-hidden="true">行</span><span>Мост к HSK 2<small>Урок китайского</small></span></a>
+      <div class="top-actions">
+        <details class="voice-panel">
+          <summary>Настроить звук</summary>
+          <div class="voice-controls">
+            <label>Голос <select id="voice"></select></label>
+            <label>Скорость <select id="rate"><option value="0.65">0,65×</option><option value="0.7">0,70×</option></select></label>
+            <button class="button small" id="test-voice" data-test-phrase="从我家到火车站要三十分钟。" type="button">Проверить звук</button>
+            <p class="hint" id="voice-status" aria-live="polite"></p>
+          </div>
+        </details>
+        <a href="#teacher" class="teacher-link">Для преподавателя</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="wrap">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span> Урок 9 <span aria-hidden="true">·</span> 60 минут</p>
+        <h1 id="hero-title">От дома<br><span>до вокзала</span></h1>
+        <p class="hero-cn" lang="zh-CN">从家到火车站</p>
+        <p class="hero-intro">Научись спрашивать о дороге, выбирать транспорт и рассказывать, сколько времени займёт поездка.</p>
+        <a class="button primary" href="#warmup">Начать урок <span aria-hidden="true">↓</span></a>
+      </div>
+      <div class="hero-art">
+        <img src="assets/station.webp" width="1320" height="880" alt="Две подруги идут к вокзалу, где их ждёт скоростной поезд">
+        <span class="image-caption">下一站 <span>Следующая станция</span></span>
+      </div>
+    </section>
+
+    <nav class="route-nav" aria-label="Этапы урока" id="lesson">
+      <a href="#warmup"><span>01</span>Разминка</a>
+      <a href="#words"><span>02</span>Слова</a>
+      <a href="#story"><span>03</span>История</a>
+      <a href="#practice"><span>04</span>Практика</a>
+      <a href="#speak"><span>05</span>Диалог</a>
+    </nav>
+
+    <section id="warmup" class="stage">
+      <div class="stage-heading">
+        <p class="eyebrow"><span></span> 01 / Разминка <span aria-hidden="true">·</span> 5 мин</p>
+        <h2>Вспомни «Говорилку 3.0»</h2>
+        <p>Посмотри, что планирует героиня, и расскажи о своих планах. Затем сравни метро и скоростной поезд.</p>
+      </div>
+      <div class="pair">
+        <article class="prompt-card">
+          <p class="label">Расскажи о планах</p>
+          <div class="clip-inline">
+            <video class="lesson-video" controls playsinline preload="none" poster="assets/video/01.webp" width="1280" height="720" aria-label="Видео о планах на поездку">
+              <source src="assets/video/01.mp4" type="video/mp4">
+              <track kind="captions" src="assets/video/01.vtt" srclang="zh-CN" label="中文 + Русский" default>
+              <a href="assets/video/01.mp4">Открыть видео</a>
+            </video>
+          </div>
+          <div class="line-with-audio"><p class="han big" lang="zh-CN">周末你打算去哪儿？</p><button type="button" class="audio" data-say="周末你打算去哪儿？" aria-label="Послушать вопрос о планах">▶</button></div>
+          <details class="example"><summary>Показать пример</summary><p lang="zh-CN" class="han">我打算去公园。</p><p>Я собираюсь в парк.</p></details>
+        </article>
+        <article class="prompt-card">
+          <p class="label">Сравни транспорт</p>
+          <div class="line-with-audio"><p class="han big" lang="zh-CN">高铁和地铁，哪个更快？</p><button type="button" class="audio" data-say="高铁和地铁，哪个更快？" aria-label="Послушать вопрос о транспорте">▶</button></div>
+          <details class="example"><summary>Показать пример</summary><p lang="zh-CN" class="han">高铁比地铁快。</p><p>Скоростной поезд быстрее метро.</p></details>
+        </article>
+      </div>
+    </section>
+
+    <section id="words" class="stage">
+      <div class="stage-heading">
+        <p class="eyebrow"><span></span> 02 / Слова <span aria-hidden="true">·</span> 10 мин</p>
+        <h2>Слова для поездки</h2>
+        <p>Нажми ▶, повтори слово и скажи пример целиком.</p>
+      </div>
+      <div class="word-grid" id="word-list"></div>
+      <div class="pair grammar">
+        <article class="grammar-card">
+          <p class="label">Маршрут и время</p>
+          <h3 class="han" lang="zh-CN">从 A 到 B <span>要</span> … 分钟</h3>
+          <p>Начни с точки отправления, назови место назначения и добавь, сколько займёт дорога.</p>
+          <div class="line-with-audio"><p class="han" lang="zh-CN">从我家到学校要十分钟。</p><button class="audio" type="button" data-say="从我家到学校要十分钟。" aria-label="Послушать пример о маршруте">▶</button></div>
+        </article>
+        <article class="grammar-card">
+          <p class="label">Расстояние</p>
+          <h3 class="han" lang="zh-CN">A <span>离</span> B 很近 / 很远</h3>
+          <p>Назови место, о котором говоришь, затем ориентир. В конце скажи, близко это или далеко.</p>
+          <div class="clip-inline">
+            <video class="lesson-video" controls playsinline preload="none" poster="assets/video/02.webp" width="1280" height="720" aria-label="Видео о расстоянии от дома до школы">
+              <source src="assets/video/02.mp4" type="video/mp4">
+              <track kind="captions" src="assets/video/02.vtt" srclang="zh-CN" label="中文 + Русский" default>
+              <a href="assets/video/02.mp4">Открыть видео</a>
+            </video>
+          </div>
+          <div class="line-with-audio"><p class="han" lang="zh-CN">学校离我家很近。</p><button class="audio" type="button" data-say="学校离我家很近。" aria-label="Послушать пример о расстоянии">▶</button></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="story" class="stage">
+      <div class="stage-heading">
+        <p class="eyebrow"><span></span> 03 / Аудирование <span aria-hidden="true">·</span> 8 мин</p>
+        <h2>Поездка в четырёх кадрах</h2>
+        <p>Посмотри историю и послушай реплики. На втором просмотре можно открыть субтитры.</p>
+      </div>
+      <div class="story-shell">
+        <div class="story-media">
+          <img id="frame-img" src="assets/frame-1.webp" alt="Девочка идёт от дома к школе" width="760" height="506" loading="lazy">
+          <video class="lesson-video" id="story-video" controls playsinline preload="none" poster="assets/video/03.webp" width="1280" height="720" aria-label="Видео о поездке на метро" hidden>
+            <source src="assets/video/03.mp4" type="video/mp4">
+            <track kind="captions" src="assets/video/03.vtt" srclang="zh-CN" label="中文 + Русский">
+            <a href="assets/video/03.mp4">Открыть видео</a>
+          </video>
+          <div class="story-caption" id="captions" hidden><p class="han" lang="zh-CN" id="caption-zh"></p><p id="caption-ru"></p></div>
+        </div>
+        <div class="story-side">
+          <p class="label" id="frame-count">Кадр 1 из 4</p>
+          <h3 id="frame-title" aria-live="polite">Недалеко от дома</h3>
+          <p class="muted" id="frame-note"></p>
+          <div class="frame-controls">
+            <button type="button" class="button arrow" id="prev-frame" aria-label="Предыдущий кадр">←</button>
+            <button type="button" class="button arrow" id="next-frame" aria-label="Следующий кадр">→</button>
+            <button type="button" class="button" id="listen-frame">▶ Реплика</button>
+          </div>
+          <button type="button" class="button primary" id="play-story">▶ Смотреть историю</button>
+          <label class="toggle"><input type="checkbox" id="show-captions"> Субтитры</label>
+          <p class="hint" id="story-status" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="exercise story-check" id="story-check"></div>
+    </section>
+
+    <section id="practice" class="stage">
+      <div class="stage-heading">
+        <p class="eyebrow"><span></span> 04 / Практика <span aria-hidden="true">·</span> 15 мин</p>
+        <h2>Ты ведёшь по маршруту</h2>
+        <p>Прочитай карту и выбери ответ. Затем собери три фразы, как в прошлый раз.</p>
+      </div>
+      <div class="map-card">
+        <div class="map-header"><h3>Карта поездки</h3><span>Учебный маршрут</span></div>
+        <ol class="map-line" aria-label="От дома до вокзала через школу">
+          <li><span class="map-dot"></span><span class="han" lang="zh-CN">家</span><small>Дом</small></li>
+          <li class="map-leg"><strong>10 мин</strong><span>пешком</span></li>
+          <li><span class="map-dot"></span><span class="han" lang="zh-CN">学校</span><small>Школа</small></li>
+          <li class="map-leg"><strong>20 мин</strong><span>на метро</span></li>
+          <li><span class="map-dot"></span><span class="han" lang="zh-CN">火车站</span><small>Вокзал</small></li>
+        </ol>
+      </div>
+      <div class="pair practice-pair">
+        <article class="exercise" id="map-check"></article>
+        <article class="exercise" id="builder">
+          <div class="exercise-head"><h3>Собери фразу</h3><span class="step-count" id="builder-count"></span></div>
+          <p class="quiz-prompt" id="builder-prompt"></p>
+          <div class="sentence-tray" id="tray" role="group" aria-label="Твой ответ"></div>
+          <div class="option-list tokens" id="tokens" role="group" aria-label="Слова для сборки"></div>
+          <p class="feedback" id="builder-feedback" aria-live="polite"></p>
+          <div class="exercise-actions">
+            <button type="button" class="button primary small" id="check-builder">Проверить</button>
+            <button type="button" class="button small" id="reset-builder">Сбросить</button>
+            <button type="button" class="button small" id="next-builder" hidden>Следующая →</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="speak" class="stage">
+      <div class="stage-heading">
+        <p class="eyebrow"><span></span> 05 / Диалог <span aria-hidden="true">·</span> 17 мин</p>
+        <h2>Договоритесь о поездке</h2>
+        <p>Ответь героине из видео, затем попробуй вопросы ниже. Поменяйтесь ролями и придумайте свой маршрут.</p>
+      </div>
+      <article class="prompt-card video-reply">
+        <video class="lesson-video" controls playsinline preload="none" poster="assets/video/04.webp" width="1280" height="720" aria-label="Видео с вопросом о дороге до школы">
+              <source src="assets/video/04.mp4" type="video/mp4">
+              <track kind="captions" src="assets/video/04.vtt" srclang="zh-CN" label="中文 + Русский" default>
+              <a href="assets/video/04.mp4">Открыть видео</a>
+            </video>
+        <div class="video-reply-copy">
+          <h3>Ответь героине</h3>
+          <p>Послушай вопрос. Когда героиня замолчит, скажи по-китайски, сколько времени занимает твоя дорога до школы.</p>
+          <details class="example">
+            <summary>Показать пример ответа</summary>
+            <p class="han" lang="zh-CN">从我家到学校要十分钟。</p>
+            <p>От моего дома до школы десять минут.</p>
+          </details>
+        </div>
+      </article>
+      <div class="speak-grid">
+        <article class="prompt-card">
+          <h3>Твой собеседник спрашивает</h3>
+          <div id="role-lines"></div>
+        </article>
+        <article class="prompt-card mission">
+          <p class="label">Финальная задача</p>
+          <h3>Проведи мини-интервью</h3>
+          <p>Выбери два места. Спроси, далеко ли одно от другого и как туда добраться. Затем перескажи ответ собеседника в 2–3 фразах.</p>
+          <details class="example">
+            <summary>Открыть речевые опоры</summary>
+            <p class="han" lang="zh-CN">你打算怎么去……？</p><p>Как ты собираешься добраться до…?</p>
+            <p class="han" lang="zh-CN">……离……远吗？</p><p>… далеко от …?</p>
+            <p class="han" lang="zh-CN">从……到……要多久？</p><p>Сколько времени займёт дорога от … до …?</p>
+          </details>
+          <p class="mission-label">Что получилось сказать вслух?</p>
+          <div class="spoken-checks">
+            <label><input type="checkbox" value="route"> Назвать маршрут</label>
+            <label><input type="checkbox" value="distance"> Спросить о расстоянии</label>
+            <label><input type="checkbox" value="time"> Сказать, сколько займёт дорога</label>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="stage finish" id="finish">
+      <div>
+        <p class="eyebrow"><span></span> Итог и домашнее задание <span aria-hidden="true">·</span> 5 мин</p>
+        <h2>Мой маршрут</h2>
+        <p>Нарисуй путь от дома до любого места. Запиши голосом три фразы: куда собираешься, как поедешь и сколько времени займёт дорога. Подготовь один вопрос о поездке для следующего интервью.</p>
+      </div>
+      <div class="results">
+        <h3>Итог практики</h3>
+        <p id="score" aria-live="polite">Ответь на задания, чтобы увидеть результат.</p>
+        <p id="spoken-score">Устный блок: 0 из 3 по твоим отметкам.</p>
+        <small>Отметки сохраняются в этом браузере.</small>
+      </div>
+    </section>
+
+    <details class="teacher" id="teacher">
+      <summary>Заметки преподавателя</summary>
+      <div class="teacher-notes">
+        <p><strong>Связь с прошлым уроком.</strong> Начните с двух свободных ответов на 打算 и 比. В «Говорилке 3.0» эти конструкции уже были, а здесь пригодятся при выборе транспорта. Сборка фраз закрепляет знакомый порядок слов в новой теме.</p>
+        <p><strong>Аудирование.</strong> Сначала пройдите четыре кадра с закрытыми субтитрами. Спросите, какие места и виды транспорта Лера узнала. Затем откройте текст и разберите одну трудную реплику. Если в браузере нет китайского голоса, реплики можно прочитать с экрана преподавателя.</p>
+        <p><strong>Что услышать в финале.</strong> Один вопрос с 离, один ответ с 从…到…要… и уточнение про транспорт. Обратите внимание, сохраняет ли Лера оба места и ставит ли время после 要. При необходимости дайте каркас и попросите заменить места на свои.</p>
+        <p><strong>К следующему интервью.</strong> Возьмите вопрос про транспорт или расстояние из домашнего задания. Если основная тема уже уверенно получается, устно добавьте вопрос про опыт <span lang="zh-CN">你坐过高铁吗？</span> и короткие ответы <span lang="zh-CN">我坐过。/ 我没坐过。</span></p>
+      </div>
+    </details>
+  </main>
+  <footer class="wrap footer"><a href="../../#homework">← К домашке Леры</a><a href="../../hsk2_3.html">Говорилка 3.0</a><a href="#top">К началу ↑</a></footer>
+</body>
+</html>
