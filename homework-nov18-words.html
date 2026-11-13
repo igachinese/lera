@@ -3,54 +3,66 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#f3f5ed">
-  <title>Лера · Тренажёр слов к 18 ноября</title>
-  <link rel="stylesheet" href="homework-nov18-words.css">
+  <meta name="theme-color" content="#f1f4eb">
+  <title>Лера · Маршрут слов</title>
+  <link rel="stylesheet" href="homework-nov18-words.css?v=2">
   <script src="speech.js" defer></script>
-  <script src="homework-nov18-words.js" defer></script>
+  <script src="homework-nov18-words.js?v=2" defer></script>
 </head>
 <body>
 <main>
-  <nav aria-label="Навигация"><a href="./#homework">← К домашке</a></nav>
-  <header><p>Домашка к 18 ноября</p><h1>Потренируй слова</h1></header>
+  <nav aria-label="Навигация"><a href="./#homework">← К домашке</a><a href="lessons/chinese-travel/#warmup">Открыть видеоурок →</a></nav>
+  <header class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Домашка к 18 ноября</p>
+      <h1>Маршрут слов</h1>
+      <p>Лера, собери три штампа. Слушай, выбирай перевод и вставляй слова в реплики.</p>
+    </div>
+  </header>
+
   <section class="panel" id="start-panel" aria-labelledby="start-heading">
-    <h2 id="start-heading">Выбери, что повторить</h2>
-    <div id="groups" class="choices"></div>
-    <p>Начни со слов про поездки или повтори все три темы вместе.</p>
-    <button type="button" id="review-saved" hidden></button>
+    <div class="section-head"><h2 id="start-heading">Выбери остановку</h2><p id="stamp-count"></p></div>
+    <div id="groups" class="stops"></div>
+    <div class="start-actions">
+      <button type="button" class="secondary" id="play-all">Весь маршрут · 28 слов</button>
+      <button type="button" class="secondary" id="review-saved" hidden></button>
+    </div>
   </section>
+
   <section class="panel" id="round-panel" aria-label="Упражнение" hidden>
     <div class="round-top"><span id="group-name"></span><span id="counter"></span></div>
     <progress id="progress" value="0" max="1" aria-label="Прогресс раунда"></progress>
     <h2 id="question" tabindex="-1"></h2>
-    <p id="prompt"></p>
+    <p id="prompt" class="muted"></p>
     <div class="word-card">
       <strong id="word"></strong>
       <div class="word-actions">
-        <button type="button" id="listen">Послушать</button>
-        <button type="button" id="hint" aria-controls="pinyin" aria-expanded="false">Показать пиньинь</button>
+        <button type="button" class="primary" id="listen">Послушать</button>
+        <button type="button" class="secondary" id="hint" aria-controls="pinyin" aria-expanded="false"></button>
       </div>
-      <p id="pinyin" hidden></p>
+      <p id="pinyin" lang="zh-Latn" hidden></p>
       <p id="audio-status" role="status" hidden></p>
     </div>
     <div id="answers" class="choices"></div>
-    <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+    <div id="feedback" class="feedback" role="status"></div>
     <div id="example" class="example" hidden>
       <strong id="example-zh" lang="zh-CN"></strong>
       <p id="example-help"></p>
-      <button type="button" id="listen-example">Послушать фразу</button>
+      <button type="button" class="secondary" id="listen-example">Послушать фразу</button>
     </div>
     <div class="round-actions">
-      <button type="button" class="secondary" id="back">К выбору темы</button>
-      <button type="button" class="primary" id="next" hidden>Следующее слово</button>
+      <button type="button" class="secondary" id="back">К остановкам</button>
+      <button type="button" class="primary" id="next" hidden>Дальше →</button>
     </div>
   </section>
+
   <section class="panel" id="end-panel" aria-labelledby="end-title" hidden>
+    <p class="eyebrow" id="end-stamp"></p>
     <h2 id="end-title" tabindex="-1">Раунд пройден!</h2>
     <p id="result"></p>
     <ul id="review-list"></ul>
     <div class="round-actions">
-      <button type="button" class="secondary" id="change-group">Выбрать тему</button>
+      <button type="button" class="secondary" id="change-group">К остановкам</button>
       <button type="button" class="primary" id="review-missed" hidden>Повторить эти слова</button>
     </div>
   </section>
