@@ -30,3 +30,45 @@ Generated with the built-in image generation tool. Optimized as a whole WebP atl
 ## Prompt
 
 Four equal square panels in a precise 2x2 grid, no gutters. Premium editorial storybook watercolor and fine ink on warm ivory paper, plum, sage and soft gold palette. Same young female traveler with dark bob hair, cream top and small plum backpack across panels. TOP LEFT: traveler at picturesque transit stop with a bus, bicycle and railway station in background. TOP RIGHT: traveler choosing a blue shirt and cozy sweater in a tasteful clothing boutique. BOTTOM LEFT: traveler resting at a cafe table with tea, apple, delicious food and a friend. BOTTOM RIGHT: traveler studying Chinese with a friend in a cozy library, open notebooks, books, pencil, soft rain outside window. Lively sophisticated illustration, no childish stickers. Each scene entirely contained in its square, comfortably framed with objects not cut off. No text, no letters, no numbers, no speech bubbles, no watermark. Educational Chinese real life conversation game.
+
+## Семья, школа и повседневные диалоги
+
+Новые кадры сгенерированы по обложкам тренажёров в стилистике Chinese Storybook Ink & Wash. Каждый WebP содержит 16 сцен в сетке 4×4.
+
+### life-more-1.webp
+
+1. Утро дома
+2. Завтрак на кухне
+3. Готовим ужин
+4. Возвращаемся домой
+5. Знакомство у класса
+6. Семейный альбом
+7. Разговор с коллегой
+8. На собеседовании
+9. Встреча у парковой скамейки
+10. Планы на завтра
+11. В студии танца
+12. У входа в кинотеатр
+13. На продуктовом рынке
+14. Телефон и зарядка в кафе
+15. Оплата у прилавка
+16. Покупки в магазине
+
+### life-more-2.webp
+
+1. Встреча на платформе
+2. Разговор у дверей автобуса
+3. На улице под дождём
+4. Передышка в парке
+5. Разговор с врачом
+6. Оранжевая и фиолетовая одежда
+7. Выбираем цвет в магазине
+8. Сравниваем одежду у зеркала
+9. Слушаем музыку
+10. Работа за ноутбуком
+11. За письменным столом
+12. Обсуждаем задание
+13. Подарок для подруги
+14. Шутка за столом
+15. У выставки о путешествиях
+16. Добавка в кафе
