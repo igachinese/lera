@@ -2,7 +2,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 const root=path.resolve(__dirname,'..'),data=JSON.parse(fs.readFileSync(path.join(root,'data/life-stories.json'))),source=JSON.parse(fs.readFileSync(path.join(root,data.source))),engine=require('../life-stories.js');
 const words=new Set(source.topics.flatMap(t=>(t.words||t.w).map(w=>w[0])));
 assert(engine.validate(data,source,data.student));assert.throws(()=>engine.validate(data,source,'another-student'));
-const targets=new Set(data.items.map(q=>q.target));assert.equal(targets.size,data.targets);assert.equal(words.size,data.dictionarySize);assert(targets.size/words.size>=.15);
+const targets=new Set(data.items.map(q=>q.target));assert.equal(targets.size,data.targets);assert.equal(words.size,data.dictionarySize);assert(targets.size/words.size>=.25);
 // Dynamic segmentation ensures Chinese dialogue introduces no new vocabulary, even function words.
 function known(text){const hanzi=text.replace(/[^\p{Script=Han}]/gu,'');const ok=Array(hanzi.length+1).fill(false);ok[0]=true;for(let i=0;i<hanzi.length;i++)if(ok[i])for(const w of words)if(hanzi.startsWith(w,i))ok[i+w.length]=true;return ok.at(-1);}
 for(const q of data.items){assert(q.scene>=0&&q.scene<4);assert(known(q.dialogue.replace('___',q.target)),q.id+' '+q.dialogue);assert(q.prompt&&q.outcome);assert.equal(q.choices.filter(x=>x===q.target).length,1);}
