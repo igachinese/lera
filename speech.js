@@ -105,3 +105,38 @@
   engine?.addEventListener('voiceschanged',load);load();
   window.LearningSpeech={bind,speak,stop,ready,available:()=>voices.length>0,getVoice:()=>selected?.name||'',getRate:()=>rate};
 })();
+
+/* Travel lesson links for the student dashboard, which loads this script after its markup. */
+(() => {
+  'use strict';
+  if (typeof document === 'undefined') return;
+
+  const checkbox = document.querySelector('#homework #task-travel');
+  const task = checkbox?.closest('.task');
+  const label = task?.querySelector('label[for="task-travel"]');
+  const description = task?.querySelector('p');
+  const linkSlot = task?.querySelector('.task-bottom');
+  const materials = document.querySelector('#trainers details.materials');
+  const materialsList = materials?.querySelector('.materials-list');
+  if (!label || !description || !linkSlot || !materialsList) return;
+
+  const lessonUrl = 'lessons/chinese-travel/';
+  label.textContent = 'Пройди практическую часть урока «От дома до вокзала»';
+  description.textContent = 'Ответь на вопросы по карте и собери три фразы на китайском.';
+  const practice = document.createElement('a');
+  practice.className = 'text-link';
+  practice.href = lessonUrl + '#practice';
+  practice.textContent = 'Открыть практику →';
+  linkSlot.replaceChildren(practice);
+
+  if (!materialsList.querySelector('a[data-travel-lesson]')) {
+    const lesson = document.createElement('a');
+    lesson.href = lessonUrl + '#warmup';
+    lesson.setAttribute('data-travel-lesson','');
+    const title = document.createElement('span');
+    title.textContent = 'От дома до вокзала · видеоурок и практика';
+    lesson.append(title);
+    materialsList.prepend(lesson);
+  }
+  materials.open = true;
+})();
