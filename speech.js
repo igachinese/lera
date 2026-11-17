@@ -140,3 +140,43 @@
   }
   materials.open = true;
 })();
+
+/* Mount the December preparation card beside the existing dashboard calendar. */
+(() => {
+  'use strict';
+  if (typeof document === 'undefined') return;
+  const schedule = document.querySelector('.study-row #schedule');
+  if (!schedule || document.getElementById('hsk2-december')) return;
+
+  const column = document.createElement('div');
+  column.style.cssText = 'display:grid;gap:16px;min-width:0';
+  const plan = document.createElement('section');
+  plan.className = 'card schedule-card';
+  plan.id = 'hsk2-december';
+  plan.setAttribute('aria-labelledby', 'hsk2-december-title');
+  plan.innerHTML = `
+    <div style="grid-column:1/-1">
+      <div class="section-head"><div>
+        <h2 id="hsk2-december-title">К HSK 2 до Нового года</h2>
+        <p>18 ноября — 31 декабря</p>
+      </div></div>
+      <p style="margin:9px 0 12px">Шесть этапов: новые слова, короткие повторы, аудирование, чтение, письмо и пробник.</p>
+      <a class="btn primary" href="hsk2-december.html">Открыть программу →</a>
+      <div class="task-bottom" style="margin-top:12px">
+        <a class="text-link" href="hsk2-backpack.html">Новый урок «Где мой рюкзак?» →</a>
+        <a class="text-link" href="hsk2-december.html#review">Повторить сегодня →</a>
+      </div>
+    </div>`;
+  schedule.before(column);
+  column.append(schedule, plan);
+
+  const materials = document.querySelector('#trainers details.materials .materials-list');
+  if (materials) {
+    const lesson = document.createElement('a');
+    lesson.href = 'hsk2-backpack.html';
+    const title = document.createElement('span');
+    title.textContent = 'Где мой рюкзак? · новый урок';
+    lesson.append(title);
+    materials.prepend(lesson);
+  }
+})();
