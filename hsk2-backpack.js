@@ -3,8 +3,13 @@
 (() => {
   const directory = 'assets/backpack/';
   const bridge = 'lessons/chinese-travel/assets/video/';
-  // Add each approved clip's filename and subtitle tracks here after reviewing the actual render.
-  const media = {};
+  const media = Object.fromEntries(['01', '02', '03', '04', '05', '06', '07', '08'].map(id => {
+    const clip = directory + 'video/' + id;
+    return [id, {
+      video: clip + '.mp4',
+      tracks: {'zh-CN': clip + '.zh.vtt', ru: clip + '.ru.vtt'},
+    }];
+  }));
   const scenes = {
     '01': {title:'Дорога в памяти', speaker:'Подруга', line:'从学校到火车站要多久？', pinyin:'Cóng xuéxiào dào huǒchēzhàn yào duōjiǔ?', translation:'Сколько времени нужно от школы до вокзала?', still:bridge + '01.webp'},
     '02': {title:'Пропажа', speaker:'Девочка в красной куртке', line:'我在找我的书包。', pinyin:'Wǒ zài zhǎo wǒ de shūbāo.', translation:'Я ищу свой рюкзак.', still:directory + 'station-counter.webp'},
