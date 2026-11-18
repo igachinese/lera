@@ -33,54 +33,6 @@
     });
   }
 
-  function setupLesson() {
-    const status = byId('backpack-listen-status');
-    const card = ([word, py, meaning, example, translation]) => {
-      const item = el('article', '', 'item');
-      const actions = el('div', '', 'actions');
-      actions.append(button('▶ Слово', () => say(word.replaceAll('…', ' '), status)),
-        button('▶ Фраза', () => say(example, status)));
-      const exampleText = el('details');
-      exampleText.append(el('summary', 'Пример и перевод'), zh('p', example), el('p', translation, 'note'));
-      item.append(zh('b', word), el('p', py + ' · ' + meaning), actions, exampleText);
-      return item;
-    };
-    const warmup = document.createDocumentFragment();
-    data.words.filter(row => ['离','从…到…','数学','比'].includes(row[0])).forEach(word => warmup.append(card(word)));
-    byId('backpack-warmup').append(warmup);
-    byId('backpack-words').append(...data.words.filter(word => word[5] === 0).map(card));
-    byId('backpack-story').addEventListener('click', () => say(data.dialogue.map(row => row[1]).join(' '), status));
-    byId('backpack-dialogue').append(...data.dialogue.map(([name, text, py, meaning]) => {
-      const scene = el('article', '', 'scene');
-      const top = el('div', '', 'actions');
-      top.append(el('strong', name), button('▶ Послушать реплику', () => say(text, status)));
-      const script = el('details');
-      script.append(el('summary', 'Открыть реплику'), zh('p', text), el('p', py, 'py'), el('p', meaning));
-      scene.append(top, script);
-      return scene;
-    }));
-    const bagAnswer = el('p', '', 'status');
-    bagAnswer.setAttribute('role', 'status');
-    const guesses = data.bags.map(([description, translation], i) => {
-      const choice = button('', () => {
-        choice.classList.add(i === 0 ? 'correct' : 'wrong');
-        bagAnswer.textContent = i === 0
-          ? 'Рюкзак найден! Чёрный, с учебником по математике и справа от двери.'
-          : 'Одна или две приметы совпали. Сверь все три и попробуй снова.';
-        if (i === 0) guesses.forEach(node => { node.disabled = true; });
-      });
-      choice.lang = 'zh-CN';
-      choice.textContent = description;
-      return choice;
-    });
-    const translations = el('details');
-    const translationList = el('ol');
-    data.bags.forEach(row => { translationList.append(el('li', row[1])); });
-    translations.append(el('summary', 'Подсказка: перевести приметы'), translationList);
-    byId('backpack-bags').append(...guesses, translations, bagAnswer);
-    byId('backpack-builds').append(...data.builds.map(setupBuilder));
-  }
-
   function setupBuilder({ru, tokens, answer, zh: spoken}) {
     const item = el('article', '', 'question');
     const line = el('div', '', 'answer-line');
@@ -397,7 +349,7 @@
   }
 
   if (document.body.dataset.prep === 'lesson') {
-    setupLesson();
+    byId('backpack-builds').append(...data.builds.map(setupBuilder));
   } else {
     setupWeeks();
     setupReview();
