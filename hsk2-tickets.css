@@ -1,0 +1,126 @@
+.ticket-lesson {
+  --green: #235c4d;
+  --ink: #202f2a;
+  --muted: #53605a;
+  --line: #dbd9cb;
+  --surface: #fffdf6;
+  --soft: #eeeee2;
+  background: #f6f1e7;
+  min-height: 100vh;
+}
+
+.lesson-links, .ticket-footer { gap: 12px; }
+.lesson-links a, .ticket-footer a { font-weight: 700; }
+
+.ticket-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+  background: #173d33;
+  color: #fffbef;
+  border-radius: 22px;
+  overflow: hidden;
+}
+.ticket-hero-copy { padding: clamp(24px, 5vw, 52px); position: relative; }
+.ticket-hero .eyebrow { color: #ffdb9b; }
+.ticket-hero h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(2.8rem, 6.2vw, 5rem);
+  font-weight: 500;
+  line-height: .98;
+  letter-spacing: -.05em;
+  margin: 12px 0;
+}
+.ticket-hero .hero-zh { color: #ffdb9b; font-size: 1.4rem; letter-spacing: .12em; margin-bottom: 13px; }
+.ticket-hero-copy > p:last-of-type { max-width: 37ch; color: #f4f0e4; }
+.ticket-hero .button { background: #ffdb9b; color: #23392e; border-color: #ffdb9b; margin-top: 22px; }
+.ticket-hero .button:hover { background: #ffe9bf; border-color: #ffe9bf; }
+.ticket-hero-image { display: block; width: 100%; height: 100%; min-height: 300px; object-fit: cover; object-position: 58% center; }
+
+.ticket-section { padding-block: clamp(24px, 5vw, 46px) 0; scroll-margin-top: 12px; }
+.ticket-section-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 16px; }
+.ticket-section h2 { font-size: clamp(1.65rem, 4vw, 2.5rem); letter-spacing: -.035em; }
+.ticket-section-head p { color: var(--muted); margin-top: 6px; }
+.ticket-progress { min-width: 175px; font-size: .88rem; font-weight: 750; }
+.ticket-progress progress { display: block; width: 100%; height: 9px; margin-top: 6px; accent-color: var(--green); }
+
+.word-rounds, .exam-rounds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.lesson-mode {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 4px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--ink);
+  text-align: left;
+}
+.lesson-mode strong { font-size: 1.12rem; line-height: 1.25; }
+.lesson-mode small { color: var(--muted); }
+.lesson-mode:hover, .lesson-mode[aria-expanded="true"] { border-color: var(--green); background: #eef3e9; }
+.exam-rounds .lesson-mode { border-top: 4px solid var(--green); }
+.exam-rounds .lesson-mode:nth-child(2) { border-top-color: #9b5639; }
+.exam-rounds .lesson-mode:nth-child(3) { border-top-color: #536591; }
+.ticket-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; }
+.ticket-footer { display: flex; flex-wrap: wrap; justify-content: space-between; padding-top: 24px; margin-top: 32px; border-top: 1px solid var(--line); }
+
+.ticket-round {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: clamp(16px, 4vw, 32px);
+  margin-top: 14px;
+  scroll-margin-top: 14px;
+}
+.ticket-round:focus-within { border-color: #9aac9c; }
+.ticket-round-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline; }
+.ticket-round-head h3 { font-size: clamp(1.27rem, 3vw, 1.7rem); outline: none; }
+.ticket-count { font-size: .9rem; color: var(--muted); font-weight: 700; }
+.ticket-stimulus { margin-top: 14px; padding: 12px 15px; border-radius: 11px; background: var(--soft); font-size: clamp(1.35rem, 4vw, 2.05rem); line-height: 1.45; }
+.ticket-prompt { margin-top: 14px; font-weight: 700; }
+.ticket-prompt[lang="zh-CN"] { font-size: 1.25rem; }
+.ticket-options { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.ticket-options .button { min-height: 46px; font-size: 1.12rem; padding-inline: 16px; gap: 10px; }
+.ticket-options .choice-letter { font-size: .75rem; color: var(--muted); }
+.ticket-options .button:disabled { opacity: 1; }
+.ticket-feedback { min-height: 1.5em; margin-top: 13px; }
+.ticket-feedback:empty { min-height: 0; margin-top: 0; }
+.ticket-feedback strong { display: block; }
+.ticket-feedback .zh { font-size: 1.2rem; margin-block: 4px; }
+.ticket-feedback[data-correct="true"] strong { color: var(--green); }
+.ticket-feedback[data-correct="false"] strong { color: #875035; }
+.ticket-transcript { margin-top: 10px; color: var(--muted); }
+.ticket-round details { margin-top: 12px; }
+.ticket-round summary { cursor: pointer; font-weight: 650; color: var(--green); }
+.ticket-input { min-height: 44px; width: min(8rem, 100%); font-size: 1.25rem; }
+.ticket-audio { display: block; margin-top: 14px; width: min(100%, 340px); }
+
+.train-ticket {
+  max-width: 435px;
+  margin: 14px 0 0;
+  border-radius: 12px;
+  border: 1px solid #bac7b9;
+  background: #f3f6eb;
+  overflow: hidden;
+}
+.train-ticket figcaption { background: var(--green); color: #fff; padding: 8px 14px; font-size: .88rem; font-weight: 700; }
+.train-ticket dl { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 16px; padding: 12px 14px; margin: 0; }
+.train-ticket dl > div:first-child { grid-column: 1 / -1; border-bottom: 1px dashed #a6b5a5; padding-bottom: 8px; }
+.train-ticket dt { color: var(--muted); font-size: .88rem; }
+.train-ticket dd { margin: 0; font-size: 1.45rem; font-weight: 700; }
+.round-score { font: 500 2.1rem/1.2 Georgia, serif; margin-block: 12px 6px; }
+.ticket-section > h2 + p { color: var(--muted); margin-top: 6px; }
+.ticket-order-line { margin-top: 0; font-size: 1.25rem; }
+.ticket-order-line:empty::before { content: "Нажимай на части фразы по порядку"; color: var(--muted); font-size: .9rem; }
+
+@media (max-width: 670px) {
+  .ticket-hero { grid-template-columns: 1fr; }
+  .ticket-hero h1 { max-width: none; }
+  .ticket-hero-image { min-height: 0; max-height: 200px; aspect-ratio: 2.1; }
+  .ticket-section-head { align-items: start; flex-direction: column; gap: 10px; }
+  .ticket-progress { width: min(240px, 100%); }
+  .word-rounds, .exam-rounds { grid-template-columns: 1fr; gap: 8px; }
+  .lesson-mode { padding: 13px 14px; }
+}

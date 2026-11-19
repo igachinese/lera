@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f1e7">
+  <meta name="description" content="Повтори 24 знакомых слова и потренируй аудирование, чтение и письмо в заданиях по мотивам HSK 2.">
+  <title>Билет и покупки · Лера · HSK 2</title>
+  <link rel="stylesheet" href="hsk2-prep.css">
+  <link rel="stylesheet" href="hsk2-tickets.css">
+  <script src="hsk2-tickets-data.js" defer></script>
+  <script src="hsk2-tickets.js" defer></script>
+</head>
+<body class="ticket-lesson">
+  <header class="top lesson-links">
+    <a href="./#homework">← В кабинет</a>
+    <a href="hsk2-december.html#weeks">Программа HSK 2</a>
+  </header>
+  <main>
+    <header class="ticket-hero">
+      <div class="ticket-hero-copy">
+        <p class="eyebrow">HSK 2 · Следующий урок</p>
+        <h1>Билет и покупки</h1>
+        <p class="hero-zh zh" lang="zh-CN">买票和购物</p>
+        <p>Рюкзак нашёлся. Теперь нужно купить билет, сверить время и успеть за чаем перед поездкой.</p>
+        <a class="button primary" href="#practice">Начать тренировку ↓</a>
+      </div>
+      <img class="ticket-hero-image" src="lessons/chinese-travel/assets/station.webp" alt="Акварельная сцена на вокзале" fetchpriority="high">
+    </header>
+
+    <section class="ticket-section" id="practice" aria-labelledby="practice-title">
+      <div class="ticket-section-head">
+        <div>
+          <h2 id="practice-title">24 слова в новых фразах</h2>
+          <p>Выбери слово для пропуска. В каждом раунде восемь фраз с переводом после ответа.</p>
+        </div>
+        <div class="ticket-progress">
+          <label for="word-progress" id="word-count">Слова с верным ответом</label>
+          <progress id="word-progress" max="24" value="0"></progress>
+        </div>
+      </div>
+      <div class="word-rounds" id="word-rounds"></div>
+      <div class="ticket-actions">
+        <button type="button" id="retry-words" class="button" disabled>Повторить трудные слова</button>
+      </div>
+    </section>
+
+    <section class="ticket-section" id="games" aria-labelledby="games-title">
+      <div class="ticket-section-head">
+        <div>
+          <h2 id="games-title">Три игры в формате HSK 2</h2>
+          <p>Четыре задания в каждой игре. После ответа можно разобрать фразу.</p>
+        </div>
+      </div>
+      <div class="exam-rounds" id="exam-rounds"></div>
+    </section>
+
+    <section class="ticket-section" id="order" aria-labelledby="order-title">
+      <h2 id="order-title">Собери заказ</h2>
+      <p>Как спросить «Ты хочешь кофе или чай с молоком?»</p>
+      <div id="order-builder" class="ticket-round"></div>
+    </section>
+
+    <noscript><p class="card">Включи JavaScript, чтобы открыть задания.</p></noscript>
+
+    <footer class="ticket-footer">
+      <a href="hsk2-backpack.html">← Где мой рюкзак?</a>
+      <a href="hsk2-december.html#exam">Формат экзамена и демоверсия →</a>
+    </footer>
+  </main>
+</body>
+</html>
