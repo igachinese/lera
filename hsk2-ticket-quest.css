@@ -1,0 +1,134 @@
+.ticket-hero-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.ticket-hero-actions .button { margin-top: 0; }
+.ticket-hero-actions .button:not(.primary) { color: #fffaf0; border-color: #8ba99b; background: transparent; }
+.ticket-hero-actions .button:not(.primary):hover { background: #28604e; border-color: #d4e3d9; }
+
+.quest-shell {
+  overflow: hidden;
+  border: 1px solid #c4cfc2;
+  border-radius: 20px;
+  background: #fdfbf2;
+  box-shadow: 0 14px 35px #25372a12;
+}
+.quest-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px clamp(14px, 4vw, 30px);
+  background: #173d33;
+  color: #fffaf0;
+}
+.quest-destinations { display: flex; flex-wrap: wrap; gap: 6px; }
+.quest-destinations .button { background: transparent; color: #fffaf0; border-color: #7f9f91; }
+.quest-destinations .button:hover { border-color: #ffdb9b; }
+.quest-destinations .button[aria-pressed="true"] { background: #ffdb9b; border-color: #ffdb9b; color: #243c31; }
+.quest-wallet { font-variant-numeric: tabular-nums; font-weight: 750; }
+.quest-steps {
+  margin: 0;
+  padding: 15px clamp(12px, 4vw, 30px);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  list-style: none;
+  background: #e8eee2;
+}
+.quest-steps li {
+  position: relative;
+  display: grid;
+  gap: 7px;
+  justify-items: center;
+  color: #4f6057;
+  font-size: clamp(.74rem, 2.5vw, .91rem);
+  font-weight: 680;
+  text-align: center;
+}
+.quest-steps li::before {
+  content: "";
+  z-index: 1;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #728c7c;
+  border-radius: 50%;
+  background: #e8eee2;
+}
+.quest-steps li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  width: 100%;
+  border-top: 2px solid #9ab19f;
+}
+.quest-steps li[data-done]::before { border-color: #28644f; background: #28644f; }
+.quest-steps li[aria-current] { color: #173d33; font-weight: 850; }
+.quest-steps li[aria-current]::before { background: #ffdb9b; border-color: #173d33; box-shadow: 0 0 0 3px #ffdb9b; }
+.quest-body { padding: clamp(16px, 4vw, 30px); }
+.quest-body h3 { font: 500 clamp(1.65rem, 4vw, 2.4rem)/1.05 Georgia, serif; outline: none; margin-bottom: 9px; }
+.quest-body h4 { font-size: 1.25rem; margin: 16px 0 6px; }
+.quest-body .ticket-stimulus { font-size: clamp(1.2rem, 4vw, 1.65rem); }
+.quest-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(137px, 100%), 1fr)); gap: 9px; margin-block: 16px 12px; }
+.quest-choice {
+  min-height: 58px;
+  padding: 10px 13px;
+  border: 1px solid #9caa9e;
+  border-radius: 10px;
+  display: grid;
+  gap: 3px;
+  align-content: center;
+  background: #f8f6ec;
+  color: #21382d;
+  text-align: left;
+}
+.quest-choice strong { font-size: clamp(1rem, 3vw, 1.22rem); }
+.quest-choice span { color: #4e5e54; font-variant-numeric: tabular-nums; }
+.quest-choice:hover:not(:disabled) { border-color: #27614d; background: #eef2e7; }
+.quest-choice[data-result="wrong"] { background: #f8e8dc; border-color: #a8755b; }
+.quest-choice[data-result="correct"] { background: #dcedd9; border: 2px solid #28644f; }
+.quest-feedback:not(:empty) { margin-bottom: 12px; font-weight: 650; }
+.quest-help { margin-top: 13px; color: #344f42; }
+.quest-help summary { cursor: pointer; font-weight: 700; text-underline-offset: 3px; }
+.quest-help p { margin-top: 5px; }
+.quest-help .zh { font-size: 1.12rem; }
+.quest-ticket {
+  width: min(100%, 420px);
+  margin: 14px 0 0;
+  border: 1px solid #c9bd93;
+  border-radius: 11px;
+  background: #f9efcf;
+  overflow: hidden;
+}
+.quest-ticket figcaption { padding: 7px 12px; background: #173d33; color: #fffaf0; font-weight: 700; }
+.quest-ticket-route { font-size: clamp(1.25rem, 4vw, 1.65rem); margin: 8px 12px; font-weight: 750; }
+.quest-ticket dl { display: flex; flex-wrap: wrap; gap: 8px 18px; border-top: 1px dashed #a1987a; padding: 8px 12px; margin: 0; }
+.quest-ticket dt { color: #47584b; font-size: .83rem; }
+.quest-ticket dd { margin: 0; font-size: 1.12rem; font-weight: 750; }
+.quest-arrival-image { display: block; margin-top: 14px; width: 100%; max-height: 370px; aspect-ratio: 2.4; object-fit: cover; object-position: center 48%; border-radius: 13px; }
+.quest-receipt { margin-top: 10px; color: #244938; font-weight: 750; }
+.quest-speaking-start { margin-top: 7px; }
+.quest-transfer { border-inline-start: 3px solid #ae6a2b; padding-inline-start: 12px; margin: 17px 0; }
+.recall-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border: 1px solid #c5d0c2;
+  border-radius: 9px;
+  color: #234436;
+  background: #eaf1e6;
+  font-weight: 730;
+  cursor: pointer;
+}
+.recall-toggle input { width: 18px; height: 18px; accent-color: #235c4d; }
+.ticket-reveal { margin-top: 14px; padding: 12px 15px; border-left: 3px solid var(--green); background: #eff2e9; }
+.ticket-reveal-line { font-size: 1.3rem; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .quest-steps li[aria-current]::before { animation: quest-step-in .26s ease-out both; }
+  @keyframes quest-step-in {
+    from { transform: scale(.55); opacity: .5; }
+    to { transform: scale(1); opacity: 1; }
+  }
+}

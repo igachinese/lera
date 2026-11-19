@@ -34,9 +34,9 @@
     const asRecord = value => value && typeof value === 'object' && !Array.isArray(value) ? value : {};
     try {
       const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
-      return {words: asRecord(saved?.words), scores: asRecord(saved?.scores)};
+      return {words: asRecord(saved?.words), recall: asRecord(saved?.recall), scores: asRecord(saved?.scores)};
     } catch {
-      return {words: {}, scores: {}};
+      return {words: {}, recall: {}, scores: {}};
     }
   }
 
@@ -54,6 +54,7 @@
     id: `words-${index}`, title, label: `Урок ${index + 1}`, tasks: groups[index], vocabulary: true,
   }));
   const retry = byId('retry-words');
+  const recallToggle = byId('recall-mode');
   const panel = element('div', '', 'ticket-round');
   panel.id = 'ticket-round';
   panel.hidden = true;
@@ -65,19 +66,22 @@
   }
 
   function missedWords() {
-    return allWords.filter(task => record.words[task.word] === false);
+    const words = recallToggle.checked ? record.recall : record.words;
+    return allWords.filter(task => words[task.word] === false);
   }
 
   function updateProgress() {
-    const known = allWords.filter(task => record.words[task.word] === true).length;
+    const words = recallToggle.checked ? record.recall : record.words;
+    const known = allWords.filter(task => words[task.word] === true).length;
     byId('word-progress').value = known;
-    byId('word-count').textContent = `${known} из ${allWords.length} слов с верным ответом`;
+    const caption = recallToggle.checked ? 'слов вспомнила сама' : 'слов с верным ответом';
+    byId('word-count').textContent = `${known} из ${allWords.length} ${caption}`;
     const missed = missedWords().length;
     retry.textContent = missed ? `Повторить трудные слова · ${missed}` : 'Повторить трудные слова';
     retry.disabled = !missed;
     for (const mode of vocabulary) {
-      const done = mode.tasks.filter(task => record.words[task.word] === true).length;
-      mode.status.textContent = `${done} из ${mode.tasks.length} верно`;
+      const done = mode.tasks.filter(task => words[task.word] === true).length;
+      mode.status.textContent = `${done} из ${mode.tasks.length} ${recallToggle.checked ? 'вспомнила' : 'верно'}`;
     }
     for (const mode of exam) {
       const best = record.scores[mode.id];
@@ -106,7 +110,8 @@
     const holder = mode.vocabulary ? byId('practice') : byId('games');
     holder.append(panel);
     panel.hidden = false;
-    round = {mode, tasks: shuffle(tasks), position: 0, correct: 0, missed: [], launcher, isRetry};
+    const recall = mode.vocabulary && recallToggle.checked;
+    round = {mode, tasks: shuffle(tasks), position: 0, correct: 0, missed: [], launcher, isRetry, recall};
     renderQuestion();
   }
 
@@ -152,8 +157,27 @@
     return transcript;
   }
 
+  function renderRecall(task, check) {
+    const revealPanel = element('div', '', 'ticket-reveal');
+    revealPanel.hidden = true;
+    const grade = element('div', '', 'ticket-actions');
+    const remembered = button('Вспомнила сама', () => check(task.word), 'button primary');
+    grade.append(remembered, button('Надо повторить', () => check('')));
+    revealPanel.append(element('p', task.text.replace('＿', task.word), 'ticket-reveal-line zh', zh),
+      element('p', `${task.pinyin} · ${task.meaning}`, 'note'), element('p', task.translation), grade);
+    const reveal = button('Открыть ответ', () => {
+      reveal.hidden = true;
+      revealPanel.hidden = false;
+      remembered.focus();
+    });
+    const controls = element('div', '', 'ticket-actions');
+    controls.append(reveal);
+    panel.append(controls, revealPanel);
+    return grade;
+  }
+
   function renderQuestion() {
-    const {mode, position, tasks} = round;
+    const {mode, position, tasks, recall} = round;
     const task = tasks[position];
     const heading = setPanel(mode.title, `Задание ${position + 1} из ${tasks.length}`);
     let transcript;
@@ -180,6 +204,7 @@
     const answer = task.answer ?? task.options[0];
     let answered = false;
     let form;
+    let recallGrade;
     function check(value) {
       if (answered) return;
       answered = true;
@@ -187,20 +212,24 @@
       if (correct) round.correct++;
       else round.missed.push(task);
       if (task.word) {
-        record.words[task.word] = correct;
+        const words = recall ? record.recall : record.words;
+        words[task.word] = correct;
         save();
         updateProgress();
       }
       feedback.dataset.correct = String(correct);
-      feedback.append(element('strong', correct ? 'Верно!' : `Правильный ответ — ${answer}`));
-      if (task.word) {
+      if (recall) {
+        recallGrade.hidden = true;
+        feedback.append(element('strong', correct ? 'Слово вспомнила сама.' : 'Добавлено к трудным словам.'));
+      } else if (task.word) {
         feedback.append(
+          element('strong', correct ? 'Верно!' : `Правильный ответ — ${answer}`),
           element('p', task.text.replace('＿', task.word), 'zh', zh),
           element('p', task.translation),
           element('p', `${task.pinyin} · ${task.meaning}`, 'note'),
         );
       } else {
-        feedback.append(element('p', task.explanation));
+        feedback.append(element('strong', correct ? 'Верно!' : `Правильный ответ — ${answer}`), element('p', task.explanation));
       }
       if (transcript) transcript.hidden = false;
       if (form) for (const control of form.elements) control.disabled = true;
@@ -213,7 +242,9 @@
       next.focus({preventScroll: true});
     }
 
-    if (task.options) {
+    if (recall) {
+      recallGrade = renderRecall(task, check);
+    } else if (task.options) {
       shuffle(task.options).forEach((option, index) => {
         const choice = button('', () => check(option));
         const letter = element('span', 'ABC'[index], 'choice-letter');
@@ -258,14 +289,14 @@
   }
 
   function renderSummary() {
-    const {mode, tasks, correct, missed, launcher, isRetry} = round;
+    const {mode, tasks, correct, missed, launcher, isRetry, recall} = round;
     const heading = setPanel(mode.title + ' · результат');
     if (!mode.vocabulary && !isRetry) {
       record.scores[mode.id] = Math.max(record.scores[mode.id] || 0, correct);
       save();
       updateProgress();
     }
-    panel.append(element('p', `${correct} из ${tasks.length} верно`, 'round-score'));
+    panel.append(element('p', `${correct} из ${tasks.length} ${recall ? 'вспомнила сама' : 'верно'}`, 'round-score'));
     if (missed.length && mode.vocabulary) {
       panel.append(element('p', missed.map(task => task.word).join(' · '), 'zh', zh));
     }
@@ -328,6 +359,17 @@
 
   byId('word-rounds').append(...vocabulary.map(renderMode));
   byId('exam-rounds').append(...exam.map(renderMode));
+  recallToggle.addEventListener('change', () => {
+    byId('word-instructions').textContent = recallToggle.checked
+      ? 'Вставь слово вслух, открой ответ и отметь, удалось ли вспомнить его самой.'
+      : 'Выбери слово для пропуска. В каждом раунде восемь фраз с переводом после ответа.';
+    if (round?.mode.vocabulary) {
+      round.launcher.setAttribute('aria-expanded', 'false');
+      panel.hidden = true;
+      round = null;
+    }
+    updateProgress();
+  });
   retry.setAttribute('aria-controls', panel.id);
   retry.setAttribute('aria-expanded', 'false');
   retry.addEventListener('click', () => activate({title: 'Трудные слова', vocabulary: true}, missedWords(), retry, true));

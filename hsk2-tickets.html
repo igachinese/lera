@@ -4,12 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f6f1e7">
-  <meta name="description" content="Повтори 24 знакомых слова и потренируй аудирование, чтение и письмо в заданиях по мотивам HSK 2.">
+  <meta name="description" content="Поймай свой поезд, повтори 24 знакомых слова и потренируй аудирование, чтение и письмо по мотивам HSK 2.">
   <title>Билет и покупки · Лера · HSK 2</title>
   <link rel="stylesheet" href="hsk2-prep.css">
   <link rel="stylesheet" href="hsk2-tickets.css">
+  <link rel="stylesheet" href="hsk2-ticket-quest.css">
   <script src="hsk2-tickets-data.js" defer></script>
-  <script src="hsk2-tickets.js" defer></script>
+  <script src="hsk2-tickets.js?v=2" defer></script>
+  <script src="hsk2-ticket-quest-data.js" defer></script>
+  <script src="hsk2-ticket-quest.js" defer></script>
 </head>
 <body class="ticket-lesson">
   <header class="top lesson-links">
@@ -22,23 +25,40 @@
         <p class="eyebrow">HSK 2 · Следующий урок</p>
         <h1>Билет и покупки</h1>
         <p class="hero-zh zh" lang="zh-CN">买票和购物</p>
-        <p>Рюкзак нашёлся. Теперь нужно купить билет, сверить время и успеть за чаем перед поездкой.</p>
-        <a class="button primary" href="#practice">Начать тренировку ↓</a>
+        <p>Рюкзак нашёлся. У тебя есть деньги на билет и напиток. Найди нужный рейс по объявлению на китайском.</p>
+        <nav class="ticket-hero-actions" aria-label="Выбери тренировку">
+          <a class="button primary" href="#journey">Успеть на поезд ↓</a>
+          <a class="button" href="#practice">Повторить 24 слова</a>
+        </nav>
       </div>
       <img class="ticket-hero-image" src="lessons/chinese-travel/assets/station.webp" alt="Акварельная сцена на вокзале" fetchpriority="high">
     </header>
+
+    <section class="ticket-section" id="journey" aria-labelledby="journey-title">
+      <div class="ticket-section-head">
+        <div>
+          <h2 id="journey-title">Успей на поезд</h2>
+          <p>Услышь время, купи напиток на сдачу и найди выход на посадку.</p>
+        </div>
+      </div>
+      <div id="journey-app"></div>
+    </section>
 
     <section class="ticket-section" id="practice" aria-labelledby="practice-title">
       <div class="ticket-section-head">
         <div>
           <h2 id="practice-title">24 слова в новых фразах</h2>
-          <p>Выбери слово для пропуска. В каждом раунде восемь фраз с переводом после ответа.</p>
+          <p id="word-instructions">Выбери слово для пропуска. В каждом раунде восемь фраз с переводом после ответа.</p>
         </div>
         <div class="ticket-progress">
           <label for="word-progress" id="word-count">Слова с верным ответом</label>
           <progress id="word-progress" max="24" value="0"></progress>
         </div>
       </div>
+      <label class="recall-toggle">
+        <input id="recall-mode" type="checkbox" autocomplete="off" aria-describedby="word-instructions">
+        <span>Вспоминать вслух без вариантов</span>
+      </label>
       <div class="word-rounds" id="word-rounds"></div>
       <div class="ticket-actions">
         <button type="button" id="retry-words" class="button" disabled>Повторить трудные слова</button>
