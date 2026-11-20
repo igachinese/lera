@@ -49,7 +49,7 @@
     const audio = node('audio', '', 'ticket-audio');
     audio.controls = true;
     audio.preload = 'none';
-    audio.src = `assets/tickets/${route.id}-${kind}.mp3`;
+    audio.src = `assets/tickets/${route.id}-${kind}.mp3?v=station-audio-1`;
     audio.setAttribute('aria-label', label);
     audio.addEventListener('error', () => { fallback.open = true; });
     return audio;

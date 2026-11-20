@@ -36,16 +36,16 @@
   ];
 
   const listening = [
-    {audio: '我们买两张票吧。好，一张二十块。问：一张票多少钱？', file: 'assets/tickets/dialogue-1.mp3',
+    {audio: '我们买两张票吧。好，好，一张二十块。问：一张票多少钱？', file: 'assets/tickets/dialogue-1.mp3?v=station-audio-1',
       prompt: '一张票多少钱？', options: ['二十块', '十二块', '四十块'],
       explanation: 'Один билет стоит 20 юаней. 40 юаней стоили бы два билета.'},
-    {audio: '你想喝咖啡还是奶茶？奶茶吧，我今天不想喝咖啡。问：她想喝什么？', file: 'assets/tickets/dialogue-2.mp3',
+    {audio: '你想喝咖啡还是奶茶？奶茶吧，我今天不想喝咖啡。问：她想喝什么？', file: 'assets/tickets/dialogue-2.mp3?v=station-audio-1',
       prompt: '她想喝什么？', options: ['奶茶', '咖啡', '水'],
       explanation: '奶茶吧 — «Давай чай с молоком». Кофе героиня прямо отвергает.'},
-    {audio: '你已经买好票了吗？还没有，我正在买呢。问：她在做什么？', file: 'assets/tickets/dialogue-3.mp3',
+    {audio: '你已经买好票了吗？还没有，我正在买呢。问：她在做什么？', file: 'assets/tickets/dialogue-3.mp3?v=station-audio-1',
       prompt: '她在做什么？', options: ['买票', '等火车', '喝咖啡'],
       explanation: '正在买呢 означает «как раз покупаю». Покупка ещё не закончилась.'},
-    {audio: '我们在哪儿见？超市门口吧，从那儿一起去火车站。问：他们在哪儿见？', file: 'assets/tickets/dialogue-4.mp3',
+    {audio: '我们在哪儿见？超市门口吧，从那儿一起去火车站。问：他们在哪儿见？', file: 'assets/tickets/dialogue-4.mp3?v=station-audio-1',
       prompt: '他们在哪儿见？', options: ['超市门口', '火车站', '学校门口'],
       explanation: 'Они встречаются у входа в супермаркет, а потом вместе идут на вокзал.'},
   ];
