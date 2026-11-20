@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f1e7">
+  <title>Покупка билетов и заказ напитков · Домашка Леры</title>
+  <style>
+    :root {
+      --paper: #f6f1e7;
+      --surface: #fffdf7;
+      --ink: #24362e;
+      --muted: #54635b;
+      --green: #215846;
+      --deep: #173d33;
+      --mint: #e8efe4;
+      --line: #c7d0c3;
+      --gold: #ffdb9b;
+      --ticket: #fbefd1;
+      --rust: #8a482d;
+      --error-bg: #f8e9df;
+      --white: #fff;
+      --black: #000;
+      --system: system-ui, "Segoe UI", sans-serif;
+      --serif: Georgia, serif;
+      --han: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+      color-scheme: light;
+      color: var(--ink);
+      background: var(--paper);
+      font: 16px/1.5 var(--system);
+    }
+    * { box-sizing: border-box; }
+    html, body { overflow-x: clip; }
+    body, h1, h2, p, figure, dl, dd { margin: 0; }
+    h1, h2 { line-height: 1.12; overflow-wrap: break-word; }
+    a { color: var(--green); text-underline-offset: 3px; }
+    :focus-visible { outline: 3px solid var(--rust); outline-offset: 3px; }
+    [hidden] { display: none !important; }
+    button, input, select { font: inherit; }
+    [lang="zh-CN"] { font-family: var(--han); }
+    .top, main, .bottom { width: min(100% - 30px, 940px); margin-inline: auto; }
+    .top, .bottom, .actions, .jump { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 15px; }
+    .top, .bottom { justify-content: space-between; padding-block: 15px; font-weight: 700; }
+    .hero { padding: clamp(22px, 5vw, 42px); color: var(--surface); background: var(--deep); border-radius: 22px; }
+    .hero .meta { color: var(--gold); margin-bottom: 8px; }
+    h1 { font: 500 clamp(2rem, 6.7vw, 4.15rem)/1.04 var(--serif); letter-spacing: -.035em; max-width: 17ch; }
+    .hero-zh { color: var(--gold); font-size: 1.35rem; margin-top: 9px; }
+    .hero .actions { margin-top: 18px; }
+    .jump { margin: 16px 0 20px; font-weight: 650; }
+    .button { display: inline-flex; justify-content: center; align-items: center; border: 1px solid var(--green); padding: 8px 13px; border-radius: 9px; min-height: 44px; background: var(--surface); color: var(--green); font-weight: 730; cursor: pointer; }
+    .button:hover:not(:disabled) { background: var(--mint); }
+    .button:disabled { cursor: default; opacity: .55; }
+    .primary { color: var(--white); background: var(--green); }
+    .primary:hover:not(:disabled) { background: var(--deep); }
+    .hero .button { background: var(--gold); color: var(--deep); border-color: var(--gold); }
+    .hero .button:hover { background: var(--surface); }
+    .hero .button:focus-visible { outline-color: var(--gold); }
+    .exercise { scroll-margin-top: 12px; border: 1px solid var(--line); border-radius: 17px; background: var(--surface); padding: clamp(14px, 4vw, 28px); margin-block: 14px; }
+    h2 { font-size: clamp(1.35rem, 4vw, 1.9rem); margin-bottom: 6px; }
+    .instruction, .py, .note { color: var(--muted); }
+    .py, .note { font-size: .88rem; }
+    .bank { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 12px 0; list-style: none; }
+    .bank li { display: flex; align-items: baseline; gap: 6px; border: 1px solid var(--line); background: var(--mint); border-radius: 7px; padding: 3px 7px; }
+    .bank [lang] { font-weight: 700; }
+    .questions { display: grid; gap: 10px; padding-left: 1.45em; margin-block: 12px; }
+    .sentence { display: inline; font-size: 1.15rem; line-height: 1.75; }
+    .questions .py { display: block; line-height: 1.28; }
+    .entry { max-width: 100%; min-height: 44px; padding: 3px 8px; border: 1px solid var(--line); border-radius: 7px; background: var(--white); color: var(--ink); }
+    .sentence select { width: min(8.4em, 100%); margin-inline: 2px; font-size: .9rem; vertical-align: middle; }
+    .entry[data-result="yes"] { border-color: var(--green); background: var(--mint); }
+    .entry[data-result="no"] { border-color: var(--rust); background: var(--error-bg); }
+    .item-feedback, .status { font-size: .88rem; color: var(--muted); }
+    .item-feedback:not(:empty) { display: block; margin-top: 3px; }
+    .actions .status { flex: 1 1 180px; }
+    .tip { background: var(--mint); padding: 7px 10px; border-radius: 7px; margin-top: 10px; font-size: .9rem; }
+
+    .match-board { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 4vw, 43px); margin: 13px 0; }
+    .match-column { display: grid; grid-template-rows: auto repeat(6, minmax(47px, auto)); gap: 6px; margin: 0; min-width: 0; }
+    .match-column h3 { margin: 0; font-size: clamp(.75rem, 3vw, 1rem); color: var(--muted); }
+    .pair { min-width: 0; min-height: 44px; border: 1px solid var(--line); border-radius: 7px; color: var(--ink); background: var(--white); font-size: clamp(.76rem, 3vw, 1.06rem); padding: 4px; overflow-wrap: anywhere; cursor: pointer; }
+    .pair:hover { border-color: var(--green); }
+    .pair[aria-pressed="true"] { color: var(--white); border-color: var(--green); background: var(--green); }
+    .pair[lang="zh-CN"] { font-size: 1.13rem; }
+    .connections { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; color: var(--green); }
+    .connections path { fill: none; stroke: currentColor; stroke-width: 1.65; }
+    .connections .bad { color: var(--rust); stroke-dasharray: 4 2; }
+    .connections marker path { fill: currentColor; stroke: none; }
+
+    .ticket { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); max-width: 570px; border: 1px solid var(--line); border-radius: 12px; background: var(--ticket); margin-block: 12px; overflow: hidden; }
+    .ticket figcaption { grid-column: 1 / -1; padding: 7px 12px; color: var(--white); background: var(--deep); font-weight: 750; }
+    .ticket dl { padding: 10px 12px; display: grid; gap: 7px; }
+    .ticket dl + dl { border-inline-start: 1px dashed var(--muted); }
+    .ticket dt { color: var(--muted); font-size: .82rem; }
+    .ticket dd { color: var(--ink); font-size: 1.19rem; font-weight: 750; }
+    .ticket-questions { margin-bottom: 14px; }
+    .ticket-questions label { display: block; font-size: .9rem; font-weight: 650; }
+    .ticket-questions input { width: min(230px, 100%); }
+    .route-answers { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+    .route-answers > div { flex: 1 1 120px; max-width: 230px; min-width: 0; }
+    .bottom { margin-top: 10px; border-top: 1px solid var(--line); }
+    .print-only { display: none; }
+
+    @page { size: A4 portrait; margin: 11mm 13mm; }
+    @media print {
+      :root { background: var(--white); color: var(--black); font-size: 10pt; line-height: 1.3; }
+      html, body { overflow: visible; }
+      .screen-only, .entry, .connections, .item-feedback, .top, .bottom { display: none !important; }
+      .print-only { display: inline; }
+      main { width: 100%; margin: 0; }
+      .hero, .exercise, .ticket, .ticket figcaption, .bank li, .tip, .pair {
+        color: var(--black) !important; background: var(--white) !important; box-shadow: none; border-radius: 0;
+      }
+      .hero { padding: 0 0 2.5mm; border-bottom: .35mm solid var(--black); }
+      .hero .meta, .hero-zh, .instruction, .py, .note, .match-column h3, .ticket dt { color: var(--black); }
+      .hero .meta { margin-bottom: 1mm; }
+      h1 { font: 700 22pt/1.1 var(--serif); max-width: none; }
+      .hero-zh { margin-block: 1mm 2mm; font-size: 11pt; }
+      .exercise { padding: 0; border: 0; margin-block: 4mm; break-inside: avoid; }
+      h2 { font-size: 14pt; margin-bottom: 1mm; }
+      .bank { gap: 1.3mm; margin-block: 2mm; }
+      .bank li { padding: .25mm 1.4mm; border: .2mm solid var(--muted); }
+      .questions { gap: 1.25mm; margin-block: 2mm; }
+      .sentence { font-size: 12pt; line-height: 1.3; }
+      .py, .note { font-size: 8.4pt; }
+      .tip { margin-top: 1.8mm; padding: 0; font-size: 9pt; }
+      .paper-line { display: inline-block; min-width: 22mm; height: .85em; border-bottom: .24mm solid var(--black); vertical-align: baseline; }
+      .match-board { gap: 13mm; margin-block: 2mm; }
+      .match-column { grid-template-rows: auto repeat(6, minmax(0, auto)); gap: .7mm; }
+      .match-column h3 { font-size: 9.4pt; }
+      .pair, .pair[lang="zh-CN"] { display: block; width: 100%; min-height: 0; padding: .45mm 1.7mm; border: .2mm solid var(--muted) !important; font-size: 10pt; text-align: start; }
+      .ticket { width: 100%; max-width: none; margin-block: 2mm; border: .25mm solid var(--black); }
+      .ticket figcaption { border-bottom: .25mm solid var(--black); padding: 1mm 2mm; }
+      .ticket dl { padding: 1mm 2mm; gap: .4mm; }
+      .ticket dt { font-size: 8.4pt; }
+      .ticket dd { color: var(--black); font-size: 10.5pt; }
+      .ticket-questions { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 1.8mm 7mm; }
+      .ticket-questions label { font-size: 9pt; }
+      .route-answers { gap: 2mm; }
+      .route-answers > div { flex: 0 0 auto; }
+      .route-answers label { display: inline; }
+      .ticket-questions .paper-line { min-width: 24mm; }
+    }
+    @media screen and (max-width: 460px) {
+      .match-board { gap: 19px; }
+      .match-column { grid-template-rows: 1.3em repeat(6, minmax(48px, auto)); }
+      .match-column h3 { font-size: .76rem; }
+      .ticket .py { font-size: .73rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a href="index.html#homework">← В кабинет Леры</a>
+    <a href="hsk2-tickets.html">К уроку «Билет и покупки»</a>
+  </header>
+  <main>
+    <header class="hero">
+      <p class="meta">Домашнее задание к уроку 1</p>
+      <h1>Покупка билетов и заказ напитков</h1>
+      <p class="hero-zh" lang="zh-CN">买票与点饮料</p>
+      <p class="print-only">Имя <span class="paper-line"></span> &ensp; Дата <span class="paper-line"></span></p>
+      <div class="actions screen-only"><button type="button" class="button" id="print-sheet">Распечатать рабочий лист</button></div>
+    </header>
+    <nav class="jump screen-only" aria-label="Задания">
+      <a href="#gaps">Пропуски</a><a href="#match">Стрелочки</a><a href="#ticket">Билет</a>
+    </nav>
+    <noscript class="screen-only"><p>Для проверки ответов и соединения стрелочками включи JavaScript. Лист можно распечатать через меню браузера.</p></noscript>
+
+    <section class="exercise" id="gaps" aria-labelledby="gaps-title">
+      <h2 id="gaps-title">1. Вставь слово или выражение</h2>
+      <p class="instruction">Используй каждое слово или выражение из списка один раз.</p>
+      <ul class="bank" id="word-bank">
+        <li><b lang="zh-CN">苦</b><span class="py">kǔ</span></li>
+        <li><b lang="zh-CN">买不了</b><span class="py">mǎi bu liǎo</span></li>
+        <li><b lang="zh-CN">钱包</b><span class="py">qiánbāo</span></li>
+        <li><b lang="zh-CN">热奶茶</b><span class="py">rè nǎichá</span></li>
+        <li><b lang="zh-CN">去不了</b><span class="py">qù bu liǎo</span></li>
+        <li><b lang="zh-CN">张</b><span class="py">zhāng</span></li>
+      </ul>
+      <ol class="questions">
+        <li><span class="sentence" lang="zh-CN">我的<select class="entry" aria-label="Пропуск 1" data-answer="钱包" data-hint="Что могло остаться в рюкзаке и пригодится для оплаты?"></select><span class="paper-line print-only"></span>在书包里。</span><span class="py" lang="zh-Latn">Wǒ de ____ zài shūbāo lǐ.</span><span class="item-feedback"></span></li>
+        <li><span class="sentence" lang="zh-CN">我想买两<select class="entry" aria-label="Пропуск 2" data-answer="张" data-hint="Какое счётное слово ставят перед 票?"></select><span class="paper-line print-only"></span>去天津的票。</span><span class="py" lang="zh-Latn">Wǒ xiǎng mǎi liǎng ____ qù Tiānjīn de piào.</span><span class="item-feedback"></span></li>
+        <li><span class="sentence" lang="zh-CN">咖啡太<select class="entry" aria-label="Пропуск 3" data-answer="苦" data-hint="Как сказать «горький»?"></select><span class="paper-line print-only"></span>了，我不想喝。</span><span class="py" lang="zh-Latn">Kāfēi tài ____ le, wǒ bù xiǎng hē.</span><span class="item-feedback"></span></li>
+        <li><span class="sentence" lang="zh-CN">今天有点儿冷，我想喝一杯<select class="entry" aria-label="Пропуск 4" data-answer="热奶茶" data-hint="В холодный день героиня хочет горячий напиток."></select><span class="paper-line print-only"></span>。</span><span class="py" lang="zh-Latn">Jīntiān yǒudiǎnr lěng, wǒ xiǎng hē yì bēi ____.</span><span class="item-feedback"></span></li>
+        <li><span class="sentence" lang="zh-CN">我没带钱，今天<select class="entry" aria-label="Пропуск 5" data-answer="买不了" data-hint="Без денег не получается купить билет. Какой глагол значит «купить»?"></select><span class="paper-line print-only"></span>车票。</span><span class="py" lang="zh-Latn">Wǒ méi dài qián, jīntiān ____ chēpiào.</span><span class="item-feedback"></span></li>
+        <li><span class="sentence" lang="zh-CN">明天我有课，<select class="entry" aria-label="Пропуск 6" data-answer="去不了" data-hint="Из-за урока не получается поехать. Какой глагол значит «ехать, идти»?"></select><span class="paper-line print-only"></span>上海。</span><span class="py" lang="zh-Latn">Míngtiān wǒ yǒu kè, ____ Shànghǎi.</span><span class="item-feedback"></span></li>
+      </ol>
+      <p class="tip">В конструкции <span lang="zh-CN">V + 不了</span> иероглиф <span lang="zh-CN">了</span> читается <i>liǎo</i>. Так говорят, когда действие не получается выполнить.</p>
+      <div class="actions screen-only"><button class="button primary" type="button" id="check-gaps">Проверить пропуски</button><p id="gaps-status" class="status" role="status"></p></div>
+    </section>
+
+    <section class="exercise" id="match" aria-labelledby="match-title">
+      <h2 id="match-title">2. Соедини стрелочками</h2>
+      <p class="instruction screen-only">Нажми на пиньинь, затем на иероглифы и перевод. Чтобы переделать линию, снова выбери её начало.</p>
+      <p class="instruction print-only">Проведи стрелки от пиньиня к иероглифам и от иероглифов к переводу.</p>
+      <div class="match-board" id="match-board">
+        <div class="match-column" role="group" aria-labelledby="pinyin-column">
+          <h3 id="pinyin-column">Пиньинь</h3>
+          <button class="pair" type="button" data-col="0" data-word="gate" lang="zh-Latn">jiǎnpiàokǒu</button>
+          <button class="pair" type="button" data-col="0" data-word="wallet" lang="zh-Latn">qiánbāo</button>
+          <button class="pair" type="button" data-col="0" data-word="small" lang="zh-Latn">xiǎo bēi</button>
+          <button class="pair" type="button" data-col="0" data-word="buy" lang="zh-Latn">mǎi piào</button>
+          <button class="pair" type="button" data-col="0" data-word="store" lang="zh-Latn">chāoshì</button>
+          <button class="pair" type="button" data-col="0" data-word="coffee" lang="zh-Latn">kāfēi</button>
+        </div>
+        <div class="match-column" role="group" aria-labelledby="han-column">
+          <h3 id="han-column">Иероглифы</h3>
+          <button class="pair" type="button" data-col="1" data-word="coffee" lang="zh-CN">咖啡</button>
+          <button class="pair" type="button" data-col="1" data-word="gate" lang="zh-CN">检票口</button>
+          <button class="pair" type="button" data-col="1" data-word="store" lang="zh-CN">超市</button>
+          <button class="pair" type="button" data-col="1" data-word="small" lang="zh-CN">小杯</button>
+          <button class="pair" type="button" data-col="1" data-word="wallet" lang="zh-CN">钱包</button>
+          <button class="pair" type="button" data-col="1" data-word="buy" lang="zh-CN">买票</button>
+        </div>
+        <div class="match-column" role="group" aria-labelledby="meaning-column">
+          <h3 id="meaning-column">Перевод</h3>
+          <button class="pair" type="button" data-col="2" data-word="small">маленький стакан</button>
+          <button class="pair" type="button" data-col="2" data-word="buy">купить билет</button>
+          <button class="pair" type="button" data-col="2" data-word="wallet">кошелёк</button>
+          <button class="pair" type="button" data-col="2" data-word="coffee">кофе</button>
+          <button class="pair" type="button" data-col="2" data-word="gate">выход на посадку</button>
+          <button class="pair" type="button" data-col="2" data-word="store">супермаркет</button>
+        </div>
+        <svg class="connections" aria-hidden="true" focusable="false">
+          <defs>
+            <marker id="arrow" viewBox="0 0 7 7" refX="6" refY="3.5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L7 3.5L0 7Z"/></marker>
+            <marker id="arrow-wrong" class="bad" viewBox="0 0 7 7" refX="6" refY="3.5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L7 3.5L0 7Z"/></marker>
+          </defs>
+          <g id="links"></g>
+        </svg>
+      </div>
+      <div class="actions screen-only">
+        <button class="button primary" type="button" id="check-matches">Проверить стрелочки</button>
+        <button class="button" type="button" id="clear-matches" disabled>Сбросить стрелочки</button>
+        <p id="match-status" class="status" role="status"></p>
+      </div>
+    </section>
+
+    <section class="exercise" id="ticket" aria-labelledby="ticket-title">
+      <h2 id="ticket-title">3. Прочитай китайский билет</h2>
+      <p class="instruction">Найди ответы на билете. Города можно написать по-русски или по-китайски.</p>
+      <figure class="ticket" lang="zh-CN">
+        <figcaption>电子车票 G462</figcaption>
+        <dl>
+          <div><dt>出发站 <span class="py" lang="zh-Latn">chūfāzhàn</span></dt><dd>杭州</dd></div>
+          <div><dt>到站 <span class="py" lang="zh-Latn">dàozhàn</span></dt><dd>上海</dd></div>
+        </dl>
+        <dl>
+          <div><dt>开车时间 <span class="py" lang="zh-Latn">kāichē shíjiān</span></dt><dd>10:50</dd></div>
+          <div><dt>检票口 <span class="py" lang="zh-Latn">jiǎnpiàokǒu</span></dt><dd>B6</dd></div>
+          <div><dt>票价 <span class="py" lang="zh-Latn">piàojià</span></dt><dd>42 元</dd></div>
+        </dl>
+      </figure>
+      <ol class="questions ticket-questions">
+        <li>Откуда и куда едет поезд?
+          <div class="route-answers">
+            <div><label for="from">Из</label> <input class="entry" id="from" maxlength="32" autocomplete="off" data-answers="ханчжоу|杭州|hangzhou|изханчжоу" data-hint="Ищи строку 出发站."><span class="paper-line print-only"></span><span class="item-feedback"></span></div>
+            <div><label for="to">в</label> <input class="entry" id="to" maxlength="32" autocomplete="off" data-answers="шанхай|上海|shanghai|вшанхай" data-hint="Ищи строку 到站."><span class="paper-line print-only"></span><span class="item-feedback"></span></div>
+          </div>
+        </li>
+        <li><label for="time">Во сколько отправляется поезд?</label> <input class="entry" id="time" maxlength="30" autocomplete="off" data-answers="1050|1050утра|上午十点五十分|十点五十分|上午十点五十|十点五十" data-hint="Время отправления указано рядом с 开车时间."><span class="paper-line print-only"></span><span class="item-feedback"></span></li>
+        <li><label for="gate">Какой выход на посадку?</label> <input class="entry" id="gate" maxlength="16" autocomplete="off" data-answers="b6|в6|выходb6|выходв6|b6检票口|检票口b6" data-hint="Букву и цифру ищи в строке 检票口."><span class="paper-line print-only"></span><span class="item-feedback"></span></li>
+        <li><label for="price">Сколько стоит билет?</label> <input class="entry" id="price" maxlength="24" autocomplete="off" data-answers="42|42元|42块|42юаня|42юань|42yuan|42¥|¥42|四十二|四十二元|四十二块" data-hint="Цена подписана 票价. 元 — юань."><span class="paper-line print-only"></span><span class="item-feedback"></span></li>
+      </ol>
+      <div class="actions screen-only"><button class="button primary" type="button" id="check-ticket">Проверить билет</button><p id="ticket-status" class="status" role="status"></p></div>
+    </section>
+  </main>
+  <footer class="bottom">
+    <a href="index.html#homework">← В кабинет Леры</a>
+    <p class="note" id="save-status">Ответы сохраняются в этом браузере.</p>
+  </footer>
+
+  <script>
+    'use strict';
+
+    (() => {
+      const storageKey = 'lera.hsk2.tickets.homework.v1';
+      const byId = id => document.getElementById(id);
+      const selects = [...document.querySelectorAll('#gaps select')];
+      const ticketFields = [...document.querySelectorAll('#ticket input')];
+      const board = byId('match-board');
+      const pairs = [...board.querySelectorAll('.pair')];
+      const words = [...document.querySelectorAll('#word-bank b')].map(node => node.textContent);
+      const matchCount = words.length * 2;
+      const svgNS = 'http://www.w3.org/2000/svg';
+      let saved = {};
+      let active = null;
+      let matchChecked = false;
+      try {
+        saved = JSON.parse(localStorage.getItem(storageKey) || '{}') || {};
+      } catch {}
+
+      const links = [new Map(), new Map()];
+      const columns = [0, 1, 2].map(col => pairs.filter(button => Number(button.dataset.col) === col));
+      const keys = new Set(columns[0].map(button => button.dataset.word));
+      for (const [index, map] of links.entries()) {
+        const previous = saved.links?.[index];
+        if (!previous || typeof previous !== 'object') continue;
+        for (const [from, to] of Object.entries(previous)) {
+          if (keys.has(from) && keys.has(to) && ![...map.values()].includes(to)) map.set(from, to);
+        }
+      }
+
+      function save() {
+        try {
+          localStorage.setItem(storageKey, JSON.stringify({
+            gaps: selects.map(field => field.value),
+            ticket: ticketFields.map(field => field.value),
+            links: links.map(map => Object.fromEntries(map)),
+          }));
+        } catch {
+          byId('save-status').textContent = 'В этом браузере ответы доступны до закрытия страницы.';
+        }
+      }
+
+      function feedbackFor(field) {
+        const container = field.tagName === 'SELECT' ? field.closest('li') : field.parentElement;
+        return container.querySelector('.item-feedback');
+      }
+
+      function resetField(field, status) {
+        delete field.dataset.result;
+        field.removeAttribute('aria-invalid');
+        feedbackFor(field).textContent = '';
+        byId(status).textContent = '';
+        save();
+      }
+
+      function grade(fields, accepts, status) {
+        let correct = 0;
+        let answered = 0;
+        for (const [index, field] of fields.entries()) {
+          const value = field.value.trim();
+          const ok = Boolean(value) && accepts(field, value);
+          const feedback = feedbackFor(field);
+          feedback.id = status + '-item-' + index;
+          field.setAttribute('aria-describedby', feedback.id);
+          field.setAttribute('aria-invalid', String(!ok));
+          field.dataset.result = ok ? 'yes' : 'no';
+          if (value) answered++;
+          if (ok) correct++;
+          feedback.textContent = ok ? 'Верно.' : value ? field.dataset.hint : 'Сначала заполни пропуск.';
+        }
+        byId(status).textContent = correct === fields.length
+          ? 'Готово! Все ответы верны.'
+          : `Верно ${correct} из ${fields.length}. ${answered < fields.length ? 'Заполни пустые поля и проверь ещё раз.' : 'Посмотри подсказки и попробуй ещё раз.'}`;
+      }
+
+      function normalize(value) {
+        return value.normalize('NFKC').toLowerCase().normalize('NFD').replace(/\p{M}/gu, '').replace(/[\s.,:;–—-]+/g, '');
+      }
+
+      selects.forEach((field, index) => {
+        field.append(new Option('Выбери слово', ''), ...words.map(word => new Option(word, word)));
+        if (words.includes(saved.gaps?.[index])) field.value = saved.gaps[index];
+        field.addEventListener('change', () => resetField(field, 'gaps-status'));
+      });
+      ticketFields.forEach((field, index) => {
+        if (typeof saved.ticket?.[index] === 'string') field.value = saved.ticket[index].slice(0, field.maxLength);
+        field.addEventListener('input', () => resetField(field, 'ticket-status'));
+      });
+      byId('check-gaps').addEventListener('click', () => grade(selects, (field, value) => field.dataset.answer === value, 'gaps-status'));
+      byId('check-ticket').addEventListener('click', () => grade(ticketFields, (field, value) => field.dataset.answers.split('|').includes(normalize(value)), 'ticket-status'));
+
+      function findPair(col, word) {
+        return columns[col].find(button => button.dataset.word === word);
+      }
+
+      function drawLinks() {
+        const origin = board.getBoundingClientRect();
+        const layer = byId('links');
+        layer.replaceChildren();
+        for (const [index, map] of links.entries()) {
+          for (const [from, to] of map) {
+            const a = findPair(index, from).getBoundingClientRect();
+            const b = findPair(index + 1, to).getBoundingClientRect();
+            const x1 = a.right - origin.left + 1;
+            const x2 = b.left - origin.left - 2;
+            const y1 = a.top + a.height / 2 - origin.top;
+            const y2 = b.top + b.height / 2 - origin.top;
+            const middle = (x1 + x2) / 2;
+            const path = document.createElementNS(svgNS, 'path');
+            const wrong = matchChecked && from !== to;
+            path.setAttribute('d', `M ${x1} ${y1} C ${middle} ${y1}, ${middle} ${y2}, ${x2} ${y2}`);
+            path.setAttribute('marker-end', wrong ? 'url(#arrow-wrong)' : 'url(#arrow)');
+            if (wrong) path.setAttribute('class', 'bad');
+            layer.append(path);
+          }
+        }
+      }
+
+      function displayMatches() {
+        const names = ['Пиньинь', 'Иероглифы', 'Перевод'];
+        for (const [col, group] of columns.entries()) {
+          for (const button of group) {
+            const word = button.dataset.word;
+            const outgoing = links[col]?.get(word);
+            const incoming = col ? [...links[col - 1]].find(([, to]) => to === word)?.[0] : undefined;
+            const descriptions = [names[col] + ' ' + button.textContent];
+            if (incoming) descriptions.push('Связано с ' + findPair(col - 1, incoming).textContent);
+            if (outgoing) descriptions.push('Стрелка к ' + findPair(col + 1, outgoing).textContent);
+            if (matchChecked && outgoing) descriptions.push(outgoing === word ? 'Верная связь' : 'Проверь связь');
+            button.setAttribute('aria-label', descriptions.join('. '));
+            button.setAttribute('aria-pressed', String(active === button));
+          }
+        }
+        byId('clear-matches').disabled = !active && links.every(map => map.size === 0);
+        drawLinks();
+      }
+
+      const matchStatus = byId('match-status');
+      for (const button of pairs) {
+        button.addEventListener('click', () => {
+          const col = Number(button.dataset.col);
+          const previousCol = Number(active?.dataset.col);
+          if (active && col === previousCol + 1) {
+            const map = links[previousCol];
+            const target = button.dataset.word;
+            const pair = active.textContent + ' → ' + button.textContent;
+            for (const [from, to] of map) if (to === target) map.delete(from);
+            map.set(active.dataset.word, target);
+            matchChecked = false;
+            active = col === 1 ? button : null;
+            matchStatus.textContent = col === 1 ? pair + '. Теперь выбери перевод.' : pair;
+            save();
+          } else if (col < 2) {
+            active = active === button ? null : button;
+            matchStatus.textContent = active ? (col === 0 ? 'Выбери иероглифы.' : 'Выбери перевод.') : '';
+          } else {
+            matchStatus.textContent = 'Чтобы провести стрелку к переводу, сначала выбери иероглифы.';
+          }
+          displayMatches();
+        });
+      }
+      byId('check-matches').addEventListener('click', () => {
+        const segments = links.flatMap(map => [...map]);
+        const correct = segments.filter(([from, to]) => from === to).length;
+        matchChecked = true;
+        active = null;
+        matchStatus.textContent = correct === matchCount
+          ? 'Готово! Все шесть цепочек верны.'
+          : `Верно ${correct} из ${matchCount} стрелок. ${segments.length < matchCount ? 'Дорисуй недостающие.' : 'Проверь пунктирные линии.'}`;
+        displayMatches();
+      });
+      byId('clear-matches').addEventListener('click', () => {
+        for (const map of links) map.clear();
+        active = null;
+        matchChecked = false;
+        matchStatus.textContent = 'Стрелочки сброшены.';
+        displayMatches();
+        save();
+      });
+      if ('ResizeObserver' in window) new ResizeObserver(drawLinks).observe(board);
+      else window.addEventListener('resize', drawLinks);
+      displayMatches();
+      byId('print-sheet').addEventListener('click', () => window.print());
+    })();
+  </script>
+</body>
+</html>
