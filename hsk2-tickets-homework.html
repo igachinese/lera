@@ -97,6 +97,11 @@
     .ticket-questions input { width: min(230px, 100%); }
     .route-answers { display: flex; flex-wrap: wrap; gap: 4px 10px; }
     .route-answers > div { flex: 1 1 120px; max-width: 230px; min-width: 0; }
+    .review-round + .review-round { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 18px; }
+    .review-round h3 { margin: 15px 0 6px; font-size: 1.13rem; }
+    .review-bank li { flex-wrap: wrap; column-gap: 6px; row-gap: 0; }
+    .review-progress { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: 12px 0; color: var(--green); font-size: .88rem; font-weight: 700; }
+    .review-progress progress { width: min(165px, 100%); accent-color: var(--green); }
     .bottom { margin-top: 10px; border-top: 1px solid var(--line); }
     .print-only { display: none; }
 
@@ -139,6 +144,20 @@
       .route-answers > div { flex: 0 0 auto; }
       .route-answers label { display: inline; }
       .ticket-questions .paper-line { min-width: 24mm; }
+      .review { break-before: page; break-inside: auto; margin: 0; }
+      .review-round { break-inside: avoid; }
+      .review-round + .review-round { border-color: var(--black); margin-top: 4mm; padding-top: 2mm; }
+      .review-round h3 { margin: 3mm 0 1.5mm; font-size: 11pt; }
+      .review-bank li { white-space: nowrap; }
+      .review-questions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(4, auto);
+        grid-auto-flow: column;
+        gap: 2.2mm 8mm;
+      }
+      .review-questions li { break-inside: avoid; }
+      .review-questions .sentence { font-size: 10.6pt; line-height: 1.38; }
+      .review-questions .paper-line { min-width: 16mm; }
     }
     @media screen and (max-width: 460px) {
       .match-board { gap: 19px; }
@@ -162,7 +181,7 @@
       <div class="actions screen-only"><button type="button" class="button" id="print-sheet">Распечатать рабочий лист</button></div>
     </header>
     <nav class="jump screen-only" aria-label="Задания">
-      <a href="#gaps">Пропуски</a><a href="#match">Стрелочки</a><a href="#ticket">Билет</a>
+      <a href="#gaps">Пропуски</a><a href="#match">Стрелочки</a><a href="#ticket">Билет</a><a href="#review">Все 24 слова</a>
     </nav>
     <noscript class="screen-only"><p>Для проверки ответов и соединения стрелочками включи JavaScript. Лист можно распечатать через меню браузера.</p></noscript>
 
@@ -264,6 +283,86 @@
       </ol>
       <div class="actions screen-only"><button class="button primary" type="button" id="check-ticket">Проверить билет</button><p id="ticket-status" class="status" role="status"></p></div>
     </section>
+    <section class="exercise review" id="review" aria-labelledby="review-title">
+      <h2 id="review-title">4. Повтори 24 слова из «Говорилок»</h2>
+      <p class="instruction">Три раунда по восемь слов. Сначала попробуй вспомнить слово вслух. В каждом раунде используй каждое слово один раз.</p>
+      <div class="review-progress screen-only">
+        <label for="review-progress" id="review-count">Заполнено 0 из 24</label>
+        <progress id="review-progress" max="24" value="0"></progress>
+      </div>
+      <div class="review-round" data-review-round="1" aria-labelledby="review-1-title">
+        <h3 id="review-1-title">Говорилка 1. На вокзале</h3>
+        <ul class="bank review-bank" aria-label="Словарь раунда 1">
+          <li><b lang="zh-CN">可以</b><span class="py" lang="zh-Latn">kěyǐ</span><span class="note">можно</span></li>
+          <li><b lang="zh-CN">最</b><span class="py" lang="zh-Latn">zuì</span><span class="note">больше всего</span></li>
+          <li><b lang="zh-CN">觉得</b><span class="py" lang="zh-Latn">juéde</span><span class="note">думать, считать</span></li>
+          <li><b lang="zh-CN">一起</b><span class="py" lang="zh-Latn">yìqǐ</span><span class="note">вместе</span></li>
+          <li><b lang="zh-CN">但是</b><span class="py" lang="zh-Latn">dànshì</span><span class="note">но</span></li>
+          <li><b lang="zh-CN">开始</b><span class="py" lang="zh-Latn">kāishǐ</span><span class="note">начинать</span></li>
+          <li><b lang="zh-CN">因为</b><span class="py" lang="zh-Latn">yīnwèi</span><span class="note">потому что</span></li>
+          <li><b lang="zh-CN">已经</b><span class="py" lang="zh-Latn">yǐjīng</span><span class="note">уже</span></li>
+        </ul>
+        <ol class="questions review-questions">
+          <li><span class="sentence" lang="zh-CN">你<select class="entry" aria-label="Говорилка 1, пропуск 1" data-answer="觉得" data-hint="Героиня спрашивает твоё мнение о вокзале."></select><span class="paper-line print-only"></span>这个车站怎么样？</span><span class="py" lang="zh-Latn">Nǐ ____ zhège chēzhàn zěnmeyàng?</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN"><select class="entry" aria-label="Говорилка 1, пропуск 2" data-answer="因为" data-hint="Сначала назови причину. Поэтому билет купить не получается."></select><span class="paper-line print-only"></span>我没带钱包，所以买不了票。</span><span class="py" lang="zh-Latn">____ wǒ méi dài qiánbāo, suǒyǐ mǎi bu liǎo piào.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">虽然这张票便宜，<select class="entry" aria-label="Говорилка 1, пропуск 3" data-answer="但是" data-hint="Билет дешёвый, но поезд отправляется слишком поздно."></select><span class="paper-line print-only"></span>火车开得太晚。</span><span class="py" lang="zh-Latn">Suīrán zhè zhāng piào piányi, ____ huǒchē kāi de tài wǎn.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">这里<select class="entry" aria-label="Говорилка 1, пропуск 4" data-answer="可以" data-hint="Спроси, можно ли здесь купить билет с телефона."></select><span class="paper-line print-only"></span>用手机买票吗？</span><span class="py" lang="zh-Latn">Zhèlǐ ____ yòng shǒujī mǎi piào ma?</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">别一个人走，我们<select class="entry" aria-label="Говорилка 1, пропуск 5" data-answer="一起" data-hint="Не иди одна. Давай пойдём к выходу вместе."></select><span class="paper-line print-only"></span>去检票口吧。</span><span class="py" lang="zh-Latn">Bié yí ge rén zǒu, wǒmen ____ qù jiǎnpiàokǒu ba.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">你不用排队了，我<select class="entry" aria-label="Говорилка 1, пропуск 6" data-answer="已经" data-hint="Стоять в очереди не нужно. Билеты уже куплены."></select><span class="paper-line print-only"></span>买好票了。</span><span class="py" lang="zh-Latn">Nǐ bú yòng páiduì le, wǒ ____ mǎi hǎo piào le.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">这三种饮料里，我<select class="entry" aria-label="Говорилка 1, пропуск 7" data-answer="最" data-hint="Из трёх напитков героине больше всего нравится холодный чай с молоком."></select><span class="paper-line print-only"></span>喜欢冰奶茶。</span><span class="py" lang="zh-Latn">Zhè sān zhǒng yǐnliào lǐ, wǒ ____ xǐhuan bīng nǎichá.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">检票刚<select class="entry" aria-label="Говорилка 1, пропуск 8" data-answer="开始" data-hint="Проверка билетов только началась. Можно идти в очередь."></select><span class="paper-line print-only"></span>，我们去排队吧。</span><span class="py" lang="zh-Latn">Jiǎnpiào gāng ____, wǒmen qù páiduì ba.</span><span class="item-feedback"></span></li>
+        </ol>
+        <div class="actions screen-only"><button class="button primary" type="button">Проверить раунд 1</button><p id="review-1-status" class="status" role="status"></p></div>
+      </div>
+      <div class="review-round" data-review-round="2" aria-labelledby="review-2-title">
+        <h3 id="review-2-title">Говорилка 2. Перед поездкой</h3>
+        <ul class="bank review-bank" aria-label="Словарь раунда 2">
+          <li><b lang="zh-CN">准备</b><span class="py" lang="zh-Latn">zhǔnbèi</span><span class="note">готовить, готовиться</span></li>
+          <li><b lang="zh-CN">有意思</b><span class="py" lang="zh-Latn">yǒuyìsi</span><span class="note">интересно</span></li>
+          <li><b lang="zh-CN">所以</b><span class="py" lang="zh-Latn">suǒyǐ</span><span class="note">поэтому</span></li>
+          <li><b lang="zh-CN">需要</b><span class="py" lang="zh-Latn">xūyào</span><span class="note">нужно</span></li>
+          <li><b lang="zh-CN">还</b><span class="py" lang="zh-Latn">hái</span><span class="note">ещё, вдобавок</span></li>
+          <li><b lang="zh-CN">可能</b><span class="py" lang="zh-Latn">kěnéng</span><span class="note">возможно</span></li>
+          <li><b lang="zh-CN">虽然</b><span class="py" lang="zh-Latn">suīrán</span><span class="note">хотя</span></li>
+          <li><b lang="zh-CN">非常</b><span class="py" lang="zh-Latn">fēicháng</span><span class="note">очень</span></li>
+        </ul>
+        <ol class="questions review-questions">
+          <li><span class="sentence" lang="zh-CN">因为没买到票，<select class="entry" aria-label="Говорилка 2, пропуск 1" data-answer="所以" data-hint="Билет не удалось купить, поэтому поедем завтра."></select><span class="paper-line print-only"></span>我们明天再去。</span><span class="py" lang="zh-Latn">Yīnwèi méi mǎidào piào, ____ wǒmen míngtiān zài qù.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN"><select class="entry" aria-label="Говорилка 2, пропуск 2" data-answer="虽然" data-hint="Начни с «хотя сегодня холодно»."></select><span class="paper-line print-only"></span>今天很冷，但是我还是想喝冰奶茶。</span><span class="py" lang="zh-Latn">____ jīntiān hěn lěng, dànshì wǒ háishi xiǎng hē bīng nǎichá.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">我买了一张票，<select class="entry" aria-label="Говорилка 2, пропуск 3" data-answer="还" data-hint="Кроме билета, героиня купила ещё и бутылку воды."></select><span class="paper-line print-only"></span>买了一瓶水。</span><span class="py" lang="zh-Latn">Wǒ mǎi le yì zhāng piào, ____ mǎi le yì píng shuǐ.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">我在<select class="entry" aria-label="Говорилка 2, пропуск 4" data-answer="准备" data-hint="Героиня готовит вещи, которые завтра возьмёт с собой."></select><span class="paper-line print-only"></span>明天出门要带的东西。</span><span class="py" lang="zh-Latn">Wǒ zài ____ míngtiān chūmén yào dài de dōngxi.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">买两张票<select class="entry" aria-label="Говорилка 2, пропуск 5" data-answer="需要" data-hint="На два билета нужно восемьдесят юаней."></select><span class="paper-line print-only"></span>八十块钱。</span><span class="py" lang="zh-Latn">Mǎi liǎng zhāng piào ____ bāshí kuài qián.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">她听了好消息，<select class="entry" aria-label="Говорилка 2, пропуск 6" data-answer="非常" data-hint="Она услышала хорошие новости и очень обрадовалась."></select><span class="paper-line print-only"></span>高兴。</span><span class="py" lang="zh-Latn">Tā tīng le hǎo xiāoxi, ____ gāoxìng.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">坐火车看窗外的风景，很<select class="entry" aria-label="Говорилка 2, пропуск 7" data-answer="有意思" data-hint="Смотреть на пейзаж из окна поезда интересно."></select><span class="paper-line print-only"></span>。</span><span class="py" lang="zh-Latn">Zuò huǒchē kàn chuāngwài de fēngjǐng, hěn ____.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">我不太确定，她<select class="entry" aria-label="Говорилка 2, пропуск 8" data-answer="可能" data-hint="Я не уверена. Возможно, она в кофейне."></select><span class="paper-line print-only"></span>在咖啡店。</span><span class="py" lang="zh-Latn">Wǒ bú tài quèdìng, tā ____ zài kāfēidiàn.</span><span class="item-feedback"></span></li>
+        </ol>
+        <div class="actions screen-only"><button class="button primary" type="button">Проверить раунд 2</button><p id="review-2-status" class="status" role="status"></p></div>
+      </div>
+      <div class="review-round" data-review-round="3" aria-labelledby="review-3-title">
+        <h3 id="review-3-title">Говорилка 3. Планы и сравнения</h3>
+        <ul class="bank review-bank" aria-label="Словарь раунда 3">
+          <li><b lang="zh-CN">快要</b><span class="py" lang="zh-Latn">kuàiyào</span><span class="note">вот-вот</span></li>
+          <li><b lang="zh-CN">一定</b><span class="py" lang="zh-Latn">yídìng</span><span class="note">обязательно, точно</span></li>
+          <li><b lang="zh-CN">打算</b><span class="py" lang="zh-Latn">dǎsuàn</span><span class="note">планировать, план</span></li>
+          <li><b lang="zh-CN">比</b><span class="py" lang="zh-Latn">bǐ</span><span class="note">чем (сравнение)</span></li>
+          <li><b lang="zh-CN">正在</b><span class="py" lang="zh-Latn">zhèngzài</span><span class="note">прямо сейчас</span></li>
+          <li><b lang="zh-CN">帮助</b><span class="py" lang="zh-Latn">bāngzhù</span><span class="note">помогать, помощь</span></li>
+          <li><b lang="zh-CN">希望</b><span class="py" lang="zh-Latn">xīwàng</span><span class="note">надеяться</span></li>
+          <li><b lang="zh-CN">更</b><span class="py" lang="zh-Latn">gèng</span><span class="note">ещё (при сравнении)</span></li>
+        </ul>
+        <ol class="questions review-questions">
+          <li><span class="sentence" lang="zh-CN">我的<select class="entry" aria-label="Говорилка 3, пропуск 1" data-answer="打算" data-hint="Планы изменились. Сегодня поездки в Тяньцзинь не будет."></select><span class="paper-line print-only"></span>改了，今天不去天津了。</span><span class="py" lang="zh-Latn">Wǒ de ____ gǎi le, jīntiān bú qù Tiānjīn le.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">我<select class="entry" aria-label="Говорилка 3, пропуск 2" data-answer="希望" data-hint="Героиня надеется, что завтра не будет дождя."></select><span class="paper-line print-only"></span>明天别下雨。</span><span class="py" lang="zh-Latn">Wǒ ____ míngtiān bié xiàyǔ.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">等一下，我<select class="entry" aria-label="Говорилка 3, пропуск 3" data-answer="正在" data-hint="Подожди. Я прямо сейчас разговариваю с кассиром."></select><span class="paper-line print-only"></span>跟售票员说话呢。</span><span class="py" lang="zh-Latn">Děng yíxià, wǒ ____ gēn shòupiàoyuán shuōhuà ne.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">快一点儿，火车<select class="entry" aria-label="Говорилка 3, пропуск 4" data-answer="快要" data-hint="Поторопись. Поезд вот-вот отправится."></select><span class="paper-line print-only"></span>开了。</span><span class="py" lang="zh-Latn">Kuài yìdiǎnr, huǒchē ____ kāi le.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">小杯奶茶<select class="entry" aria-label="Говорилка 3, пропуск 5" data-answer="比" data-hint="Маленький стакан чая на четыре юаня дешевле, чем большой."></select><span class="paper-line print-only"></span>大杯便宜四块钱。</span><span class="py" lang="zh-Latn">Xiǎo bēi nǎichá ____ dà bēi piányi sì kuài qián.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">今天已经很冷了，听说明天会<select class="entry" aria-label="Говорилка 3, пропуск 6" data-answer="更" data-hint="Сегодня уже холодно. Говорят, завтра будет ещё холоднее."></select><span class="paper-line print-only"></span>冷。</span><span class="py" lang="zh-Latn">Jīntiān yǐjīng hěn lěng le, tīngshuō míngtiān huì ____ lěng.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">你放心，我<select class="entry" aria-label="Говорилка 3, пропуск 7" data-answer="一定" data-hint="Успокой подругу. Ты обязательно придёшь вовремя."></select><span class="paper-line print-only"></span>会准时到。</span><span class="py" lang="zh-Latn">Nǐ fàngxīn, wǒ ____ huì zhǔnshí dào.</span><span class="item-feedback"></span></li>
+          <li><span class="sentence" lang="zh-CN">谢谢你的<select class="entry" aria-label="Говорилка 3, пропуск 8" data-answer="帮助" data-hint="Героиня благодарит за помощь. Она нашла выход на посадку."></select><span class="paper-line print-only"></span>，我找到检票口了。</span><span class="py" lang="zh-Latn">Xièxie nǐ de ____, wǒ zhǎodào jiǎnpiàokǒu le.</span><span class="item-feedback"></span></li>
+        </ol>
+        <div class="actions screen-only"><button class="button primary" type="button">Проверить раунд 3</button><p id="review-3-status" class="status" role="status"></p></div>
+      </div>
+    </section>
   </main>
   <footer class="bottom">
     <a href="index.html#homework">← В кабинет Леры</a>
@@ -277,6 +376,13 @@
       const storageKey = 'lera.hsk2.tickets.homework.v1';
       const byId = id => document.getElementById(id);
       const selects = [...document.querySelectorAll('#gaps select')];
+      const reviewRounds = [...document.querySelectorAll('[data-review-round]')].map(round => ({
+        round,
+        fields: [...round.querySelectorAll('select')],
+        bank: [...round.querySelectorAll('.bank b')].map(node => node.textContent),
+        status: 'review-' + round.dataset.reviewRound + '-status',
+      }));
+      const reviewFields = reviewRounds.flatMap(round => round.fields);
       const ticketFields = [...document.querySelectorAll('#ticket input')];
       const board = byId('match-board');
       const pairs = [...board.querySelectorAll('.pair')];
@@ -305,6 +411,7 @@
         try {
           localStorage.setItem(storageKey, JSON.stringify({
             gaps: selects.map(field => field.value),
+            review: reviewRounds.map(round => round.fields.map(field => field.value)),
             ticket: ticketFields.map(field => field.value),
             links: links.map(map => Object.fromEntries(map)),
           }));
@@ -350,16 +457,35 @@
         return value.normalize('NFKC').toLowerCase().normalize('NFD').replace(/\p{M}/gu, '').replace(/[\s.,:;–—-]+/g, '');
       }
 
-      selects.forEach((field, index) => {
-        field.append(new Option('Выбери слово', ''), ...words.map(word => new Option(word, word)));
-        if (words.includes(saved.gaps?.[index])) field.value = saved.gaps[index];
-        field.addEventListener('change', () => resetField(field, 'gaps-status'));
-      });
+      function setupWordBank(fields, bank, previous, status, afterChange) {
+        for (const [index, field] of fields.entries()) {
+          field.append(new Option('Выбери слово', ''), ...bank.map(word => new Option(word, word)));
+          if (bank.includes(previous?.[index])) field.value = previous[index];
+          field.addEventListener('change', () => {
+            resetField(field, status);
+            afterChange?.();
+          });
+        }
+      }
+
+      function updateReviewProgress() {
+        const answered = reviewFields.filter(field => field.value).length;
+        byId('review-progress').value = answered;
+        byId('review-count').textContent = `Заполнено ${answered} из ${reviewFields.length}`;
+      }
+
+      const correctWord = (field, value) => field.dataset.answer === value;
+      setupWordBank(selects, words, saved.gaps, 'gaps-status');
+      for (const [index, {round, fields, bank, status}] of reviewRounds.entries()) {
+        setupWordBank(fields, bank, saved.review?.[index], status, updateReviewProgress);
+        round.querySelector('.actions button').addEventListener('click', () => grade(fields, correctWord, status));
+      }
+      updateReviewProgress();
       ticketFields.forEach((field, index) => {
         if (typeof saved.ticket?.[index] === 'string') field.value = saved.ticket[index].slice(0, field.maxLength);
         field.addEventListener('input', () => resetField(field, 'ticket-status'));
       });
-      byId('check-gaps').addEventListener('click', () => grade(selects, (field, value) => field.dataset.answer === value, 'gaps-status'));
+      byId('check-gaps').addEventListener('click', () => grade(selects, correctWord, 'gaps-status'));
       byId('check-ticket').addEventListener('click', () => grade(ticketFields, (field, value) => field.dataset.answers.split('|').includes(normalize(value)), 'ticket-status'));
 
       function findPair(col, word) {
